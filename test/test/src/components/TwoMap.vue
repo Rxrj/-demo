@@ -18,15 +18,15 @@ export default {
       var map1 = new mapboxgl.Map({
         container: 'map1', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/streets-v11', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-74.5, 40], // 初始坐标系，这个是南京建邺附近
-        zoom: 9,     // starting zoom 地图初始的拉伸比例
+        center: [-73.80,40.785], // 初始坐标系，这个是南京建邺附近
+        zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
       var map2 = new mapboxgl.Map({
         container: 'map2', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/streets-v11', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-74.5, 40], // 初始坐标系，这个是南京建邺附近
-        zoom: 9,     // starting zoom 地图初始的拉伸比例
+        center: [-73.80,40.785], // 初始坐标系，这个是南京建邺附近
+        zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
     }
