@@ -8,6 +8,8 @@ import map from "../components/map";
 
 import Analysis from "../page/Analysis";
 import Prediction from "../page/Prediction";
+import Slider from "../components/Slider";
+import TwoMap from "../components/TwoMap";
 
 Vue.use(Router)
 
@@ -29,8 +31,8 @@ export default new Router({
       component: Prediction,
       children: [{
         path:'/',
-        name:'map',
-        component:map
+        name:'TwoMap',
+        component:TwoMap
       }]
     },
     {
@@ -54,9 +56,19 @@ export default new Router({
       component: SliderAnalysis
     },
     {
+      path:'/components/Slider',
+      name:'Slider',
+      component: Slider
+    },
+    {
       path:'/components/map',
       name:'map',
       component: map
+    },
+    {
+      path:'/components/TwoMap',
+      name:'TwoMap',
+      component: TwoMap
     }
   ]
   // routes: [

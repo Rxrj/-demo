@@ -1,10 +1,12 @@
 <template>
-  <el-container>
-  <el-main>
     <div id="map">
+        <el-slider
+          v-model="value"
+          max="24"
+          :step="1"
+          show-stops>
+        </el-slider>
     </div>
-  </el-main>
-  </el-container>
 </template>
 
 <script type="text/ecmascript-6">
@@ -25,25 +27,34 @@ export default {
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
     }
-  }
+  },
+  data() {
+    return {
+      value: 0,
+    }
+  },
 }
 </script>
 
 <style scoped>
 @import url('https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css');
 #map{
-  position: absolute;
+  margin: 0;
+  padding: 0;
   top: 0;
   bottom: 0;
-  width: 100%;
+  width: auto;
+  height: 100%;
+  z-index: 0;
 }
-el-main{
-  position: absolute;
-  width: 100%;
-  top:0px;
-  left:0;
-  bottom: 0;
-  padding-top: 60px;
+.el-slider{
+  padding: 20px;
+  margin: 0;
+  position: fixed;
+  z-index: 1000;
+  width: 500px;
+  bottom: 10px;
+  left: 900px;
 }
 
 </style>

@@ -1,24 +1,28 @@
 <template>
-  <div>
-    <el-container>
-      <Header/>
-    </el-container>
-    <el-container>
-      <el-aside>
-        <SliderAnalysis/>
-      </el-aside>
-      <router-view/>
+  <div style="height: 100%">
+    <el-container style="height: 100%">
+      <el-header>
+        <Header/>
+      </el-header>
+      <el-container style="height: 100%">
+        <el-aside>
+          <Slider/>
+        </el-aside>
+        <el-main>
+          <router-view/>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header";
-import SliderAnalysis from "../components/SliderAnalysis";
+import Slider from "../components/Slider";
 import map from "../components/map";
 export default {
   name: "Simulation",
-  components: {SliderAnalysis, Header},
+  components: {Slider, Header},
 }
 </script>
 

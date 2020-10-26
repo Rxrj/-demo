@@ -1,10 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app" style="height: 100%">
     <router-view/>
   </div>
 </template>
 
 <script>
+import '@/assets/css/all.css'
 export default {
   name: 'App'
 }
@@ -14,8 +15,9 @@ export default {
 *{
   padding: 0;
   margin: 0;
+
 }
-html,body{
+html,body.el-container{
   width: 100%;
   height:100%;
 }
@@ -25,7 +27,9 @@ html,body{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 0px;
+  margin: 0;
+  padding: 0;
   height: 100%;
+  width: 100%;
 }
 </style>

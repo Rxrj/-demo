@@ -5,20 +5,22 @@
     </el-container>
     <el-container>
       <el-aside>
-        <SliderAnalysis/>
+        <Slider/>
       </el-aside>
-      <router-view/>
+      <el-main>
+        <router-view/>
+      </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header";
-import SliderAnalysis from "../components/SliderAnalysis";
+import Slider from "../components/Slider";
 import map from "../components/map";
 export default {
   name: "Prediction",
-  components: {SliderAnalysis, Header},
+  components: {Slider, Header},
 }
 </script>
 
@@ -26,5 +28,8 @@ export default {
 html,body{
   width: 100%;
   height:100%;
+}
+.el-container{
+  width:100%;
 }
 </style>
