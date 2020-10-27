@@ -33,10 +33,10 @@
               :step="1"
               show-stops>
             </el-slider>
-            <div class="Evaluation" style="text-align: right">
-              <div style="color: brown; font-weight: bold">Search Time：416.317s</div>
-              <div style="color: brown; font-weight: bold">Waiting Time：61.833s</div>
-              <div style="color: brown; font-weight: bold">Expiration Percentage：14.411%</div>
+            <div class="Evaluation">
+              <div>出租车搜索时间：416.317s</div>
+              <div>乘客等待时间：61.833s</div>
+              <div>过期率：14.411%</div>
             </div>
           </div>
         </el-main>
@@ -325,9 +325,9 @@ export default {
       mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
       var map = new mapboxgl.Map({
         container: 'map', // container id 绑定的组件的id
-        style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
+        style: 'mapbox://styles/mapbox/streets-v11', //地图样式，可以使用官网预定义的样式,也可以自定义
         center: [-73.90,40.785], // 初始坐标系，这个是南京建邺附近
-        zoom: 11,     // starting zoom 地图初始的拉伸比例
+        zoom: 9,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
     }
@@ -381,7 +381,7 @@ html,body{
   top: 0;
   bottom: 0;
   width: auto;
-  height: 95%;
+  height: 100%;
   z-index: 0;
 }
 .el-slider{

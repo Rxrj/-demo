@@ -103,7 +103,7 @@ export default {
 <style scoped>
 .el-aside{
   border-right: 0!important;
-  padding-top: 60px;
+  padding-top: 70px;
   position: absolute;
   width: 100%;
   top:10px;

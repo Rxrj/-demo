@@ -4,7 +4,7 @@
       <Header/>
     </el-container>
     <el-container style="height: 100%; margin: 0; padding: 0;">
-      <el-aside style="padding-top: 20px">
+      <el-aside style="padding-top: 20px;">
         <div class="block">
           <el-date-picker
             v-model="value1"
@@ -20,7 +20,7 @@
         <!--          给折线图准备一个div-->
         <div id="charts1" style="width: 100%;height:40%;padding-left: 5px;padding-top: 10px">
         </div>
-        <div id="charts2" style="width: 100%;height: 40%;padding-left: 5px;padding-top: 10px">
+        <div id="charts2" style="width: 100%;height: 40%;padding-left: 5px;">
         </div>
       </el-aside>
       <el-main>
@@ -181,7 +181,7 @@ export default {
         }
       },
       yAxis: {
-        name:'drop-off',
+        name:' drop-off',
         nameTextStyle:{
           color: '#1B2232',
           fontSize:15
