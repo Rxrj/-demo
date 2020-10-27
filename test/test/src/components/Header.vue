@@ -1,6 +1,6 @@
 <template>
   <el-header>
-    <el-menu :default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu :default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect" style="font-weight: bold">
       <el-menu-item index="3" class="fr" >Simulation</el-menu-item>
       <el-menu-item index="2" class="fr">Resource Prediction</el-menu-item>
       <el-menu-item index="1" class="fr">Supply-Demand Analysis</el-menu-item>
@@ -39,6 +39,6 @@ export default {
   width: 100%;
 }
 .el-header .fr{
-  float: right;
+  float: left;
 }
 </style>
