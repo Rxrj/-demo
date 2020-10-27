@@ -33,10 +33,10 @@
               :step="1"
               show-stops>
             </el-slider>
-            <div class="Evaluation">
-              <div>出租车搜索时间：416.317s</div>
-              <div>乘客等待时间：61.833s</div>
-              <div>过期率：14.411%</div>
+            <div class="Evaluation" style="text-align: right">
+              <div style="color: brown; font-weight: bold">Search Time：416.317s</div>
+              <div style="color: brown; font-weight: bold">Waiting Time：61.833s</div>
+              <div style="color: brown; font-weight: bold">Expiration Percentage：14.411%</div>
             </div>
           </div>
         </el-main>
@@ -110,7 +110,7 @@ export default {
         }
       },
       yAxis: {
-        name:'搜索时间',
+        name:'Search Time',
         nameTextStyle:{
           color: '#1B2232',
           fontSize:15
@@ -198,7 +198,7 @@ export default {
         }
       },
       yAxis: {
-        name:'等待时间',
+        name:'Waiting Time',
         nameTextStyle:{
           color: '#1B2232',
           fontSize:15
@@ -286,7 +286,7 @@ export default {
         }
       },
       yAxis: {
-        name:'过期率',
+        name:'Expiration Percentage',
         nameTextStyle:{
           color: '#1B2232',
           fontSize:15
@@ -325,11 +325,51 @@ export default {
       mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
       var map = new mapboxgl.Map({
         container: 'map', // container id 绑定的组件的id
-        style: 'mapbox://styles/mapbox/streets-v11', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.90,40.785], // 初始坐标系，这个是南京建邺附近
-        zoom: 9,     // starting zoom 地图初始的拉伸比例
+        style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
+        center: [-73.97,40.75], // 初始坐标系，这个是曼哈顿附近
+        zoom: 12,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
+
+      var radius = 0.05;
+      function pointOnCircle(angle) {
+        return {
+          "type": "Point",
+          "coordinates": [
+            0.5 * Math.cos(angle) * radius - 73.98,
+            0.5 * Math.sin(angle) * radius + 40.75
+          ]
+        };
+      }
+
+      map.on('load', function () {
+// Add a source and layer displaying a point which will be animated in a circle.
+        map.addSource('point', {
+          "type": "geojson",
+          "data": pointOnCircle(0)
+        });
+
+        map.addLayer({
+          "id": "point",
+          "source": "point",
+          "type": "circle",
+          "paint": {
+            "circle-radius": 10,
+            "circle-color": "#007cbf"
+          }
+        });
+
+        function animateMarker(timestamp) {
+// Update the data to a new position based on the animation timestamp. The
+// divisor in the expression `timestamp / 1000` controls the animation speed.
+          map.getSource('point').setData(pointOnCircle(timestamp / 1000));
+
+// Request the next frame of the animation.
+          requestAnimationFrame(animateMarker);
+        }
+
+// Start the animation.
+        animateMarker(0);})
     }
   },
   data() {
@@ -381,7 +421,7 @@ html,body{
   top: 0;
   bottom: 0;
   width: auto;
-  height: 100%;
+  height: 95%;
   z-index: 0;
 }
 .el-slider{
