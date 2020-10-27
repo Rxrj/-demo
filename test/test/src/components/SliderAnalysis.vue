@@ -6,10 +6,10 @@
           v-model="value1"
           align="right"
           type="date"
-          placeholder="选择日期"
+          placeholder="select data"
           :picker-options="pickerOptions">
         </el-date-picker>
-        <el-select v-model="value" placeholder="请选择" style="margin-top: 20px;width: 220px">
+        <el-select v-model="value" placeholder="please choose" style="margin-top: 20px;width: 220px">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -17,9 +17,9 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">显示分区</el-radio>
-        <el-radio v-model="radio" label="2">不显示分区</el-radio>
-        <el-button style="margin-top: 20px;width: 220px">查询</el-button>
+        <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">partition visible</el-radio>
+        <el-radio v-model="radio" label="2">invisible</el-radio>
+        <el-button style="margin-top: 20px;width: 220px">search</el-button>
       </div>
       <el-row class="tac">
         <el-col :span="12">
@@ -31,17 +31,17 @@
             style="left: 40px">
             <el-submenu index="1" style="width: 220px">
               <template slot="title">
-                <span>流量变化</span>
+                <span>Data changes</span>
               </template>
-              <el-menu-item>散点图</el-menu-item>
-              <el-menu-item>热力图</el-menu-item>
-              <el-menu-item>三维图</el-menu-item>
+              <el-menu-item>Scatter plot</el-menu-item>
+              <el-menu-item>Thermodynamic diagram</el-menu-item>
+              <el-menu-item>Three dimensional diagram</el-menu-item>
             </el-submenu>
             <el-submenu index="2" style="width: 220px">
               <template slot="title">
-                <span>流量分析</span>
+                <span>Data analysis</span>
               </template>
-              <el-menu-item>节假日与工作日对比</el-menu-item>
+              <el-menu-item>Holidays and working days</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-col>
@@ -62,19 +62,19 @@ export default {
           return time.getTime() > Date.now();
         },
         shortcuts: [{
-          text: '今天',
+          text: 'Today',
           onClick(picker) {
             picker.$emit('pick', new Date());
           }
         }, {
-          text: '昨天',
+          text: 'Yesterday',
           onClick(picker) {
             const date = new Date();
             date.setTime(date.getTime() - 3600 * 1000 * 24);
             picker.$emit('pick', date);
           }
         }, {
-          text: '一周前',
+          text: 'One week ago',
           onClick(picker) {
             const date = new Date();
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);

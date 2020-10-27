@@ -10,12 +10,12 @@
               v-model="value1"
               align="right"
               type="date"
-              placeholder="选择日期"
+              placeholder="select date"
               :picker-options="pickerOptions">
             </el-date-picker>
-            <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">显示分区</el-radio>
-            <el-radio v-model="radio" label="2">不显示分区</el-radio>
-            <el-button style="margin-top: 20px;width: 220px">开始</el-button>
+            <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">partition visible</el-radio>
+            <el-radio v-model="radio" label="2">invisible</el-radio>
+            <el-button style="margin-top: 20px;width: 220px">start</el-button>
           </div>
 <!--          给折线图准备一个div-->
           <div id="charts1" style="width: 100%;height: 26%;padding-left: 5px;padding-top: 10px">
@@ -62,6 +62,9 @@ export default {
     var option = {
       title: [],//
       legend:{},
+      grid:{
+        left:50
+      },
       tooltip: {
         trigger: 'axis',
         formatter: function (params) {
@@ -150,6 +153,9 @@ export default {
     var option = {
       title: [],//
       legend:{},
+      grid:{
+        left:50
+      },
       tooltip: {
         trigger: 'axis',
         formatter: function (params) {
@@ -238,6 +244,9 @@ export default {
     var option = {
       title: [],//
       legend:{},
+      grid:{
+        left:35
+      },
       tooltip: {
         trigger: 'axis',
         formatter: function (params) {
@@ -326,11 +335,10 @@ export default {
       var map = new mapboxgl.Map({
         container: 'map', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.97,40.75], // 初始坐标系，这个是曼哈顿附近
+        center: [-73.97,40.75], // 初始坐标系，这个是南京建邺附近
         zoom: 12,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
-
       var radius = 0.05;
       function pointOnCircle(angle) {
         return {
@@ -341,14 +349,12 @@ export default {
           ]
         };
       }
-
       map.on('load', function () {
 // Add a source and layer displaying a point which will be animated in a circle.
         map.addSource('point', {
           "type": "geojson",
           "data": pointOnCircle(0)
         });
-
         map.addLayer({
           "id": "point",
           "source": "point",
@@ -358,20 +364,18 @@ export default {
             "circle-color": "#007cbf"
           }
         });
-
         function animateMarker(timestamp) {
 // Update the data to a new position based on the animation timestamp. The
 // divisor in the expression `timestamp / 1000` controls the animation speed.
           map.getSource('point').setData(pointOnCircle(timestamp / 1000));
-
 // Request the next frame of the animation.
           requestAnimationFrame(animateMarker);
         }
-
 // Start the animation.
         animateMarker(0);})
     }
   },
+
   data() {
     return {
       activeIndex: '1',
@@ -381,19 +385,19 @@ export default {
           return time.getTime() > Date.now();
         },
         shortcuts: [{
-          text: '今天',
+          text: 'Today',
           onClick(picker) {
             picker.$emit('pick', new Date());
           }
         }, {
-          text: '昨天',
+          text: 'Yesterday',
           onClick(picker) {
             const date = new Date();
             date.setTime(date.getTime() - 3600 * 1000 * 24);
             picker.$emit('pick', date);
           }
         }, {
-          text: '一周前',
+          text: 'One week ago',
           onClick(picker) {
             const date = new Date();
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
@@ -438,6 +442,7 @@ html,body{
   right:100px;
   top:100px;
   font-size: 20px;
+  font-weight: 700;
   line-height: 50px;
 }
 

@@ -10,12 +10,12 @@
             v-model="value1"
             align="right"
             type="date"
-            placeholder="选择日期"
+            placeholder="select date"
             :picker-options="pickerOptions">
           </el-date-picker>
-          <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">显示分区</el-radio>
-          <el-radio v-model="radio" label="2">不显示分区</el-radio>
-          <el-button style="margin-top: 20px;width: 220px">开始</el-button>
+          <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">partition visible</el-radio>
+          <el-radio v-model="radio" label="2">invisible</el-radio>
+          <el-button style="margin-top: 20px;width: 220px">start</el-button>
         </div>
         <!--          给折线图准备一个div-->
         <div id="charts1" style="width: 100%;height:40%;padding-left: 5px;padding-top: 10px">
@@ -224,19 +224,19 @@ export default {
           return time.getTime() > Date.now();
         },
         shortcuts: [{
-          text: '今天',
+          text: 'Today',
           onClick(picker) {
             picker.$emit('pick', new Date());
           }
         }, {
-          text: '昨天',
+          text: 'Yesterday',
           onClick(picker) {
             const date = new Date();
             date.setTime(date.getTime() - 3600 * 1000 * 24);
             picker.$emit('pick', date);
           }
         }, {
-          text: '一周前',
+          text: 'One week ago',
           onClick(picker) {
             const date = new Date();
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);

@@ -6,12 +6,12 @@
           v-model="value1"
           align="right"
           type="date"
-          placeholder="选择日期"
+          placeholder="select date"
           :picker-options="pickerOptions">
         </el-date-picker>
-        <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">显示分区</el-radio>
-        <el-radio v-model="radio" label="2">不显示分区</el-radio>
-        <el-button style="margin-top: 20px;width: 220px">开始</el-button>
+        <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">partition visible</el-radio>
+        <el-radio v-model="radio" label="2">partition invisible</el-radio>
+        <el-button style="margin-top: 20px;width: 220px">start</el-button>
       </div>
     </el-aside>
   </el-container>
