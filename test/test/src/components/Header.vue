@@ -39,6 +39,6 @@ export default {
   width: 100%;
 }
 .el-header .fr{
-  float: left;
+  float: right;
 }
 </style>
