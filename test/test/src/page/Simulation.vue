@@ -340,12 +340,14 @@ export default {
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
       var radius = 0.05;
-      function pointOnCircle(angle) {
+      function pointOnCircle(i) {
         return {
           "type": "Point",
           "coordinates": [
-            0.5 * Math.cos(angle) * radius - 73.98,
-            0.5 * Math.sin(angle) * radius + 40.75
+            -73.98 + 0.0001 * i,
+            40.75 + 0.0001 * i
+            // 0.5 * Math.cos(angle) * radius - 73.98,
+            // 0.5 * Math.sin(angle) * radius + 40.75
           ]
         };
       }
@@ -360,19 +362,17 @@ export default {
           "source": "point",
           "type": "circle",
           "paint": {
-            "circle-radius": 10,
+            "circle-radius": 5,
             "circle-color": "#007cbf"
           }
         });
-        function animateMarker(timestamp) {
-// Update the data to a new position based on the animation timestamp. The
-// divisor in the expression `timestamp / 1000` controls the animation speed.
-          map.getSource('point').setData(pointOnCircle(timestamp / 1000));
-// Request the next frame of the animation.
-          requestAnimationFrame(animateMarker);
-        }
-// Start the animation.
-        animateMarker(0);})
+
+        var i = 0;
+        var timer = window.setInterval(function() {
+          map.getSource('point').setData(pointOnCircle(i));
+          i++;
+        }, 100);
+      })
     }
   },
 
