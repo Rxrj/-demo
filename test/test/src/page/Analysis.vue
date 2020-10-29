@@ -1,14 +1,14 @@
 <template>
   <div style="height: 100%">
-    <el-container style="height: 100%">
-      <el-header>
+    <el-container style="height: 100%;background-color: #252525" >
+      <el-header style="padding: 0">
         <Header/>
       </el-header>
       <el-container style="height: 100%">
         <el-aside>
          <SliderAnalysis/>
         </el-aside>
-        <el-main>
+        <el-main style="padding: 20px">
           <router-view/>
         </el-main>
       </el-container>

@@ -1,25 +1,18 @@
 <template>
   <el-container>
     <el-aside>
-      <div class="block">
+      <div class="block" >
         <el-date-picker
-          v-model="value1"
+          v-model="value"
           align="right"
           type="date"
-          placeholder="select data"
+          placeholder="Select Data"
           :picker-options="pickerOptions">
         </el-date-picker>
-        <el-select v-model="value" placeholder="please choose" style="margin-top: 20px;width: 220px">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <el-radio v-model="radio" label="1" style="margin-top: 20px;margin-left: 16px">partition visible</el-radio>
-        <el-radio v-model="radio" label="2">invisible</el-radio>
-        <el-button style="margin-top: 20px;width: 220px">search</el-button>
+        <br>
+        <el-checkbox v-model="checked" style="padding-top: 20px">Partition Visible</el-checkbox>
+        <br>
+        <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">SEARCH</el-button>
       </div>
       <el-row class="tac">
         <el-col :span="12">
@@ -29,17 +22,17 @@
             @open="handleOpen"
             @close="handleClose"
             style="left: 40px">
-            <el-submenu index="1" style="width: 220px">
+            <el-submenu index="1" style="width: 220px;background-color: #252525">
               <template slot="title">
-                <span>Data changes</span>
+                <span style="color: #eeeeee" class="item-title">Data Changes</span>
               </template>
               <el-menu-item>Scatter plot</el-menu-item>
               <el-menu-item>Thermodynamic diagram</el-menu-item>
               <el-menu-item>Three dimensional diagram</el-menu-item>
             </el-submenu>
-            <el-submenu index="2" style="width: 220px">
+            <el-submenu index="2" style="width: 220px;background-color: #252525">
               <template slot="title">
-                <span>Data analysis</span>
+                <span style="color: #eeeeee" class="item-title">Data Analysis</span>
               </template>
               <el-menu-item>Holidays and working days</el-menu-item>
             </el-submenu>
@@ -55,6 +48,7 @@ export default {
   name: "SliderAnalysis",
   data() {
     return {
+      checked: true,
       activeIndex: '1',
       activeIndex2: '1',
       pickerOptions: {
@@ -124,4 +118,30 @@ export default {
   left:0px;
   bottom: 0;
 }
+.el-menu-item{
+  background-color: #252525;
+  color: #eeeeee;
+}
+.el-menu-item:hover,.el-menu-item:focus{
+  background-color: #383838;
+}
+
+/deep/ .el-submenu__title:hover{background-color:#383838 !important;}
+/deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
+  color: #eeeeee;
+}
+/deep/ .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #252525;
+  border-color: #eeeeee;
+}
+/deep/ .el-p .el-picker-panel__sidebar{
+  color: #eeeeee;
+  background-color: #252525;
+}
+/deep/ .el-input__inner{
+  background-color: #2d2d2d;
+  border: solid 2px #444444;
+  color: #eeeeee;
+}
 </style>
+
