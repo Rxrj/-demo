@@ -12,7 +12,7 @@
         <br>
         <el-checkbox v-model="checked" style="padding-top: 20px">Partition Visible</el-checkbox>
         <br>
-        <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">SEARCH</el-button>
+        <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Search</el-button>
       </div>
       <el-row class="tac">
         <el-col :span="12">
@@ -24,7 +24,7 @@
             style="left: 40px">
             <el-submenu index="1" style="width: 220px;background-color: #252525">
               <template slot="title">
-                <span style="color: #eeeeee" class="item-title">Data Changes</span>
+                <span style="color: #eeeeee" class="item-title">Data Visualization</span>
               </template>
               <el-menu-item>Scatter plot</el-menu-item>
               <el-menu-item>Thermodynamic diagram</el-menu-item>

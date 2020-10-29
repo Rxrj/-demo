@@ -12,7 +12,7 @@
         <br>
         <el-checkbox v-model="checked" style="padding-top: 20px">Partition Visible</el-checkbox>
         <br>
-        <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">START</el-button>
+        <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
       </div>
     </el-aside>
   </el-container>
