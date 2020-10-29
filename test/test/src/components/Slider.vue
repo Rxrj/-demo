@@ -10,7 +10,7 @@
           :picker-options="pickerOptions">
         </el-date-picker>
         <br>
-        <el-checkbox v-model="checked" style="padding-top: 20px">Partition Visible</el-checkbox>
+        <el-checkbox v-model="checked" style="padding-top: 20px" @change="handleChange">Partition Visible</el-checkbox>
         <br>
         <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
       </div>
@@ -65,6 +65,11 @@ export default {
       }],
       value: ''
     };
+  },
+  methods:{
+    handleChange(){
+      this.emit('handleChange',this.checked);
+    }
   }
 }
 </script>
