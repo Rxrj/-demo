@@ -45,28 +45,76 @@ export default {
       var map = new mapboxgl.Map({
         container: 'map', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.97,40.75], // 初始坐标系，这个是南京建邺附近
+        center: [-73.97,40.75],
         zoom: 12,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
-      var radius = 0.05;
+
       function pointOnCircle(i) {
         return {
           "type": "Point",
           "coordinates": [
             -73.98 + 0.0001 * i,
             40.75 + 0.0001 * i
-            // 0.5 * Math.cos(angle) * radius - 73.98,
-            // 0.5 * Math.sin(angle) * radius + 40.75
           ]
         };
       }
       map.on('load', function () {
-// Add a source and layer displaying a point which will be animated in a circle.
+        map.addSource("regions", {
+          "type": "geojson",           /* geojson类型资源 */
+          "data": {                    /* geojson数据 */
+            "type": "FeatureCollection",
+            "features": [{
+              "type": "Feature",
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                  [
+                    [-73.9570868799842, 40.78418956539499],
+                    [-73.96347129174404, 40.783136890661766],
+                    [-73.96544002797853, 40.77867605891164],
+                    [-73.96102526311755, 40.77526823378264],
+                    [-73.95464187881434, 40.776320688988555],
+                    [-73.95267223202801, 40.78078118882081],
+                    [-73.9570868799842, 40.78418956539499]
+                  ]
+                ]
+              }
+            }, {
+              "type": "Feature",
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                  [-73.97824871666947, 40.72281094762265],
+                  [-73.98462442013124, 40.7217577544381],
+                  [-73.98658861001985, 40.71729990459654],
+                  [-73.98217800523803, 40.71389557913704],
+                  [-73.97580332622488, 40.71494855254655],
+                  [-73.97383822765691, 40.71940607116063],
+                  [-73.97824871666947, 40.72281094762265]
+                ]]
+              }
+            }]
+          }
+        });
+
+        map.addLayer({
+          "id": "regions",
+          "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+          "source": "regions",
+          "paint": {
+            "fill-color": "#FFC1C1", /* 填充的颜色 */
+            "fill-opacity": 0.4      /* 透明度 */
+          },
+          "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
+        });
+
+        // Add a source and layer displaying a point which will be animated in a circle.
         map.addSource('point', {
           "type": "geojson",
           "data": pointOnCircle(0)
         });
+
         map.addLayer({
           "id": "point",
           "source": "point",
@@ -76,15 +124,19 @@ export default {
             "circle-color": "#007cbf"
           }
         });
+
         var i = 0;
         var timer = window.setInterval(function() {
           map.getSource('point').setData(pointOnCircle(i));
           i++;
+          if(i>200){
+            map.setLayoutProperty('point', 'visibility', 'none');
+            map.setLayoutProperty('regions', 'visibility', 'none');
+          }
         }, 100);
       })
     }
   },
-
 }
 </script>
 
