@@ -69,13 +69,12 @@ const mapboxgl = require('mapbox-gl');
 export default {
   name: "Analysis",
   components: {Header},
-  methods:{
-    handleChange(){
+  methods: {
+    handleChange() {
       var check = this.checked;
-      if(!check){
+      if (!check) {
         map.setLayoutProperty('regions', 'visibility', 'none');
-      }
-      else{
+      } else {
         map.setLayoutProperty('regions', 'visibility', 'visible');
       }
     }
@@ -106,6 +105,7 @@ export default {
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
+
 
     });
   },
