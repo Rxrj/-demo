@@ -1,5 +1,5 @@
 <template>
-    <div id="map">
+    <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
         <el-slider
           v-model="value"
           max="24"
@@ -22,8 +22,8 @@ export default {
       var map = new mapboxgl.Map({
         container: 'map', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.97,40.75], // 初始坐标系，这个是南京建邺附近
-        zoom: 12,     // starting zoom 地图初始的拉伸比例
+        center: [-73.96,40.78], // 初始坐标系
+        zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
 
@@ -83,7 +83,7 @@ export default {
   position: fixed;
   z-index: 1000;
   width: 500px;
-  bottom: 10px;
+  bottom: 50px;
   left: 900px;
 }
 

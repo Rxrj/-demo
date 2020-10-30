@@ -30,6 +30,8 @@
                   show-stops>
                 </el-slider>
                 <div class="Evaluation" style="text-align: right">
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Cars<br/>14</div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Customers<br/>14</div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/>416.317s</div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/>61.833s</div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/>14.411%</div>
@@ -51,22 +53,19 @@
 
 <script type="text/ecmascript-6">
 import Header from "../components/Header";
-import Slider from "../components/Slider";
 import echarts from 'echarts'
 import '@/assets/css/all.css'
 const mapboxgl = require('mapbox-gl');
 export default {
   name: "Simulation",
-  components: {Slider, Header},
+  components: {Header},
   methods:{
     handleChange(){
       var check = this.checked;
       if(!check){
-        alert("没有选中");
         map.setLayoutProperty('regions', 'visibility', 'none');
       }
       else{
-        alert("被选中");
         map.setLayoutProperty('regions', 'visibility', 'visible');
       }
     }
@@ -76,7 +75,7 @@ export default {
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-      center: [-73.96,40.78], // 初始坐标系，这个是南京建邺附近
+      center: [-73.96,40.78], // 初始坐标系
       zoom: 11,     // starting zoom 地图初始的拉伸比例
       antialias: true, //抗锯齿，通过false关闭提升性能
     });
@@ -124,17 +123,6 @@ export default {
       });
 
     });
-    // var i = 0;
-    // var timer = window.setInterval(function() {
-    //   i++;
-    //   if(i>10){
-    //     map.setLayoutProperty('regions', 'visibility', 'none');
-    //   }
-    //   if(i>20){
-    //     map.setLayoutProperty('regions', 'visibility', 'visible');
-    //   }
-    // }, 1000);
-
     var charts1 = echarts.init(document.getElementById('charts1'));
     var data = [{"name":1596038400000,"value":[1596038400000,53]},{"name":1596039040000,"value":[1596039040000,51]},{"name":1596039680000,"value":[1596039680000,51]},{"name":1596040320000,"value":[1596040320000,51]},{"name":1596040832000,"value":[1596040832000,58]},{"name":1596041472000,"value":[1596041472000,67]},{"name":1596042112000,"value":[1596042112000,68]},{"name":1596042624000,"value":[1596042624000,54]},{"name":1596043264000,"value":[1596043264000,51]},{"name":1596043904000,"value":[1596043904000,57]},{"name":1596044416000,"value":[1596044416000,52]},{"name":1596045056000,"value":[1596045056000,54]},{"name":1596045696000,"value":[1596045696000,51]},{"name":1596046208000,"value":[1596046208000,51]},{"name":1596046848000,"value":[1596046848000,52]},{"name":1596047488000,"value":[1596047488000,51]},{"name":1596048000000,"value":[1596048000000,53]},{"name":1596048640000,"value":[1596048640000,52]},{"name":1596049280000,"value":[1596049280000,67]},{"name":1596049920000,"value":[1596049920000,59]},{"name":1596050432000,"value":[1596050432000,58]},{"name":1596051072000,"value":[1596051072000,52]},{"name":1596051712000,"value":[1596051712000,55]},{"name":1596052224000,"value":[1596052224000,53]},{"name":1596052864000,"value":[1596052864000,54]},{"name":1596053504000,"value":[1596053504000,54]},{"name":1596054016000,"value":[1596054016000,54]},{"name":1596054656000,"value":[1596054656000,52]},{"name":1596055296000,"value":[1596055296000,54]},{"name":1596055808000,"value":[1596055808000,65]},{"name":1596056448000,"value":[1596056448000,59]},{"name":1596057088000,"value":[1596057088000,55]},{"name":1596057600000,"value":[1596057600000,53]},{"name":1596058240000,"value":[1596058240000,55]},{"name":1596058880000,"value":[1596058880000,54]},{"name":1596059520000,"value":[1596059520000,55]},{"name":1596060032000,"value":[1596060032000,64]},{"name":1596060672000,"value":[1596060672000,57]},{"name":1596061312000,"value":[1596061312000,56]},{"name":1596061824000,"value":[1596061824000,55]},{"name":1596062464000,"value":[1596062464000,55]},{"name":1596063104000,"value":[1596063104000,55]},{"name":1596063616000,"value":[1596063616000,58]},{"name":1596064256000,"value":[1596064256000,79]},{"name":1596064896000,"value":[1596064896000,60]},{"name":1596065408000,"value":[1596065408000,63]},{"name":1596066048000,"value":[1596066048000,63]},{"name":1596066688000,"value":[1596066688000,82]},{"name":1596067200000,"value":[1596067200000,81]},{"name":1596067840000,"value":[1596067840000,78]},{"name":1596068480000,"value":[1596068480000,78]},{"name":1596069120000,"value":[1596069120000,65]},{"name":1596069632000,"value":[1596069632000,76]},{"name":1596070272000,"value":[1596070272000,80]},{"name":1596070912000,"value":[1596070912000,78]},{"name":1596107040000,"value":[1596107040000,70]},{"name":1596124799000,"value":[1596124799000,0]}];
 
@@ -446,18 +434,6 @@ export default {
           }
         }]
       },
-      value1: '1',
-      radio:'1',
-      options: [{
-        value: '选项1',
-        label: 'drop-off'
-      }, {
-        value: '选项2',
-        label: 'pick-up'
-      }, {
-        value: '选项3',
-        label: 'both'
-      }],
       value: ''
     };
   },
