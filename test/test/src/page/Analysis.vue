@@ -89,18 +89,7 @@ export default {
       zoom: 11,     // starting zoom 地图初始的拉伸比例
       antialias: true, //抗锯齿，通过false关闭提升性能
     });
-    var radius = 0.05;
-    function pointOnCircle(i) {
-      return {
-        "type": "Point",
-        "coordinates": [
-          -73.98 + 0.0001 * i,
-          40.75 + 0.0001 * i
-          // 0.5 * Math.cos(angle) * radius - 73.98,
-          // 0.5 * Math.sin(angle) * radius + 40.75
-        ]
-      };
-    }
+
     map.on('load', function () {
       map.addSource("regions", {
         "type": "geojson",
@@ -116,20 +105,6 @@ export default {
           "fill-opacity": 0.3      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
-      });
-      map.addSource('point', {
-        "type": "geojson",
-        "data": pointOnCircle(0)
-      });
-
-      map.addLayer({
-        "id": "point",
-        "source": "point",
-        "type": "circle",
-        "paint": {
-          "circle-radius": 5,
-          "circle-color": "#007cbf"
-        }
       });
 
     });
