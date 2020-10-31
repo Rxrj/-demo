@@ -37,8 +37,10 @@
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font">14.411%</div></div>
                 </div>
                 <div class="Numbers" style="text-align: right">
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Cars<br/><div style="font-size: 25px;color:#409EFF">14</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Customers<br/><div style="font-size: 25px;color:#409EFF">14</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Agents<br/><div
+                    style="font-size: 25px;color:#409EFF">14</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Requests<br/><div
+                    style="font-size: 25px;color:#409EFF">14</div></div>
                 </div>
               </div>
             </el-col>
@@ -115,7 +117,7 @@ export default {
         "source": "resources",
         "type": "circle",
         "paint": {
-          "circle-radius": 2,
+          "circle-radius": 3,
           "circle-color": "#007cbf"
         }
       });
@@ -125,7 +127,7 @@ export default {
         "source": "agents",
         "type": "circle",
         "paint": {
-          "circle-radius": 2,
+          "circle-radius": 3,
           "circle-color": "#FF0000"
         }
       });
