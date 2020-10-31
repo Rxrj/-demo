@@ -41,6 +41,11 @@
               </el-slider>
             </div>
           </el-col>
+          <div class="Evaluation" style="text-align: right">
+            <div style="color: #eeeeee; font-weight: bold;text-align:center">MAPE<br/><div class="font">16.666%</div></div>
+            <div style="color: #eeeeee; font-weight: bold;text-align:center">MAE<br/><div class="font">2.345</div></div>
+            <div style="color: #eeeeee; font-weight: bold;text-align:center">RMSE<br/><div class="font">5.689</div></div>
+          </div>
           <el-col :span="8" style="height: 100%;margin: 0;padding: 0">
             <div class="charts" id="charts1" style="width: auto;height: 46%"></div>
             <div class="charts" id="charts2" style="width: auto;height: 46%"></div>
@@ -445,15 +450,20 @@ html,body{
 }
 .Evaluation{
   position: fixed;
-  left:30px;
-  top:250px;
-  font-size: 20px;
+  left:80px;
+  top:300px;
+  font-size: 25px;
   font-weight: 700;
   line-height: 50px;
 
+  box-sizing: border-box;
   padding:10px;
   border-radius: 10px;
   box-shadow: 0 2px 5px black
+}
+.font{
+  font-size: 30px;
+  color: #409EFF;
 }
 
 .charts{
