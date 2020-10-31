@@ -3,23 +3,25 @@
       <el-header style="padding: 0">
         <Header/>
       </el-header>
-      <el-container style="height: 100%">
-        <el-aside style="padding-top: 20px">
+      <el-container style="height: 100%;background-color: #252525">
+        <el-aside style="padding-top: 70px">
           <div class="block" >
             <el-date-picker
               v-model="value"
               align="right"
               type="date"
-              placeholder="Select Data"
+              placeholder=" Select Data"
+              style="font-size: 22px"
               :picker-options="pickerOptions">
             </el-date-picker>
             <br>
-            <el-checkbox v-model="checked" style="padding-top: 20px" @change="handleChange">Partition Visible</el-checkbox>
-            <br>
-            <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
+            <div>
+              <el-checkbox v-model="checked" style="padding-top: 20px;" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+            </div>
+            <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
           </div>
         </el-aside>
-        <el-main style="padding: 20px;margin: 0">
+        <el-main style="padding-top: 70px;margin: 0">
           <el-row style="height: 100%;margin: 0;padding: 0">
             <el-col :span="15" style="height: 100%;margin: 0;padding: 0">
               <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
@@ -35,8 +37,8 @@
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font">14.411%</div></div>
                 </div>
                 <div class="Numbers" style="text-align: right">
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Cars<br/><div style="font-size: 20px;color:#409EFF">14</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Customers<br/><div style="font-size: 20px;color:#409EFF">14</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Cars<br/><div style="font-size: 25px;color:#409EFF">14</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Customers<br/><div style="font-size: 25px;color:#409EFF">14</div></div>
                 </div>
               </div>
             </el-col>
@@ -93,7 +95,7 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#FFC1C1", /* 填充的颜色 */
+          "fill-color": "#eeeeee", /* 填充的颜色 */
           "fill-opacity": 0.3      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
@@ -503,8 +505,8 @@ html,body{
 .Evaluation{
   position: fixed;
   left:35px;
-  top:250px;
-  font-size: 19px;
+  top:300px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 50px;
 
@@ -514,15 +516,15 @@ html,body{
 }
 
 .font{
-  font-size: 30px;
+  font-size: 35px;
   color: #409EFF;
 }
 
 .Numbers{
   position: fixed;
   left:50px;
-  top:600px;
-  font-size: 18px;
+  top:650px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 50px;
 

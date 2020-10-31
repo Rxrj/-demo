@@ -1,25 +1,28 @@
 <template>
   <el-container style="height: 100%;background-color: #252525">
-    <el-header style="padding: 0">
+    <el-header style="padding: 0;">
       <Header/>
     </el-header>
-    <el-container style="height: 100%">
-      <el-aside style="padding-top: 20px">
+    <el-container style="height: 100%;background-color: #252525">
+      <el-aside style="padding-top: 70px">
         <div class="block" >
           <el-date-picker
             v-model="value"
             align="right"
             type="date"
-            placeholder="Select Data"
+            placeholder=" Select Data"
+            style="font-size: 22px"
             :picker-options="pickerOptions">
           </el-date-picker>
           <br>
-          <el-checkbox v-model="checked" style="padding-top: 20px;padding-left: 40px" @change="handleChange">Partition Visible</el-checkbox>
+          <div>
+            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 30px" @change="handleChange"><div>Partition Visible</div></el-checkbox>
           <br>
-          <el-checkbox v-model="dropoff" style="padding-top: 20px" @change="handleChange">Drop Off</el-checkbox>
-          <el-checkbox v-model="pickup" style="padding-top: 20px" @change="handleChange">Pick Up</el-checkbox>
+            <el-checkbox v-model="pickup" style="padding-top: 20px;margin-left: 30px"><div>Pick Up</div></el-checkbox>
           <br>
-          <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Search</el-button>
+            <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px"><div>Drop Off</div></el-checkbox>
+          </div>
+          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Search</el-button>
         </div>
         <el-row class="tac">
           <el-col :span="12">
@@ -28,26 +31,26 @@
               class="el-menu-vertical-demo"
               @open="handleOpen"
               @close="handleClose"
-              style="left: 40px">
-              <el-submenu index="1" style="width: 220px;background-color: #252525">
+              style="left: 25px">
+              <el-submenu index="1" style="width: 250px;background-color: #252525">
                 <template slot="title">
                   <span style="color: #eeeeee" class="item-title">Data Visualization</span>
                 </template>
-                <el-menu-item>Scatter plot</el-menu-item>
-                <el-menu-item>Thermodynamic diagram</el-menu-item>
-                <el-menu-item>Three dimensional diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px">Scatter Plot</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px">Thermodynamic Diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 5px">Three Dimensional Diagram</el-menu-item>
               </el-submenu>
-              <el-submenu index="2" style="width: 220px;background-color: #252525">
+              <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
                   <span style="color: #eeeeee" class="item-title">Data Analysis</span>
                 </template>
-                <el-menu-item>Holidays and working days</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 5px">Holidays and Working Days</el-menu-item>
               </el-submenu>
             </el-menu>
           </el-col>
         </el-row>
       </el-aside>
-      <el-main style="padding: 20px;margin: 0">
+      <el-main style="padding-top: 70px;margin: 0">
         <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
           <el-slider
             v-model="value2"
@@ -100,7 +103,7 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#FFC1C1", /* 填充的颜色 */
+          "fill-color": "#eeeeee", /* 填充的颜色 */
           "fill-opacity": 0.3      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
@@ -180,6 +183,8 @@ html,body{
   border: solid 2px #444444;
   color: #eeeeee;
 }
+
+
 
 .el-menu{
   border-right: 0!important;

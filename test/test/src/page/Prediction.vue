@@ -3,23 +3,25 @@
     <el-header style="padding: 0">
       <Header/>
     </el-header>
-    <el-container style="height: 100%">
-      <el-aside style="padding-top: 20px">
+    <el-container style="height: 100%;background-color: #252525">
+      <el-aside style="padding-top: 70px">
         <div class="block" >
           <el-date-picker
             v-model="value"
             align="right"
             type="date"
-            placeholder="Select Data"
+            placeholder=" Select Data"
+            style="font-size: 22px"
             :picker-options="pickerOptions">
           </el-date-picker>
           <br>
-          <el-checkbox v-model="checked" style="padding-top: 20px" @change="handleChange">Partition Visible</el-checkbox>
-          <br>
-          <el-button style="margin-top: 20px;width: 220px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
+          <div>
+            <el-checkbox v-model="checked" style="padding-top: 20px;" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+          </div>
+          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
         </div>
       </el-aside>
-      <el-main style="padding: 20px;margin: 0">
+      <el-main style="padding-top: 70px;margin: 0">
         <el-row style="height: 100%;margin: 0;padding: 0">
           <el-col :span="8" style="height: 100%;margin: 0;padding-right: 40px">
             <div id="map1" style="border-radius: 10px;box-shadow: 0 2px 5px black;height: 95%;margin: 0;padding: 0">
@@ -29,6 +31,11 @@
                 :step="1"
                 show-stops>
               </el-slider>
+              <div class="Evaluation" style="text-align: right">
+                <div style="color: #eeeeee; font-weight: bold;text-align:center">MAPE(%)<br/><div class="font">18.677</div></div>
+                <div style="color: #eeeeee; font-weight: bold;text-align:center">MAE<br/><div class="font">3.648</div></div>
+                <div style="color: #eeeeee; font-weight: bold;text-align:center">RMSE<br/><div class="font">5.458</div></div>
+              </div>
             </div>
           </el-col>
           <el-col :span="8" style="height: 100%;margin: 0;padding: 0">
@@ -41,11 +48,6 @@
               </el-slider>
             </div>
           </el-col>
-          <div class="Evaluation" style="text-align: right">
-            <div style="color: #eeeeee; font-weight: bold;text-align:center">MAPE<br/><div class="font">16.666%</div></div>
-            <div style="color: #eeeeee; font-weight: bold;text-align:center">MAE<br/><div class="font">2.345</div></div>
-            <div style="color: #eeeeee; font-weight: bold;text-align:center">RMSE<br/><div class="font">5.689</div></div>
-          </div>
           <el-col :span="8" style="height: 100%;margin: 0;padding: 0">
             <div class="charts" id="charts1" style="width: auto;height: 46%"></div>
             <div class="charts" id="charts2" style="width: auto;height: 46%"></div>
@@ -109,7 +111,7 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#FFC1C1", /* 填充的颜色 */
+          "fill-color": "#eeeeee", /* 填充的颜色 */
           "fill-opacity": 0.3      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
@@ -160,7 +162,7 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#FFC1C1", /* 填充的颜色 */
+          "fill-color": "#eeeeee", /* 填充的颜色 */
           "fill-opacity": 0.3      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
@@ -450,19 +452,20 @@ html,body{
 }
 .Evaluation{
   position: fixed;
-  left:80px;
+  left:35px;
   top:300px;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 50px;
 
-  box-sizing: border-box;
   padding:10px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px black
+  box-shadow: 0 2px 5px black;
+  width: 11%;
 }
+
 .font{
-  font-size: 30px;
+  font-size: 35px;
   color: #409EFF;
 }
 
