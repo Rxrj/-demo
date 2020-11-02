@@ -4,19 +4,21 @@
         <Header/>
       </el-header>
       <el-container style="height: 100%;background-color: #252525">
-        <el-aside style="padding-top: 70px">
+        <el-aside style="padding-top: 90px">
           <div class="block" >
             <el-date-picker
-              v-model="value"
               align="right"
               type="date"
               placeholder=" Select Data"
-              style="font-size: 22px"
+              style="font-size: 22px;"
+              v-model="valueTime"
+              default-value = "2016-6-1"
               :picker-options="pickerOptions">
             </el-date-picker>
             <br>
             <div>
-              <el-checkbox v-model="checked" style="padding-top: 20px;" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+              <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+              <br>
             </div>
             <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
           </div>
@@ -430,6 +432,7 @@ export default {
       activeIndex: '1',
       activeIndex2: '1',
       maps: null,
+      valueTime:"2016-6-1",
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -471,6 +474,7 @@ html,body{
 /deep/ .el-submenu__title:hover{background-color:#383838 !important;}
 /deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
   color: #eeeeee;
+  font-size: 22px;
 }
 /deep/ .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
   background-color: #252525;
@@ -505,8 +509,8 @@ html,body{
 }
 .Evaluation{
   position: fixed;
-  left:35px;
-  top:300px;
+  left:20px;
+  top:320px;
   font-size: 22px;
   font-weight: 700;
   line-height: 50px;
@@ -523,8 +527,8 @@ html,body{
 
 .Numbers{
   position: fixed;
-  left:50px;
-  top:650px;
+  left:40px;
+  top:670px;
   font-size: 22px;
   font-weight: 700;
   line-height: 50px;

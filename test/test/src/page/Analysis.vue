@@ -4,49 +4,49 @@
       <Header/>
     </el-header>
     <el-container style="height: 100%;background-color: #252525">
-      <el-aside style="padding-top: 70px">
+      <el-aside style="padding-top:90px">
         <div class="block" >
           <el-date-picker
-            v-model="value"
             align="right"
             type="date"
             placeholder=" Select Data"
-            style="font-size: 22px"
+            style="font-size: 22px;"
+            v-model="valueTime"
+            default-value = "2016-6-1"
             :picker-options="pickerOptions">
           </el-date-picker>
           <br>
           <div>
-            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 30px" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 30px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
           <br>
             <el-checkbox v-model="pickup"
-                         style="padding-top: 20px;margin-left: 30px"
+                         style="padding-top: 20px;margin-left: 30px;font-size: 20px;font-weight: 700"
                          @change="handleChangePickup"><div>Pick Up</div></el-checkbox>
           <br>
-            <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px" @change="handleChangeDropoff"
+            <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px;font-size: 20px;font-weight: 700" @change="handleChangeDropoff"
             ><div>Drop Off</div></el-checkbox>
           </div>
-          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px
-          #444444;color: #eeeeee">Search</el-button>
+          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Play</el-button>
         </div>
         <el-row class="tac">
           <el-col :span="12">
             <el-menu
-              default-active="2"
+              default-active="1-1"
               class="el-menu-vertical-demo"
               @open="handleOpen"
               @close="handleClose"
-              style="left: 25px">
-              <el-submenu index="1" style="width: 250px;background-color: #252525">
+              style="left: 25px;font-weight: 700">
+              <el-submenu default-active="1-1" index="1" style="width: 250px;background-color: #252525">
                 <template slot="title">
-                  <span style="color: #eeeeee" class="item-title">Data Visualization</span>
+                  <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
-                <el-menu-item style="font-size: 18px">Scatter Plot</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px">Thermodynamic Diagram</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 5px">Three Dimensional Diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px" index="1-1">Scatter Plot</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 5px" index="1-3">Three Dimensional Diagram</el-menu-item>
               </el-submenu>
               <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
-                  <span style="color: #eeeeee" class="item-title">Data Analysis</span>
+                  <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Analysis</span>
                 </template>
                 <el-menu-item style="font-size: 18px;padding-left: 5px">Holidays and Working Days</el-menu-item>
               </el-submenu>
@@ -54,14 +54,25 @@
           </el-col>
         </el-row>
       </el-aside>
-      <el-main style="padding-top: 70px;margin: 0">
+      <el-main style="padding-top: 70px;margin: 0;position: relative">
         <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
           <el-slider
-            v-model="value2"
-            max="24"
+            v-model="valueSlider"
+            max="22"
             :step="1"
             show-stops>
           </el-slider>
+          <p style="left:80px;top:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="NumberRequest">Number of Request: 200</p>
+          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime">Date Time: 2016-6-1 8:00</div>
+          <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+            <div style="background-color:#FF0000;bottom:10px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
+            Pick Up
+          </div>
+          <div style="bottom:150px;right:85px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+            <div style="background-color:#007cbf;bottom:10px;right:115px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
+            Drop Off
+          </div>
+          <div class="charts" id="charts1" style="left:40px;bottom:100px;position: absolute;width: 400px;height: 400px"></div>
         </div>
       </el-main>
     </el-container>
@@ -179,12 +190,84 @@ export default {
       }, 1000);
 
     });
+
+    var charts1 = echarts.init(document.getElementById('charts1'));
+    var option = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+          type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: ['8', '9', '10', '11', '12', '13', '14','15','16', '17', '18', '19', '20', '21', '22'],
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#eeeeee',//左边线的颜色
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#eeeeee',//坐标值得具体的颜色
+
+            }
+          }
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          axisLine: {
+            lineStyle: {
+              type: 'solid',
+              color: '#eeeeee',//左边线的颜色
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#eeeeee',//坐标值得具体的颜色
+
+            }
+          }
+        }
+      ],
+      series: [
+        {
+          name: 'Pick Up',
+          type: 'bar',
+          stack: '搜索引擎',
+          data: [320, 432, 301, 334, 290, 230, 220,160, 172, 271, 374, 390, 230, 210,200],
+          color:['#FF0000']
+        },
+        {
+          name: 'Drop Off',
+          type: 'bar',
+          stack: '搜索引擎',
+          data: [320, 332, 301, 134, 290, 230, 200,162, 182, 291, 384, 309, 310, 220,300],
+          color:['#007cbf']
+        },
+      ]
+    };
+    charts1.setOption(option);
+
   },
   data() {
     return {
       checked: true,
       pickup:true,
       dropoff:true,
+      valueSlider:0,
+      valueTime:"2016-6-1",
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -226,6 +309,32 @@ export default {
   },
 
 }
+var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
+var t = null;
+t = setTimeout(timeChange,1000);//開始运行
+function timeChange()
+{
+  clearTimeout(t);//清除定时器
+  var min=date.getMinutes();
+//3. 设置当bai前时间+5分钟：把当前分钟数+5后的值du重新设置为date对象的分钟数
+  date.setMinutes(min+5);
+  var h=date.getHours();//获取时
+  var m=date.getMinutes();//获取分
+  if(m < 10)
+  {
+    document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+  }
+  else
+  {
+    document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+  }
+  t = setTimeout(timeChange,1000); //设定定时器，循环运行
+  if(h == 22)
+  {
+    clearTimeout(t);
+  }
+  document.getElementById("NumberRequest").innerHTML =  "Number of Request: "+(h+m)*15;
+}
 </script>
 
 <style scoped>
@@ -237,6 +346,7 @@ html,body{
 /deep/ .el-submenu__title:hover{background-color:#383838 !important;}
 /deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
   color: #eeeeee;
+  font-size: 22px;
 }
 /deep/ .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
   background-color: #252525;
@@ -252,6 +362,10 @@ html,body{
   color: #eeeeee;
 }
 
+/deep/ .el-date-table {
+  font-size: 12px;
+}
+
 
 
 .el-menu{
@@ -263,8 +377,8 @@ html,body{
   background-color: #252525;
   color: #eeeeee;
 }
-.el-menu-item:hover,.el-menu-item:focus{
-  background-color: #383838;
+.el-menu-item:hover,.el-menu-item:focus,.el-menu-item.is-active{
+  color: #409EFF;
 }
 
 #map{

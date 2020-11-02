@@ -15,7 +15,6 @@ export default {
 *{
   padding: 0;
   margin: 0;
-  font-size: 20px;
 }
 html,body.el-container{
   width: 100%;
@@ -31,6 +30,5 @@ html,body.el-container{
   padding: 0;
   height: 100%;
   width: 100%;
-  font-size: 22px;
 }
 </style>
