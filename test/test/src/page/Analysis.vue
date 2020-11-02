@@ -191,8 +191,9 @@ export default {
 
     });
 
-    var charts1 = echarts.init(document.getElementById('charts1'));
-    var option = {
+    //echarts图表
+    window.charts1 = echarts.init(document.getElementById('charts1'));
+    window.option = {
       tooltip: {
         trigger: 'axis',
         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -256,7 +257,7 @@ export default {
           data: [320, 332, 301, 134, 290, 230, 200,162, 182, 291, 384, 309, 310, 220,300],
           color:['#007cbf']
         },
-      ]
+      ],
     };
     charts1.setOption(option);
 
@@ -335,6 +336,24 @@ function timeChange()
   }
   document.getElementById("NumberRequest").innerHTML =  "Number of Request: "+(h+m)*15;
 }
+
+var myIndex = 0;
+var a = setInterval(function () {
+  var dataLen = option.series[0].data.length;
+  // 取消之前高亮的图形
+  charts1.dispatchAction({
+    type: 'downplay',
+    seriesIndex: 0,
+    dataIndex: myIndex
+  });
+  myIndex = (myChartPieIndex + 1) % dataLen;
+  // 高亮当前图形
+  charts1.dispatchAction({
+    type: 'highlight',
+    seriesIndex: 0,
+    dataIndex: myIndex
+  });
+}, 1000);
 </script>
 
 <style scoped>
