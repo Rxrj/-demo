@@ -18,11 +18,15 @@
           <div>
             <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 30px" @change="handleChange"><div>Partition Visible</div></el-checkbox>
           <br>
-            <el-checkbox v-model="pickup" style="padding-top: 20px;margin-left: 30px"><div>Pick Up</div></el-checkbox>
+            <el-checkbox v-model="pickup"
+                         style="padding-top: 20px;margin-left: 30px"
+                         @change="handleChangePickup"><div>Pick Up</div></el-checkbox>
           <br>
-            <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px"><div>Drop Off</div></el-checkbox>
+            <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px" @change="handleChangeDropoff"
+            ><div>Drop Off</div></el-checkbox>
           </div>
-          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Search</el-button>
+          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px
+          #444444;color: #eeeeee">Search</el-button>
         </div>
         <el-row class="tac">
           <el-col :span="12">
@@ -80,6 +84,22 @@ export default {
       } else {
         map.setLayoutProperty('regions', 'visibility', 'visible');
       }
+    },
+    handleChangePickup(){
+      var pickup = this.pickup;
+      if (!pickup) {
+        map.setLayoutProperty('pickup', 'visibility', 'none');
+      } else {
+        map.setLayoutProperty('pickup', 'visibility', 'visible');
+      }
+    },
+    handleChangeDropoff(){
+      var dropoff = this.dropoff;
+      if (!dropoff) {
+        map.setLayoutProperty('dropoff', 'visibility', 'none');
+      } else {
+        map.setLayoutProperty('dropoff', 'visibility', 'visible');
+      }
     }
   },
   mounted() {
@@ -109,6 +129,54 @@ export default {
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
 
+      map.addSource('pickup', {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_0.geojson"
+      });
+
+      map.addSource('dropoff', {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_0.geojson"
+      });
+
+      map.addLayer({
+        "id": "pickup",
+        "source": "pickup",
+        "type": "circle",
+        "paint": {
+          "circle-radius": 2,
+          "circle-color": "#FF0000"
+        }
+      });
+
+      map.addLayer({
+        "id": "dropoff",
+        "source": "dropoff",
+        "type": "circle",
+        "paint": {
+          "circle-radius": 2,
+          "circle-color": "#007cbf"
+        }
+      });
+
+
+      var index=0;
+      var timer = window.setInterval(function() {
+        if(index < 168){
+          index++;
+          map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
+            ".geojson");
+          map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
+            ".geojson");
+        }else {
+          //移除添加的source和layer
+          map.removeLayer('pickup');
+          map.removeLayer('dropoff');
+          map.removeSource('pickup');
+          map.removeSource('dropoff');
+          window.clearInterval(timer);
+        }
+      }, 1000);
 
     });
   },
