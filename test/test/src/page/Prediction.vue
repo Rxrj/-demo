@@ -103,40 +103,10 @@ export default {
       };
     }
     map1.on('load', function () {
-      map1.addSource("regions", {
-        "type": "geojson",
-        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
-      });
-
-      map1.addLayer({
-        "id": "regions",
-        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
-        "source": "regions",
-        "paint": {
-          "fill-color": "#eeeeee", /* 填充的颜色 */
-          "fill-opacity": 0.3      /* 透明度 */
-        },
-        "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
-      });
-      map1.addSource('point', {
-        "type": "geojson",
-        "data": pointOnCircle(0)
-      });
-
-      map1.addLayer({
-        "id": "point",
-        "source": "point",
-        "type": "circle",
-        "paint": {
-          "circle-radius": 5,
-          "circle-color": "#007cbf"
-        }
-      });
-
 
       map1.addSource('pickup_pred',{
         "type":"geojson",
-        "data":"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/pickup_pred.geojson"
+        "data":"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/intersection_pickup_pred.geojson"
       });
 
       map1.addLayer({
@@ -189,6 +159,24 @@ export default {
           ],
         },
       });
+      map1.addSource("regions", {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
+      });
+
+      map1.addLayer({
+        "id": "regions",
+        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+        "source": "regions",
+        "paint": {
+          "fill-color": "#eeeeee", /* 填充的颜色 */
+          "fill-opacity": 0.3      /* 透明度 */
+        },
+        "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
+      });
+
+
+
 
     });
     window.map2 = new mapboxgl.Map({
@@ -211,39 +199,9 @@ export default {
       };
     }
     map2.on('load', function () {
-      map2.addSource("regions", {
-        "type": "geojson",
-        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
-      });
-
-      map2.addLayer({
-        "id": "regions",
-        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
-        "source": "regions",
-        "paint": {
-          "fill-color": "#eeeeee", /* 填充的颜色 */
-          "fill-opacity": 0.3      /* 透明度 */
-        },
-        "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
-      });
-      map2.addSource('point', {
-        "type": "geojson",
-        "data": pointOnCircle(0)
-      });
-
-      map2.addLayer({
-        "id": "point",
-        "source": "point",
-        "type": "circle",
-        "paint": {
-          "circle-radius": 5,
-          "circle-color": "#007cbf"
-        }
-      });
-
       map2.addSource('pickup_pred',{
         "type":"geojson",
-        "data":"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/pickup_pred.geojson"
+        "data":"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/intersection_pickup_pred.geojson"
       });
 
       map2.addLayer({
@@ -296,6 +254,23 @@ export default {
           ],
         },
       });
+
+      map2.addSource("regions", {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
+      });
+
+      map2.addLayer({
+        "id": "regions",
+        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+        "source": "regions",
+        "paint": {
+          "fill-color": "#eeeeee", /* 填充的颜色 */
+          "fill-opacity": 0.3      /* 透明度 */
+        },
+        "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
+      });
+
 
     });
 
