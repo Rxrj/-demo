@@ -40,9 +40,9 @@
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
-                <el-menu-item style="font-size: 18px" index="1-1">Scatter Plot</el-menu-item>
+                <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 5px" index="1-3">Three Dimensional Diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 5px" index="1-3" @click="threeD">Three Dimensional Diagram</el-menu-item>
               </el-submenu>
               <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
@@ -111,6 +111,51 @@ export default {
       } else {
         map.setLayoutProperty('dropoff', 'visibility', 'visible');
       }
+    },
+    threeD(){
+      var layers = map.getStyle().layers;
+      var labelLayerId;
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === "symbol" && layers[i].layout["text-field"]) {
+          labelLayerId = layers[i].id;
+          break;
+        }
+      }
+      map.setPitch(70);
+      map.setBearing(-17.6);
+      map.setZoom(15);
+
+      map.addLayer({
+        "id": "3d-buildings",
+        "source": "composite",
+        "source-layer": "building",
+        "filter": ["==", "extrude", "true"],
+        "maxzoom":0,
+        "type": "fill-extrusion",
+        "paint": {
+          "fill-extrusion-color": "#007cbf",
+
+// use an 'interpolate' expression to add a smooth transition effect to the
+// buildings as the user zooms in
+          "fill-extrusion-height": [
+            "interpolate", ["linear"], ["zoom"],
+            7, 0,
+            7.5, ["get", "height"]
+          ],
+          "fill-extrusion-base": [
+            "interpolate", ["linear"], ["zoom"],
+            7, 0,
+            7.5, ["get", "min_height"]
+          ],
+          "fill-extrusion-opacity": .6
+        }
+      }, labelLayerId);
+    },
+    scatterP(){
+      map.setPitch(0);
+      map.setBearing(0);
+      map.setZoom(11);
+      map.setLayoutProperty('3d-buildings','visibility','none');
     }
   },
   mounted() {
@@ -169,6 +214,7 @@ export default {
           "circle-color": "#007cbf"
         }
       });
+
 
 
       var index=0;
