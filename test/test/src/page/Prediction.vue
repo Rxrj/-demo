@@ -27,14 +27,9 @@
         <el-row style="height: 100%;margin: 0;padding: 0">
           <el-col :span="8" style="height: 100%;margin: 0;padding-right: 40px">
             <div id="map1" style="border-radius: 10px;box-shadow: 0 2px 5px black;height: 95%;margin: 0;padding: 0">
-              <el-slider
-                v-model="value1"
-                max="24"
-                :step="1"
-                show-stops>
-              </el-slider>
+              <p style="color: #eeeeee;position:absolute;left:20px;top:20px;font-size: 22px;font-weight: 700">Ground Truth</p>
               <div class="Evaluation" style="text-align: right">
-                <div style="color: #eeeeee; font-weight: bold;text-align:center">MAPE(%)<br/><div class="font">18.677</div></div>
+                <div style="color: #eeeeee; font-weight: bold;text-align:center">MAPE(%)<br/><div class="font">16.677</div></div>
                 <div style="color: #eeeeee; font-weight: bold;text-align:center">MAE<br/><div class="font">3.648</div></div>
                 <div style="color: #eeeeee; font-weight: bold;text-align:center">RMSE<br/><div class="font">5.458</div></div>
               </div>
@@ -42,12 +37,7 @@
           </el-col>
           <el-col :span="8" style="height: 100%;margin: 0;padding: 0">
             <div id="map2" style="border-radius: 10px;box-shadow: 0 2px 5px black;height: 95%;margin: 0;padding: 0">
-              <el-slider
-                v-model="value2"
-                max="24"
-                :step="1"
-                show-stops>
-              </el-slider>
+              <p style="color: #eeeeee;position:absolute;left:550px;top:20px;font-size: 22px;font-weight: 700">Predicted Request</p>
             </div>
           </el-col>
           <el-col :span="8" style="height: 100%;margin: 0;padding: 0">
@@ -119,8 +109,8 @@ export default {
           "heatmap-weight": [
             "interpolate", ["linear"],
             ["get", "mag"],
-            0, 0,
-            50, 1
+            5, 0,
+            30, 1
           ],
           // Increase the heatmap color weight weight by zoom level
           // heatmap-intensity is a multiplier on top of heatmap-weight
@@ -133,16 +123,7 @@ export default {
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
           // Begin color ramp at 0-stop with a 0-transparancy color
           // to create a blur-like effect.
-          "heatmap-color": [
-            "interpolate", ["linear"],
-            ["heatmap-density"],
-            0, "rgba(33,102,172,0)",
-            0.2, "rgb(103,169,207)",
-            0.4, "rgb(209,229,240)",
-            0.6, "rgb(253,219,199)",
-            0.8, "rgb(239,138,98)",
-            1, "rgb(178,24,43)",
-          ],
+
           // Adjust the heatmap radius by zoom level
           "heatmap-radius": [
             "interpolate", ["linear"],
@@ -154,8 +135,8 @@ export default {
           "heatmap-opacity": [
             "interpolate", ["linear"],
             ["zoom"],
-            12, 1,
-            100, 0,
+            15, 1,
+            20, 0,
           ],
         },
       });
@@ -214,8 +195,8 @@ export default {
           "heatmap-weight": [
             "interpolate", ["linear"],
             ["get", "mag"],
-            0, 0,
-            50, 1
+            5, 0,
+            30, 1
           ],
           // Increase the heatmap color weight weight by zoom level
           // heatmap-intensity is a multiplier on top of heatmap-weight
@@ -228,16 +209,6 @@ export default {
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
           // Begin color ramp at 0-stop with a 0-transparancy color
           // to create a blur-like effect.
-          "heatmap-color": [
-            "interpolate", ["linear"],
-            ["heatmap-density"],
-            0, "rgba(33,102,172,0)",
-            0.2, "rgb(103,169,207)",
-            0.4, "rgb(209,229,240)",
-            0.6, "rgb(253,219,199)",
-            0.8, "rgb(239,138,98)",
-            1, "rgb(178,24,43)",
-          ],
           // Adjust the heatmap radius by zoom level
           "heatmap-radius": [
             "interpolate", ["linear"],
@@ -273,6 +244,8 @@ export default {
 
 
     });
+
+
 
     var charts1 = echarts.init(document.getElementById('charts1'));
     var data = [{"name":1596038400000,"value":[1596038400000,53]},{"name":1596039040000,"value":[1596039040000,51]},{"name":1596039680000,"value":[1596039680000,51]},{"name":1596040320000,"value":[1596040320000,51]},{"name":1596040832000,"value":[1596040832000,58]},{"name":1596041472000,"value":[1596041472000,67]},{"name":1596042112000,"value":[1596042112000,68]},{"name":1596042624000,"value":[1596042624000,54]},{"name":1596043264000,"value":[1596043264000,51]},{"name":1596043904000,"value":[1596043904000,57]},{"name":1596044416000,"value":[1596044416000,52]},{"name":1596045056000,"value":[1596045056000,54]},{"name":1596045696000,"value":[1596045696000,51]},{"name":1596046208000,"value":[1596046208000,51]},{"name":1596046848000,"value":[1596046848000,52]},{"name":1596047488000,"value":[1596047488000,51]},{"name":1596048000000,"value":[1596048000000,53]},{"name":1596048640000,"value":[1596048640000,52]},{"name":1596049280000,"value":[1596049280000,67]},{"name":1596049920000,"value":[1596049920000,59]},{"name":1596050432000,"value":[1596050432000,58]},{"name":1596051072000,"value":[1596051072000,52]},{"name":1596051712000,"value":[1596051712000,55]},{"name":1596052224000,"value":[1596052224000,53]},{"name":1596052864000,"value":[1596052864000,54]},{"name":1596053504000,"value":[1596053504000,54]},{"name":1596054016000,"value":[1596054016000,54]},{"name":1596054656000,"value":[1596054656000,52]},{"name":1596055296000,"value":[1596055296000,54]},{"name":1596055808000,"value":[1596055808000,65]},{"name":1596056448000,"value":[1596056448000,59]},{"name":1596057088000,"value":[1596057088000,55]},{"name":1596057600000,"value":[1596057600000,53]},{"name":1596058240000,"value":[1596058240000,55]},{"name":1596058880000,"value":[1596058880000,54]},{"name":1596059520000,"value":[1596059520000,55]},{"name":1596060032000,"value":[1596060032000,64]},{"name":1596060672000,"value":[1596060672000,57]},{"name":1596061312000,"value":[1596061312000,56]},{"name":1596061824000,"value":[1596061824000,55]},{"name":1596062464000,"value":[1596062464000,55]},{"name":1596063104000,"value":[1596063104000,55]},{"name":1596063616000,"value":[1596063616000,58]},{"name":1596064256000,"value":[1596064256000,79]},{"name":1596064896000,"value":[1596064896000,60]},{"name":1596065408000,"value":[1596065408000,63]},{"name":1596066048000,"value":[1596066048000,63]},{"name":1596066688000,"value":[1596066688000,82]},{"name":1596067200000,"value":[1596067200000,81]},{"name":1596067840000,"value":[1596067840000,78]},{"name":1596068480000,"value":[1596068480000,78]},{"name":1596069120000,"value":[1596069120000,65]},{"name":1596069632000,"value":[1596069632000,76]},{"name":1596070272000,"value":[1596070272000,80]},{"name":1596070912000,"value":[1596070912000,78]},{"name":1596107040000,"value":[1596107040000,70]},{"name":1596124799000,"value":[1596124799000,0]}];
@@ -492,6 +465,7 @@ export default {
   },
 
 }
+
 </script>
 
 <style scoped>

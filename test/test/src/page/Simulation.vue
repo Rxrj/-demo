@@ -31,18 +31,28 @@
                   v-model="value2"
                   max="24"
                   :step="1"
+                  style="left:570px"
                   show-stops>
                 </el-slider>
+                <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
+                <div style="bottom:200px;right:665px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+                  <div style="background-color:#FF0000;bottom:10px;right:140px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
+                  Idle Agents
+                </div>
+                <div style="bottom:150px;right:600px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+                  <div style="background-color:#007cbf;bottom:10px;right:205px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
+                  Waiting Requests
+                </div>
                 <div class="Evaluation" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font">416.317s</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font">61.833</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font">61.833s</div></div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font">14.411%</div></div>
                 </div>
                 <div class="Numbers" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Agents<br/><div
-                    style="font-size: 25px;color:#409EFF">14</div></div>
+                    style="font-size: 25px;color:#409EFF" id="agents">14</div></div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Requests<br/><div
-                    style="font-size: 25px;color:#409EFF">14</div></div>
+                    style="font-size: 25px;color:#409EFF" id="requests">14</div></div>
                 </div>
               </div>
             </el-col>
@@ -143,39 +153,18 @@ export default {
         }else {
           window.clearInterval(timer);
         }
-      }, 200);
+      }, 500);
 
     });
     var charts1 = echarts.init(document.getElementById('charts1'));
-    var data = [{"name":1596038400000,"value":[1596038400000,53]},{"name":1596039040000,"value":[1596039040000,51]},{"name":1596039680000,"value":[1596039680000,51]},{"name":1596040320000,"value":[1596040320000,51]},{"name":1596040832000,"value":[1596040832000,58]},{"name":1596041472000,"value":[1596041472000,67]},{"name":1596042112000,"value":[1596042112000,68]},{"name":1596042624000,"value":[1596042624000,54]},{"name":1596043264000,"value":[1596043264000,51]},{"name":1596043904000,"value":[1596043904000,57]},{"name":1596044416000,"value":[1596044416000,52]},{"name":1596045056000,"value":[1596045056000,54]},{"name":1596045696000,"value":[1596045696000,51]},{"name":1596046208000,"value":[1596046208000,51]},{"name":1596046848000,"value":[1596046848000,52]},{"name":1596047488000,"value":[1596047488000,51]},{"name":1596048000000,"value":[1596048000000,53]},{"name":1596048640000,"value":[1596048640000,52]},{"name":1596049280000,"value":[1596049280000,67]},{"name":1596049920000,"value":[1596049920000,59]},{"name":1596050432000,"value":[1596050432000,58]},{"name":1596051072000,"value":[1596051072000,52]},{"name":1596051712000,"value":[1596051712000,55]},{"name":1596052224000,"value":[1596052224000,53]},{"name":1596052864000,"value":[1596052864000,54]},{"name":1596053504000,"value":[1596053504000,54]},{"name":1596054016000,"value":[1596054016000,54]},{"name":1596054656000,"value":[1596054656000,52]},{"name":1596055296000,"value":[1596055296000,54]},{"name":1596055808000,"value":[1596055808000,65]},{"name":1596056448000,"value":[1596056448000,59]},{"name":1596057088000,"value":[1596057088000,55]},{"name":1596057600000,"value":[1596057600000,53]},{"name":1596058240000,"value":[1596058240000,55]},{"name":1596058880000,"value":[1596058880000,54]},{"name":1596059520000,"value":[1596059520000,55]},{"name":1596060032000,"value":[1596060032000,64]},{"name":1596060672000,"value":[1596060672000,57]},{"name":1596061312000,"value":[1596061312000,56]},{"name":1596061824000,"value":[1596061824000,55]},{"name":1596062464000,"value":[1596062464000,55]},{"name":1596063104000,"value":[1596063104000,55]},{"name":1596063616000,"value":[1596063616000,58]},{"name":1596064256000,"value":[1596064256000,79]},{"name":1596064896000,"value":[1596064896000,60]},{"name":1596065408000,"value":[1596065408000,63]},{"name":1596066048000,"value":[1596066048000,63]},{"name":1596066688000,"value":[1596066688000,82]},{"name":1596067200000,"value":[1596067200000,81]},{"name":1596067840000,"value":[1596067840000,78]},{"name":1596068480000,"value":[1596068480000,78]},{"name":1596069120000,"value":[1596069120000,65]},{"name":1596069632000,"value":[1596069632000,76]},{"name":1596070272000,"value":[1596070272000,80]},{"name":1596070912000,"value":[1596070912000,78]},{"name":1596107040000,"value":[1596107040000,70]},{"name":1596124799000,"value":[1596124799000,0]}];
-
+    var data1 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',400]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',320]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',417]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',290]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',300]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',410]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',400]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',420]}];
     var option = {
-      title: {
-        text: 'Search Time'
-      },
       legend:{},
       grid:{
-        left:50
+        left:60
       },
       tooltip: {
         trigger: 'axis',
-        formatter: function (params) {
-          params = params[0];
-          var date = new Date(params.name);
-          var hour = date.getHours();
-          var minutes = date.getMinutes();
-          if(hour < 10){
-            hour = '0' + hour;
-          }
-          if(minutes < 10){
-            minutes = '0' + minutes;
-          }
-          var dateStr = hour + ':' + minutes;
-          return dateStr + ' ' + params.value[1];
-        },
-        axisPointer: {
-          animation: false
-        }
       },
       xAxis: {
         type: 'time',
@@ -189,18 +178,6 @@ export default {
           }
         },
         axisLabel:{
-          formatter:function(value,index){
-            var date = new Date(value);
-            var hour = date.getHours();
-            var minutes = date.getMinutes();
-            if(hour < 10){
-              hour = '0' + hour;
-            }
-            if(minutes < 10){
-              minutes = '0' + minutes;
-            }
-            return hour + ':' + minutes;
-          },
           color:'#eeeeee'
         }
       },
@@ -231,7 +208,7 @@ export default {
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
-        data: data
+        data: data1
 
       }]
     };
@@ -240,15 +217,12 @@ export default {
     // 使用刚指定的配置项和数据显示图表。
     charts1.setOption(option);
     var charts2 = echarts.init(document.getElementById('charts2'));
-    var data = [{"name":1596038400000,"value":[1596038400000,53]},{"name":1596039040000,"value":[1596039040000,51]},{"name":1596039680000,"value":[1596039680000,51]},{"name":1596040320000,"value":[1596040320000,51]},{"name":1596040832000,"value":[1596040832000,58]},{"name":1596041472000,"value":[1596041472000,67]},{"name":1596042112000,"value":[1596042112000,68]},{"name":1596042624000,"value":[1596042624000,54]},{"name":1596043264000,"value":[1596043264000,51]},{"name":1596043904000,"value":[1596043904000,57]},{"name":1596044416000,"value":[1596044416000,52]},{"name":1596045056000,"value":[1596045056000,54]},{"name":1596045696000,"value":[1596045696000,51]},{"name":1596046208000,"value":[1596046208000,51]},{"name":1596046848000,"value":[1596046848000,52]},{"name":1596047488000,"value":[1596047488000,51]},{"name":1596048000000,"value":[1596048000000,53]},{"name":1596048640000,"value":[1596048640000,52]},{"name":1596049280000,"value":[1596049280000,67]},{"name":1596049920000,"value":[1596049920000,59]},{"name":1596050432000,"value":[1596050432000,58]},{"name":1596051072000,"value":[1596051072000,52]},{"name":1596051712000,"value":[1596051712000,55]},{"name":1596052224000,"value":[1596052224000,53]},{"name":1596052864000,"value":[1596052864000,54]},{"name":1596053504000,"value":[1596053504000,54]},{"name":1596054016000,"value":[1596054016000,54]},{"name":1596054656000,"value":[1596054656000,52]},{"name":1596055296000,"value":[1596055296000,54]},{"name":1596055808000,"value":[1596055808000,65]},{"name":1596056448000,"value":[1596056448000,59]},{"name":1596057088000,"value":[1596057088000,55]},{"name":1596057600000,"value":[1596057600000,53]},{"name":1596058240000,"value":[1596058240000,55]},{"name":1596058880000,"value":[1596058880000,54]},{"name":1596059520000,"value":[1596059520000,55]},{"name":1596060032000,"value":[1596060032000,64]},{"name":1596060672000,"value":[1596060672000,57]},{"name":1596061312000,"value":[1596061312000,56]},{"name":1596061824000,"value":[1596061824000,55]},{"name":1596062464000,"value":[1596062464000,55]},{"name":1596063104000,"value":[1596063104000,55]},{"name":1596063616000,"value":[1596063616000,58]},{"name":1596064256000,"value":[1596064256000,79]},{"name":1596064896000,"value":[1596064896000,60]},{"name":1596065408000,"value":[1596065408000,63]},{"name":1596066048000,"value":[1596066048000,63]},{"name":1596066688000,"value":[1596066688000,82]},{"name":1596067200000,"value":[1596067200000,81]},{"name":1596067840000,"value":[1596067840000,78]},{"name":1596068480000,"value":[1596068480000,78]},{"name":1596069120000,"value":[1596069120000,65]},{"name":1596069632000,"value":[1596069632000,76]},{"name":1596070272000,"value":[1596070272000,80]},{"name":1596070912000,"value":[1596070912000,78]},{"name":1596107040000,"value":[1596107040000,70]},{"name":1596124799000,"value":[1596124799000,0]}];
+    var data2 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
 
     var option = {
-      title: {
-        text: 'Search Time'
-      },
       legend:{},
       grid:{
-        left:50
+        left:60
       },
       tooltip: {
         trigger: 'axis',
@@ -298,7 +272,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Search Time',
+        name:'Waiting Time',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -324,7 +298,7 @@ export default {
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
-        data: data
+        data: data2
 
       }]
     };
@@ -333,15 +307,12 @@ export default {
     // 使用刚指定的配置项和数据显示图表。
     charts2.setOption(option);
     var charts3 = echarts.init(document.getElementById('charts3'));
-    var data = [{"name":1596038400000,"value":[1596038400000,53]},{"name":1596039040000,"value":[1596039040000,51]},{"name":1596039680000,"value":[1596039680000,51]},{"name":1596040320000,"value":[1596040320000,51]},{"name":1596040832000,"value":[1596040832000,58]},{"name":1596041472000,"value":[1596041472000,67]},{"name":1596042112000,"value":[1596042112000,68]},{"name":1596042624000,"value":[1596042624000,54]},{"name":1596043264000,"value":[1596043264000,51]},{"name":1596043904000,"value":[1596043904000,57]},{"name":1596044416000,"value":[1596044416000,52]},{"name":1596045056000,"value":[1596045056000,54]},{"name":1596045696000,"value":[1596045696000,51]},{"name":1596046208000,"value":[1596046208000,51]},{"name":1596046848000,"value":[1596046848000,52]},{"name":1596047488000,"value":[1596047488000,51]},{"name":1596048000000,"value":[1596048000000,53]},{"name":1596048640000,"value":[1596048640000,52]},{"name":1596049280000,"value":[1596049280000,67]},{"name":1596049920000,"value":[1596049920000,59]},{"name":1596050432000,"value":[1596050432000,58]},{"name":1596051072000,"value":[1596051072000,52]},{"name":1596051712000,"value":[1596051712000,55]},{"name":1596052224000,"value":[1596052224000,53]},{"name":1596052864000,"value":[1596052864000,54]},{"name":1596053504000,"value":[1596053504000,54]},{"name":1596054016000,"value":[1596054016000,54]},{"name":1596054656000,"value":[1596054656000,52]},{"name":1596055296000,"value":[1596055296000,54]},{"name":1596055808000,"value":[1596055808000,65]},{"name":1596056448000,"value":[1596056448000,59]},{"name":1596057088000,"value":[1596057088000,55]},{"name":1596057600000,"value":[1596057600000,53]},{"name":1596058240000,"value":[1596058240000,55]},{"name":1596058880000,"value":[1596058880000,54]},{"name":1596059520000,"value":[1596059520000,55]},{"name":1596060032000,"value":[1596060032000,64]},{"name":1596060672000,"value":[1596060672000,57]},{"name":1596061312000,"value":[1596061312000,56]},{"name":1596061824000,"value":[1596061824000,55]},{"name":1596062464000,"value":[1596062464000,55]},{"name":1596063104000,"value":[1596063104000,55]},{"name":1596063616000,"value":[1596063616000,58]},{"name":1596064256000,"value":[1596064256000,79]},{"name":1596064896000,"value":[1596064896000,60]},{"name":1596065408000,"value":[1596065408000,63]},{"name":1596066048000,"value":[1596066048000,63]},{"name":1596066688000,"value":[1596066688000,82]},{"name":1596067200000,"value":[1596067200000,81]},{"name":1596067840000,"value":[1596067840000,78]},{"name":1596068480000,"value":[1596068480000,78]},{"name":1596069120000,"value":[1596069120000,65]},{"name":1596069632000,"value":[1596069632000,76]},{"name":1596070272000,"value":[1596070272000,80]},{"name":1596070912000,"value":[1596070912000,78]},{"name":1596107040000,"value":[1596107040000,70]},{"name":1596124799000,"value":[1596124799000,0]}];
+    var data3 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
 
     var option = {
-      title: {
-        text: 'Search Time'
-      },
       legend:{},
       grid:{
-        left:50
+        left:70
       },
       tooltip: {
         trigger: 'axis',
@@ -391,7 +362,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Search Time',
+        name:'          Expiration Percentage',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -408,7 +379,7 @@ export default {
         },
         axisLabel:{
           color:'#eeeeee'
-        }
+        },
       },
       series: [{
         name: '',
@@ -417,7 +388,7 @@ export default {
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
-        data: data
+        data: data3
 
       }]
     };
@@ -461,6 +432,44 @@ export default {
       value: ''
     };
   },
+
+}
+
+var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
+var t = null;
+t = setTimeout(timeChange,500);//開始运行
+var agentsNumber = 1700;
+function timeChange()
+{
+  clearTimeout(t);//清除定时器
+  var sec=date.getSeconds();
+  date.setSeconds(sec+30);
+  var h=date.getHours();//获取时
+  var m=date.getMinutes();//获取分
+  if(m > 15)
+  {
+    if(agentsNumber < 0)
+      agentsNumber=11;
+    document.getElementById("agents").innerHTML = agentsNumber;
+    agentsNumber = 500 - m*12;
+  }
+  if(m > 15)
+  {
+    document.getElementById("requests").innerText = m*(m);
+  }
+  if(m < 10)
+  {
+    document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+  }
+  else
+  {
+    document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+  }
+  t = setTimeout(timeChange,500); //设定定时器，循环运行
+  if(h == 22)
+  {
+    clearTimeout(t);
+  }
 
 }
 </script>

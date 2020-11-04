@@ -42,7 +42,7 @@
                 </template>
                 <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 5px" index="1-3" @click="threeD">Three Dimensional Diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-3" @click="threeD">3D Diagram</el-menu-item>
               </el-submenu>
               <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
@@ -168,6 +168,7 @@ export default {
       antialias: true, //抗锯齿，通过false关闭提升性能
     });
 
+
     map.on('load', function () {
       map.addSource("regions", {
         "type": "geojson",
@@ -184,6 +185,8 @@ export default {
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
+
+
 
       map.addSource('pickup', {
         "type": "geojson",
@@ -307,6 +310,8 @@ export default {
     };
     charts1.setOption(option);
 
+
+
   },
   data() {
     return {
@@ -363,7 +368,6 @@ function timeChange()
 {
   clearTimeout(t);//清除定时器
   var min=date.getMinutes();
-//3. 设置当bai前时间+5分钟：把当前分钟数+5后的值du重新设置为date对象的分钟数
   date.setMinutes(min+5);
   var h=date.getHours();//获取时
   var m=date.getMinutes();//获取分
@@ -381,25 +385,11 @@ function timeChange()
     clearTimeout(t);
   }
   document.getElementById("NumberRequest").innerHTML =  "Number of Request: "+(h+m)*15;
+
 }
 
-var myIndex = 0;
-var a = setInterval(function () {
-  var dataLen = option.series[0].data.length;
-  // 取消之前高亮的图形
-  charts1.dispatchAction({
-    type: 'downplay',
-    seriesIndex: 0,
-    dataIndex: myIndex
-  });
-  myIndex = (myChartPieIndex + 1) % dataLen;
-  // 高亮当前图形
-  charts1.dispatchAction({
-    type: 'highlight',
-    seriesIndex: 0,
-    dataIndex: myIndex
-  });
-}, 1000);
+
+
 </script>
 
 <style scoped>
@@ -455,6 +445,12 @@ html,body{
   height: 95%;
   z-index: 0;
 }
+/deep/ .mapboxgl-popup,.mapboxgl-popup-anchor-bottom{
+  position: absolute;
+  top: 30px;
+  color: #eeeeee;
+}
+
 .el-slider{
   padding: 20px;
   margin: 0;
