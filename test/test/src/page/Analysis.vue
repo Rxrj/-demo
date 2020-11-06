@@ -180,63 +180,105 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#eeeeee", /* 填充的颜色 */
-          "fill-opacity": 0.3      /* 透明度 */
+          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
+          "fill-outline-color": "#eeeeee",
+          "fill-opacity": 0.5      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
 
 
-
-      map.addSource('pickup', {
+      map.addSource("regionRequests", {
         "type": "geojson",
-        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_0.geojson"
-      });
-
-      map.addSource('dropoff', {
-        "type": "geojson",
-        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_0.geojson"
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_0.geojson"
       });
 
       map.addLayer({
-        "id": "pickup",
-        "source": "pickup",
-        "type": "circle",
+        "id": "regionRequests",
+        "source": "regionRequests",
+        "type": "fill",
         "paint": {
-          "circle-radius": 2,
-          "circle-color": "#FF0000"
+          "fill-color": {
+            "property": "weight",
+            "stops": [
+              [0, "rgba(0,0,0,0)"],
+              [5, "rgb(255,208,166)"],
+              [10, "rgb(255,170,127)"],
+              [30, "rgb(255,112,78)"],
+              [50, "rgb(240,64,64)"],
+              [70, "rgb(181,10,9)"]
+            ]
+          },
+          "fill-opacity" : 0.95
         }
       });
-
-      map.addLayer({
-        "id": "dropoff",
-        "source": "dropoff",
-        "type": "circle",
-        "paint": {
-          "circle-radius": 2,
-          "circle-color": "#007cbf"
-        }
-      });
-
-
 
       var index=0;
       var timer = window.setInterval(function() {
         if(index < 168){
           index++;
-          map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
-            ".geojson");
-          map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
+          map.getSource('regionRequests').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
             ".geojson");
         }else {
           //移除添加的source和layer
-          map.removeLayer('pickup');
-          map.removeLayer('dropoff');
-          map.removeSource('pickup');
-          map.removeSource('dropoff');
+          map.removeLayer('regionRequests');
+          map.removeSource('regionRequests');
           window.clearInterval(timer);
         }
       }, 1000);
+
+
+
+      // map.addSource('pickup', {
+      //   "type": "geojson",
+      //   "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_0.geojson"
+      // });
+      //
+      // map.addSource('dropoff', {
+      //   "type": "geojson",
+      //   "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_0.geojson"
+      // });
+      //
+      // map.addLayer({
+      //   "id": "pickup",
+      //   "source": "pickup",
+      //   "type": "circle",
+      //   "paint": {
+      //     "circle-radius": 2,
+      //     "circle-color": "#FF0000"
+      //   }
+      // });
+      //
+      // map.addLayer({
+      //   "id": "dropoff",
+      //   "source": "dropoff",
+      //   "type": "circle",
+      //   "paint": {
+      //     "circle-radius": 2,
+      //     "circle-color": "#007cbf"
+      //   }
+      // });
+
+
+      // var index=0;
+      // var timer = window.setInterval(function() {
+      //   if(index < 168){
+      //     index++;
+      //     map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
+      //       ".geojson");
+      //     map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
+      //       ".geojson");
+      //   }else {
+      //     //移除添加的source和layer
+      //     map.removeLayer('pickup');
+      //     map.removeLayer('dropoff');
+      //     map.removeSource('pickup');
+      //     map.removeSource('dropoff');
+      //     window.clearInterval(timer);
+      //   }
+      // }, 1000);
+
+
 
     });
 
