@@ -45,6 +45,7 @@
             <div class="charts" id="charts2" style="width: auto;height: 46%"></div>
           </el-col>
         </el-row>
+        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimePre">Date Time: 2016-6-1 0:00</div>
       </el-main>
     </el-container>
   </el-container>
@@ -94,6 +95,8 @@ export default {
     }
     map1.on('load', function () {
 
+
+
       map1.addSource('pickup_pred',{
         "type":"geojson",
         "data":"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/intersection_pickup_pred.geojson"
@@ -103,22 +106,22 @@ export default {
         "id":"pickup_pred-heatmap",
         "type":"heatmap",
         "source":"pickup_pred",
-        "maxzoom": 15,
+        "maxzoom": 20,
         "paint": {
           // Increase the heatmap weight based on frequency and property magnitude
           "heatmap-weight": [
             "interpolate", ["linear"],
             ["get", "mag"],
-            5, 0,
-            30, 1
+            0, 0,
+            20, 1
           ],
           // Increase the heatmap color weight weight by zoom level
           // heatmap-intensity is a multiplier on top of heatmap-weight
           "heatmap-intensity": [
             "interpolate", ["linear"],
             ["zoom"],
-            0, 1,
-            12, 3,
+            0, 2,
+            30, 6,
           ],
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
           // Begin color ramp at 0-stop with a 0-transparancy color
@@ -128,15 +131,16 @@ export default {
           "heatmap-radius": [
             "interpolate", ["linear"],
             ["zoom"],
-            0, 2,
-            12, 20,
+            0, 0,
+            50, 30,
           ],
+
           // Transition from heatmap to circle layer by zoom level
           "heatmap-opacity": [
             "interpolate", ["linear"],
             ["zoom"],
-            15, 1,
-            20, 0,
+            0, 1,
+            30, 1,
           ],
         },
       });
@@ -150,14 +154,34 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#eeeeee", /* 填充的颜色 */
-          "fill-opacity": 0.3      /* 透明度 */
+          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
+          "fill-outline-color": "#eeeeee",
+          "fill-opacity": 0.5      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
 
-
-
+      var index=0;
+      var timer = window.setInterval(function() {
+        if(index < 47){
+          index++;
+          if(index < 10){
+            map1.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_0" + String(index) +
+              ".geojson");
+            map2.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pred/intersection_0" + String(index) +
+              ".geojson");
+          }
+          else
+          {
+            map1.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_" + String(index) +
+              ".geojson");
+            map2.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pred/intersection_" + String(index) +
+              ".geojson");
+          }
+        }else {
+          window.clearInterval(timer);
+        }
+      }, 1000);
 
     });
     window.map2 = new mapboxgl.Map({
@@ -189,39 +213,41 @@ export default {
         "id":"pickup_pred-heatmap",
         "type":"heatmap",
         "source":"pickup_pred",
-        "maxzoom": 15,
+        "maxzoom": 20,
         "paint": {
           // Increase the heatmap weight based on frequency and property magnitude
           "heatmap-weight": [
             "interpolate", ["linear"],
             ["get", "mag"],
-            5, 0,
-            30, 1
+            0, 0,
+            20, 1
           ],
           // Increase the heatmap color weight weight by zoom level
           // heatmap-intensity is a multiplier on top of heatmap-weight
           "heatmap-intensity": [
             "interpolate", ["linear"],
             ["zoom"],
-            0, 1,
-            12, 3,
+            0, 2,
+            30, 6,
           ],
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
           // Begin color ramp at 0-stop with a 0-transparancy color
           // to create a blur-like effect.
+
           // Adjust the heatmap radius by zoom level
           "heatmap-radius": [
             "interpolate", ["linear"],
             ["zoom"],
-            0, 2,
-            12, 20,
+            0, 0,
+            50, 30,
           ],
+
           // Transition from heatmap to circle layer by zoom level
           "heatmap-opacity": [
             "interpolate", ["linear"],
             ["zoom"],
-            12, 1,
-            100, 0,
+            0, 1,
+            30, 1,
           ],
         },
       });
@@ -236,12 +262,12 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#eeeeee", /* 填充的颜色 */
-          "fill-opacity": 0.3      /* 透明度 */
+          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
+          "fill-outline-color": "#eeeeee",
+          "fill-opacity": 0.5      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
-
 
     });
 
@@ -465,7 +491,31 @@ export default {
   },
 
 }
+var date = new Date(2016,5,1,0,0);//注意月份是0-11，1月为0，12月为11
+var t = null;
+t = setTimeout(timeChange,1000);//開始运行
+function timeChange()
+{
+  clearTimeout(t);//清除定时器
+  var min=date.getMinutes();
+  date.setMinutes(min+30);
+  var h=date.getHours();//获取时
+  var m=date.getMinutes();//获取分
+  if(m < 10)
+  {
+    document.getElementById("currentTimePre").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+  }
+  else
+  {
+    document.getElementById("currentTimePre").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+  }
+  t = setTimeout(timeChange,1000); //设定定时器，循环运行
+  if(h == 24)
+  {
+    clearTimeout(t);
+  }
 
+}
 </script>
 
 <style scoped>
