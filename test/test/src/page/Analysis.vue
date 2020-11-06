@@ -41,8 +41,11 @@
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
                 <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-3" @click="threeD">3D Diagram</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-2">Heatmap</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-3" @click="coloring">Coloring
+                  Map</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-4" @click="threeD">3D
+                  Map</el-menu-item>
               </el-submenu>
               <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
@@ -156,6 +159,19 @@ export default {
       map.setBearing(0);
       map.setZoom(11);
       map.setLayoutProperty('3d-buildings','visibility','none');
+      map.setLayoutProperty('coloring','visibility','none');
+      map.setLayoutProperty('pickup','visibility','visible');
+      map.setLayoutProperty('dropoff','visibility','visible');
+    },
+
+    coloring(){
+      map.setPitch(0);
+      map.setBearing(0);
+      map.setZoom(11);
+      map.setLayoutProperty('3d-buildings','visibility','none');
+      map.setLayoutProperty('pickup', 'visibility', 'none');
+      map.setLayoutProperty('dropoff', 'visibility', 'none');
+      map.setLayoutProperty('coloring','visibility','visible');
     }
   },
   mounted() {
@@ -187,15 +203,45 @@ export default {
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
 
+      map.addSource('pickup', {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_0.geojson"
+      });
 
-      map.addSource("regionRequests", {
+      map.addSource('dropoff', {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_0.geojson"
+      });
+
+      map.addSource("coloring", {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_0.geojson"
       });
 
+
       map.addLayer({
-        "id": "regionRequests",
-        "source": "regionRequests",
+        "id": "pickup",
+        "source": "pickup",
+        "type": "circle",
+        "paint": {
+          "circle-radius": 2,
+          "circle-color": "#FF0000"
+        }
+      });
+
+      map.addLayer({
+        "id": "dropoff",
+        "source": "dropoff",
+        "type": "circle",
+        "paint": {
+          "circle-radius": 2,
+          "circle-color": "#007cbf"
+        }
+      });
+
+      map.addLayer({
+        "id": "coloring",
+        "source": "coloring",
         "type": "fill",
         "paint": {
           "fill-color": {
@@ -213,72 +259,28 @@ export default {
         }
       });
 
-      var index=0;
+
+      var index = 0;
       var timer = window.setInterval(function() {
         if(index < 168){
           index++;
-          map.getSource('regionRequests').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
+          map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
+            ".geojson");
+          map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
+            ".geojson");
+          map.getSource('coloring').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
             ".geojson");
         }else {
           //移除添加的source和layer
-          map.removeLayer('regionRequests');
-          map.removeSource('regionRequests');
+          map.removeLayer('pickup');
+          map.removeLayer('dropoff');
+          map.removeLayer('coloring');
+          map.removeSource('pickup');
+          map.removeSource('dropoff');
+          map.removeSource('coloring');
           window.clearInterval(timer);
         }
       }, 1000);
-
-
-
-      // map.addSource('pickup', {
-      //   "type": "geojson",
-      //   "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_0.geojson"
-      // });
-      //
-      // map.addSource('dropoff', {
-      //   "type": "geojson",
-      //   "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_0.geojson"
-      // });
-      //
-      // map.addLayer({
-      //   "id": "pickup",
-      //   "source": "pickup",
-      //   "type": "circle",
-      //   "paint": {
-      //     "circle-radius": 2,
-      //     "circle-color": "#FF0000"
-      //   }
-      // });
-      //
-      // map.addLayer({
-      //   "id": "dropoff",
-      //   "source": "dropoff",
-      //   "type": "circle",
-      //   "paint": {
-      //     "circle-radius": 2,
-      //     "circle-color": "#007cbf"
-      //   }
-      // });
-
-
-      // var index=0;
-      // var timer = window.setInterval(function() {
-      //   if(index < 168){
-      //     index++;
-      //     map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
-      //       ".geojson");
-      //     map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
-      //       ".geojson");
-      //   }else {
-      //     //移除添加的source和layer
-      //     map.removeLayer('pickup');
-      //     map.removeLayer('dropoff');
-      //     map.removeSource('pickup');
-      //     map.removeSource('dropoff');
-      //     window.clearInterval(timer);
-      //   }
-      // }, 1000);
-
-
 
     });
 
