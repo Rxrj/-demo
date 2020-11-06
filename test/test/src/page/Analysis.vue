@@ -18,11 +18,11 @@
           <br>
           <div>
             <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 30px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
-          <br>
+            <br>
             <el-checkbox v-model="pickup"
                          style="padding-top: 20px;margin-left: 30px;font-size: 20px;font-weight: 700"
                          @change="handleChangePickup"><div>Pick Up</div></el-checkbox>
-          <br>
+            <br>
             <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px;font-size: 20px;font-weight: 700" @change="handleChangeDropoff"
             ><div>Drop Off</div></el-checkbox>
           </div>
