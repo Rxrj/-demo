@@ -35,9 +35,14 @@
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
                 <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
+
                 <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="HeatmapP">Heat Map(Partition)</el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="HeatmapI">Heat Map(Intersection)</el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-4" @click="threeD">3D Map</el-menu-item>
+
+<!--                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>-->
+<!--                <el-menu-item style="font-size: 18px;padding-left: 5px" index="1-3" @click="threeD">3D Diagram</el-menu-item>-->
+
               </el-submenu>
               <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
@@ -388,15 +393,15 @@ export default {
       var timerP = window.setInterval(function() {
         if(indexP < 47){
           indexP++;
-          if(indexP < 10){
-            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_0" + String(index) +
+          // if(indexP < 10){
+          //   map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_0" + String(index) +
+          //     ".geojson");
+          // }
+          // else
+          // {
+            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(index) +
               ".geojson");
-          }
-          else
-          {
-            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_" + String(index) +
-              ".geojson");
-          }
+          // }
         }else {
           window.clearInterval(timerP);
         }
