@@ -17,14 +17,8 @@
           </el-date-picker>
           <br>
           <div>
-            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 30px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 5px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
             <br>
-            <el-checkbox v-model="pickup"
-                         style="padding-top: 20px;margin-left: 30px;font-size: 20px;font-weight: 700"
-                         @change="handleChangePickup"><div>Pick Up</div></el-checkbox>
-            <br>
-            <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px;font-size: 20px;font-weight: 700" @change="handleChangeDropoff"
-            ><div>Drop Off</div></el-checkbox>
           </div>
           <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Play</el-button>
         </div>
@@ -41,11 +35,9 @@
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
                 <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-2">Heatmap</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-3" @click="coloring">Coloring
-                  Map</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-4" @click="threeD">3D
-                  Map</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="HeatmapP">Heat Map(Partition)</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="HeatmapI">Heat Map(Intersection)</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-4" @click="threeD">3D Map</el-menu-item>
               </el-submenu>
               <el-submenu index="2" style="width: 250px;background-color: #252525">
                 <template slot="title">
@@ -65,17 +57,38 @@
             :step="1"
             show-stops>
           </el-slider>
-          <p style="left:80px;top:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="NumberRequest">Number of Request: 200</p>
+          <div style="height:100px;left:50px;top:80px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:75px;left:100px;position: absolute;font-size: 27px">200</div></div>
           <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime">Date Time: 2016-6-1 8:00</div>
-          <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
-            <div style="background-color:#FF0000;bottom:10px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
-            Pick Up
+          <div id="choosePD" style="visibility: visible">
+            <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+              <div style="background-color:#FF0000;bottom:5px;right:115px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
+              <el-checkbox v-model="pickup"
+                         @change="handleChangePickup"><div style="font-weight:700;">Pick Up</div></el-checkbox>
+            </div>
+            <div style="bottom:150px;right:85px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+              <div style="background-color:#007cbf;bottom:5px;right:128px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
+              <el-checkbox v-model="dropoff" style="padding-top: 20px;margin-left: 10px;font-size: 20px;font-weight: 700" @change="handleChangeDropoff"
+            ><div>Drop Off</div></el-checkbox>
+            </div>
           </div>
-          <div style="bottom:150px;right:85px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
-            <div style="background-color:#007cbf;bottom:10px;right:115px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
-            Drop Off
+          <div id="heatmapIcon" style="visibility: hidden">
+            <div style="background-color:rgb(255,255,255);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(255,208,166);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(255,170,127);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(240,64,64);bottom:200px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(181,10,9);bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+          </div>
+          <div id="heatmapIcon2" style="visibility: hidden">
+            <div style="background-color:rgba(33,102,172,0);bottom:200px;right:350px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(209,229,240);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(103,169,207);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(253,219,199);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(239,138,98);bottom:200px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:rgb(178,24,43);bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           </div>
           <div class="charts" id="charts1" style="left:40px;bottom:100px;position: absolute;width: 400px;height: 400px"></div>
+
+
         </div>
       </el-main>
     </el-container>
@@ -159,19 +172,39 @@ export default {
       map.setBearing(0);
       map.setZoom(11);
       map.setLayoutProperty('3d-buildings','visibility','none');
-      map.setLayoutProperty('coloring','visibility','none');
+      map.setLayoutProperty('pickup_pred-heatmap', 'visibility', 'none');
+      map.setLayoutProperty('regionRequests','visibility','none');
       map.setLayoutProperty('pickup','visibility','visible');
       map.setLayoutProperty('dropoff','visibility','visible');
+      document.getElementById("choosePD").style.visibility="visible";
+      document.getElementById("heatmapIcon").style.visibility="hidden";
+      document.getElementById("heatmapIcon2").style.visibility="hidden";
     },
-
-    coloring(){
+    HeatmapP(){
       map.setPitch(0);
       map.setBearing(0);
       map.setZoom(11);
       map.setLayoutProperty('3d-buildings','visibility','none');
-      map.setLayoutProperty('pickup', 'visibility', 'none');
-      map.setLayoutProperty('dropoff', 'visibility', 'none');
-      map.setLayoutProperty('coloring','visibility','visible');
+      map.setLayoutProperty('pickup','visibility','none');
+      map.setLayoutProperty('dropoff','visibility','none');
+      map.setLayoutProperty('pickup_pred-heatmap', 'visibility', 'none');
+      map.setLayoutProperty('regionRequests','visibility','visible');
+      document.getElementById("choosePD").style.visibility="hidden";
+      document.getElementById("heatmapIcon").style.visibility="visible";
+      document.getElementById("heatmapIcon2").style.visibility="hidden";
+    },
+    HeatmapI(){
+      map.setPitch(0);
+      map.setBearing(0);
+      map.setZoom(11);
+      map.setLayoutProperty('3d-buildings','visibility','none');
+      map.setLayoutProperty('pickup','visibility','none');
+      map.setLayoutProperty('dropoff','visibility','none');
+      map.setLayoutProperty('regionRequests','visibility','none');
+      map.setLayoutProperty('pickup_pred-heatmap','visibility','visible');
+      document.getElementById("choosePD").style.visibility="hidden";
+      document.getElementById("heatmapIcon").style.visibility="hidden";
+      document.getElementById("heatmapIcon2").style.visibility="visible";
     }
   },
   mounted() {
@@ -203,6 +236,8 @@ export default {
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
 
+
+
       map.addSource('pickup', {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_0.geojson"
@@ -212,12 +247,6 @@ export default {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_0.geojson"
       });
-
-      map.addSource("coloring", {
-        "type": "geojson",
-        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_0.geojson"
-      });
-
 
       map.addLayer({
         "id": "pickup",
@@ -239,9 +268,33 @@ export default {
         }
       });
 
+
+      var index=0;
+      var timer = window.setInterval(function() {
+        if(index < 168){
+          index++;
+          map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
+            ".geojson");
+          map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
+            ".geojson");
+        }else {
+          //移除添加的source和layer
+          map.removeLayer('pickup');
+          map.removeLayer('dropoff');
+          map.removeSource('pickup');
+          map.removeSource('dropoff');
+          window.clearInterval(timer);
+        }
+      }, 1000);
+
+      map.addSource("regionRequests", {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_0.geojson"
+      });
+
       map.addLayer({
-        "id": "coloring",
-        "source": "coloring",
+        "id": "regionRequests",
+        "source": "regionRequests",
         "type": "fill",
         "paint": {
           "fill-color": {
@@ -258,31 +311,100 @@ export default {
           "fill-opacity" : 0.95
         }
       });
-
-
-      var index = 0;
+      var index=0;
       var timer = window.setInterval(function() {
         if(index < 168){
           index++;
-          map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
-            ".geojson");
-          map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
-            ".geojson");
-          map.getSource('coloring').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
+          map.getSource('regionRequests').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
             ".geojson");
         }else {
           //移除添加的source和layer
-          map.removeLayer('pickup');
-          map.removeLayer('dropoff');
-          map.removeLayer('coloring');
-          map.removeSource('pickup');
-          map.removeSource('dropoff');
-          map.removeSource('coloring');
+          map.removeLayer('regionRequests');
+          map.removeSource('regionRequests');
           window.clearInterval(timer);
         }
       }, 1000);
+      map.setLayoutProperty('regionRequests','visibility','none');
+
+      map.addSource('pickup_pred',{
+        "type":"geojson",
+        "data":"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/intersection_pickup_pred.geojson"
+      });
+
+      map.addLayer({
+        "id":"pickup_pred-heatmap",
+        "type":"heatmap",
+        "source":"pickup_pred",
+        "maxzoom": 20,
+        "paint": {
+          // Increase the heatmap weight based on frequency and property magnitude
+          "heatmap-weight": [
+            "interpolate", ["linear"],
+            ["get", "mag"],
+            0, 0,
+            20, 1
+          ],
+          // Increase the heatmap color weight weight by zoom level
+          // heatmap-intensity is a multiplier on top of heatmap-weight
+          "heatmap-intensity": [
+            "interpolate", ["linear"],
+            ["zoom"],
+            0, 2,
+            30, 6,
+          ],
+          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+          // Begin color ramp at 0-stop with a 0-transparancy color
+          // to create a blur-like effect.
+
+          // Adjust the heatmap radius by zoom level
+          "heatmap-radius": [
+            "interpolate", ["linear"],
+            ["zoom"],
+            0, 0,
+            50, 30,
+          ],
+          "heatmap-color": [
+            "interpolate",
+            ["linear"],
+            ["heatmap-density"],
+            0, "rgba(33,102,172,0)",
+            0.2, "rgb(209,229,240)",
+            0.4, "rgb(103,169,207)",
+            0.6, "rgb(253,219,199)",
+            0.8, "rgb(239,138,98)",
+            1, "rgb(178,24,43)"
+          ],
+
+          // Transition from heatmap to circle layer by zoom level
+          "heatmap-opacity": [
+            "interpolate", ["linear"],
+            ["zoom"],
+            0, 1,
+            30, 1,
+          ],
+        },
+      });
+      var indexP=0;
+      var timerP = window.setInterval(function() {
+        if(indexP < 47){
+          indexP++;
+          if(indexP < 10){
+            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_0" + String(index) +
+              ".geojson");
+          }
+          else
+          {
+            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_" + String(index) +
+              ".geojson");
+          }
+        }else {
+          window.clearInterval(timerP);
+        }
+      }, 1000);
+      map.setLayoutProperty('pickup_pred-heatmap','visibility','none');
 
     });
+
 
     //echarts图表
     window.charts1 = echarts.init(document.getElementById('charts1'));
@@ -428,11 +550,9 @@ function timeChange()
   {
     clearTimeout(t);
   }
-  document.getElementById("NumberRequest").innerHTML =  "Number of Request: "+(h+m)*15;
+  document.getElementById("requestNumber").innerHTML =  (h+m)*15;
 
 }
-
-
 
 </script>
 
@@ -463,6 +583,10 @@ html,body{
 
 /deep/ .el-date-table {
   font-size: 12px;
+}
+
+/deep/ .el-checkbox__label{
+  font-size: 22px;
 }
 
 
@@ -503,6 +627,18 @@ html,body{
   width: 500px;
   bottom: 50px;
   left: 850px;
+}
+.numberBoard{
+  background: rgba(251,103,103,.5);
+  text-align: left;
+  color: #fff;
+  margin: 10px 10px 0 0;
+  padding: 5px 30px 0px 10px;
+  font-size: 22px;
+  line-height: 50px;
+  font-weight: 700;
+  border-left: 12px solid #fb6767;
+  text-shadow: 1px 1px 1px #000,1px 1px 1px #fff;
 }
 
 </style>
