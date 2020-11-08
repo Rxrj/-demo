@@ -16,10 +16,10 @@
             :picker-options="pickerOptions">
           </el-date-picker>
           <br>
-          <div>
-            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
-            <br>
-          </div>
+<!--          <div>-->
+<!--            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>-->
+<!--            <br>-->
+<!--          </div>-->
           <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
         </div>
         <el-row class="tac">
@@ -30,12 +30,13 @@
               @open="handleOpen"
               @close="handleClose"
               style="left: 25px;font-weight: 700">
-              <el-submenu default-active="1-2" index="1" style="width: 250px;background-color: #252525">
+              <el-submenu default-active="1-1" index="1" style="width: 250px;background-color: #252525">
                 <template slot="title">
-                  <span style="color: #eeeeee;font-size: 20px" class="item-title">Hierarchical Partition</span>
+                  <span style="color: #eeeeee;font-size: 20px" class="item-title">Partition Option</span>
                 </template>
-                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-1" @click="HeatmapG">Hexagon Grid</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2" @click="HeatmapI">Intersection</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-1" @click="handleChange"><div>Partition Visible</div></el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="HeatmapG">Hexagon Grid</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="HeatmapI">Intersection</el-menu-item>
               </el-submenu>
             </el-menu>
           </el-col>
@@ -100,14 +101,14 @@
 <!--            ><div>Drop Off</div></el-checkbox>-->
 <!--          </div>-->
 <!--        </div>-->
-        <div id="heatmapIcon" style="visibility: hidden">
+        <div class= "heatmapIcon" id="heatmapIcon" style="visibility: hidden">
           <div style="background-color:rgb(255,255,255);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           <div style="background-color:rgb(255,208,166);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           <div style="background-color:rgb(255,170,127);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           <div style="background-color:rgb(240,64,64);bottom:200px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           <div style="background-color:rgb(181,10,9);bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
         </div>
-        <div id="heatmapIcon2" style="visibility: hidden">
+        <div class="heatmapIcon2" id="heatmapIcon2" style="visibility: hidden">
           <div style="background-color:rgba(33,102,172,0);bottom:200px;right:350px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           <div style="background-color:rgb(209,229,240);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
           <div style="background-color:rgb(103,169,207);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
@@ -131,7 +132,9 @@ export default {
   components: {Header},
   methods:{
     handleChange(){
-      var check = this.checked;
+      // var check = this.checked;
+      var check = !this.checked;
+      this.checked = check;
       if(!check){
         map1.setLayoutProperty('regions', 'visibility', 'none');
         map2.setLayoutProperty('regions', 'visibility', 'none');
@@ -145,38 +148,38 @@ export default {
       map1.setPitch(0);
       map1.setBearing(0);
       // map.setZoom(11);
-      map1.setLayoutProperty('pickup_intersection-heatmap', 'visibility', 'none');
-      map1.setLayoutProperty('pickup_grid-heatmap','visibility','visible');
-      document.getElementById("choosePD").style.visibility="hidden";
-      document.getElementById("heatmapIcon").style.visibility="visible";
-      document.getElementById("heatmapIcon2").style.visibility="hidden";
+      map1.setLayoutProperty('pickup_intersection', 'visibility', 'none');
+      map1.setLayoutProperty('pickup_grid','visibility','visible');
+      // document.getElementById("choosePD").style.visibility="hidden";
+      // document.getElementById("heatmapIcon").style.visibility="visible";
+      // document.getElementById("heatmapIcon2").style.visibility="hidden";
 
       map2.setPitch(0);
       map2.setBearing(0);
       // map.setZoom(11);
-      map2.setLayoutProperty('pickup_intersection_pred-heatmap', 'visibility', 'none');
-      map2.setLayoutProperty('pickup_grid_pred-heatmap','visibility','visible');
-      document.getElementById("choosePD").style.visibility="hidden";
+      map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'none');
+      map2.setLayoutProperty('pickup_grid_pred','visibility','visible');
+      // document.getElementById("choosePD").style.visibility="hidden";
       document.getElementById("heatmapIcon").style.visibility="visible";
-      document.getElementById("heatmapIcon2").style.visibility="hidden";
+      // document.getElementById("heatmapIcon2").style.visibility="hidden";
     },
     HeatmapI(){
       map1.setPitch(0);
       map1.setBearing(0);
       // map.setZoom(11);
-      map1.setLayoutProperty('pickup_intersection-heatmap', 'visibility', 'visible');
-      map1.setLayoutProperty('pickup_grid-heatmap','visibility','none');
-      document.getElementById("choosePD").style.visibility="hidden";
-      document.getElementById("heatmapIcon").style.visibility="hidden";
-      document.getElementById("heatmapIcon2").style.visibility="visible";
+      map1.setLayoutProperty('pickup_intersection', 'visibility', 'visible');
+      map1.setLayoutProperty('pickup_grid','visibility','none');
+      // document.getElementById("choosePD").style.visibility="hidden";
+      // document.getElementById("heatmapIcon").style.visibility="hidden";
+      // document.getElementById("heatmapIcon2").style.visibility="visible";
 
       map2.setPitch(0);
       map2.setBearing(0);
       // map.setZoom(11);
-      map2.setLayoutProperty('pickup_intersection_pred-heatmap', 'visibility', 'visible');
-      map2.setLayoutProperty('pickup_grid_pred-heatmap','visibility','none');
-      document.getElementById("choosePD").style.visibility="hidden";
-      document.getElementById("heatmapIcon").style.visibility="hidden";
+      map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'visible');
+      map2.setLayoutProperty('pickup_grid_pred','visibility','none');
+      // document.getElementById("choosePD").style.visibility="hidden";
+      // document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="visible";
     }
   },
@@ -222,64 +225,45 @@ export default {
 
       map1.addSource('pickup_grid',{
         "type":"geojson",
-        "data":"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_groundTruth/grid_0.geojson"
+        // "data":"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_groundTruth/grid_0.geojson"
+        "data":"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_groundTruth/grid_0.geojson"
       });
 
       map1.addLayer({
-        "id":"pickup_grid-heatmap",
-        "type":"heatmap",
-        "source":"pickup_grid",
-        "maxzoom": 20,
+        "id": "pickup_grid",
+        "source": "pickup_grid",
+        "type": "fill",
         "paint": {
-          // Increase the heatmap weight based on frequency and property magnitude
-          "heatmap-weight": [
-            "interpolate", ["linear"],
-            ["get", "mag"],
-            0, 0,
-            20, 1
-          ],
-          // Increase the heatmap color weight weight by zoom level
-          // heatmap-intensity is a multiplier on top of heatmap-weight
-          "heatmap-intensity": [
-            "interpolate", ["linear"],
-            ["zoom"],
-            0, 2,
-            30, 6,
-          ],
-          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-          // Begin color ramp at 0-stop with a 0-transparancy color
-          // to create a blur-like effect.
-
-          // Adjust the heatmap radius by zoom level
-          "heatmap-radius": [
-            "interpolate", ["linear"],
-            ["zoom"],
-            0, 0,
-            50, 30,
-          ],
-
-          // Transition from heatmap to circle layer by zoom level
-          "heatmap-opacity": [
-            "interpolate", ["linear"],
-            ["zoom"],
-            0, 1,
-            30, 1,
-          ],
-        },
+          "fill-color": {
+            "property": "weight",
+            "stops": [
+              [0, "rgba(0,0,0,0)"],
+              [5, "rgb(255,208,166)"],
+              [10, "rgb(255,170,127)"],
+              [30, "rgb(255,112,78)"],
+              [50, "rgb(240,64,64)"],
+              [70, "rgb(181,10,9)"]
+            ]
+          },
+          "fill-opacity" : 0.95
+        }
       });
 
       var index=0;
       var timer = window.setInterval(function() {
-        if(index < 8640){
+        if(index < 8639){
           index++;
-          map1.getSource('pickup_grid').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_groundTruth/grid_" + String(index) + ".geojson");
-          map2.getSource('pickup_grid_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_pred/grid_" + String(index) + ".geojson");
+          map1.getSource('pickup_grid').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_groundTruth/grid_" + String(index) + ".geojson");
+          map2.getSource('pickup_grid_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_pred/grid_" + String(index) + ".geojson");
         }else {
+          //移除添加的source和layer
+          map1.removeLayer('pickup_grid');
+          map1.removeSource('pickup_grid');
+          map2.removeLayer('pickup_grid_pred');
+          map2.removeSource('pickup_grid_pred');
           window.clearInterval(timer);
         }
       }, 1000);
-      map1.setLayoutProperty('pickup_grid-heatmap','visibility','none');
-      map2.setLayoutProperty('pickup_grid_pred-heatmap','visibility','none');
 
 
       map1.addSource('pickup_intersection',{
@@ -287,7 +271,7 @@ export default {
         "data":"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_0.geojson"
       });
       map1.addLayer({
-        "id":"pickup_intersection-heatmap",
+        "id":"pickup_intersection",
         "type":"heatmap",
         "source":"pickup_intersection",
         "maxzoom": 20,
@@ -331,7 +315,7 @@ export default {
 
       var index=0;
       var timer = window.setInterval(function() {
-        if(index < 1440){
+        if(index < 1439){
           index++;
           map1.getSource('pickup_intersection').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(index) + ".geojson");
           map2.getSource('pickup_intersection_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_pred/intersection_" + String(index) + ".geojson");
@@ -340,8 +324,9 @@ export default {
         }
       }, 1000);
 
-      // map1.setLayoutProperty('pickup_intersection-heatmap','visibility','none');
-      // map2.setLayoutProperty('pickup_intersection_pred-heatmap','visibility','none');
+
+      map1.setLayoutProperty('pickup_grid','visibility','none');
+      map1.setLayoutProperty('pickup_intersection','visibility','none');
 
     });
     window.map2 = new mapboxgl.Map({
@@ -364,52 +349,47 @@ export default {
       };
     }
     map2.on('load', function () {
-      map2.addSource('pickup_grid_pred',{
-        "type":"geojson",
-        "data":"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_pred/grid_0.geojson"
+
+      map2.addSource("regions", {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
       });
 
       map2.addLayer({
-        "id":"pickup_grid_pred-heatmap",
-        "type":"heatmap",
-        "source":"pickup_grid_pred",
-        "maxzoom": 20,
+        "id": "regions",
+        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+        "source": "regions",
         "paint": {
-          // Increase the heatmap weight based on frequency and property magnitude
-          "heatmap-weight": [
-            "interpolate", ["linear"],
-            ["get", "mag"],
-            0, 0,
-            20, 1
-          ],
-          // Increase the heatmap color weight weight by zoom level
-          // heatmap-intensity is a multiplier on top of heatmap-weight
-          "heatmap-intensity": [
-            "interpolate", ["linear"],
-            ["zoom"],
-            0, 2,
-            30, 6,
-          ],
-          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-          // Begin color ramp at 0-stop with a 0-transparancy color
-          // to create a blur-like effect.
-
-          // Adjust the heatmap radius by zoom level
-          "heatmap-radius": [
-            "interpolate", ["linear"],
-            ["zoom"],
-            0, 0,
-            50, 30,
-          ],
-
-          // Transition from heatmap to circle layer by zoom level
-          "heatmap-opacity": [
-            "interpolate", ["linear"],
-            ["zoom"],
-            0, 1,
-            30, 1,
-          ],
+          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
+          "fill-outline-color": "#eeeeee",
+          "fill-opacity": 0.5      /* 透明度 */
         },
+        "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
+      });
+
+      map2.addSource('pickup_grid_pred',{
+        "type":"geojson",
+        "data":"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_pred/grid_0.geojson"
+      });
+
+      map2.addLayer({
+        "id": "pickup_grid_pred",
+        "source": "pickup_grid_pred",
+        "type": "fill",
+        "paint": {
+          "fill-color": {
+            "property": "weight",
+            "stops": [
+              [0, "rgba(0,0,0,0)"],
+              [5, "rgb(255,208,166)"],
+              [10, "rgb(255,170,127)"],
+              [30, "rgb(255,112,78)"],
+              [50, "rgb(240,64,64)"],
+              [70, "rgb(181,10,9)"]
+            ]
+          },
+          "fill-opacity" : 0.95
+        }
       });
 
       map2.addSource('pickup_intersection_pred',{
@@ -418,7 +398,7 @@ export default {
       });
 
       map2.addLayer({
-        "id":"pickup_intersection_pred-heatmap",
+        "id":"pickup_intersection_pred",
         "type":"heatmap",
         "source":"pickup_intersection_pred",
         "maxzoom": 20,
@@ -460,22 +440,8 @@ export default {
         },
       });
 
-      map2.addSource("regions", {
-        "type": "geojson",
-        "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
-      });
-
-      map2.addLayer({
-        "id": "regions",
-        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
-        "source": "regions",
-        "paint": {
-          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
-          "fill-outline-color": "#eeeeee",
-          "fill-opacity": 0.5      /* 透明度 */
-        },
-        "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
-      });
+      map2.setLayoutProperty('pickup_grid_pred','visibility','none');
+      map2.setLayoutProperty('pickup_intersection_pred','visibility','none');
 
     });
 
@@ -799,6 +765,28 @@ html,body{
 .el-menu-item:hover,.el-menu-item:focus,.el-menu-item.is-active{
   color: #409EFF;
 }
+
+/*.heatmapIcon{*/
+/*  position: fixed;*/
+/*  left:35px;*/
+/*  top:500px;*/
+/*  font-size: 22px;*/
+/*  font-weight: 700;*/
+/*  line-height: 50px;*/
+
+/*  padding:10px;*/
+/*  border-radius: 10px;*/
+/*  box-shadow: 0 2px 5px black;*/
+/*  width: 11%;*/
+
+/*  !*padding-top: 70px;*!*/
+/*  !*position: absolute;*!*/
+/*  !*width: 100%;*!*/
+/*  !*top:10px;*!*/
+/*  !*left:0px;*!*/
+/*  !*bottom: 0;*!*/
+/*  !*text-align: center;*!*/
+/*}*/
 
 .charts{
   border-radius: 10px;
