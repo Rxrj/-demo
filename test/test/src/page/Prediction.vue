@@ -89,6 +89,7 @@
           </el-col>
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimePre">Date Time: 2016-6-1 0:00</div>
+<!--        <pre id='info'></pre>-->
         <el-button id="info" type="info" plain class="left-button"></el-button>
 <!--        <div id="choosePD" style="visibility: visible">-->
 <!--          <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">-->
@@ -127,6 +128,8 @@
 import Header from "../components/Header";
 import echarts from 'echarts'
 import '@/assets/css/all.css'
+import {getMouseLngLat} from "../assets/js/utils";
+import {getCurrentGridIndex} from "../assets/js/utils";
 const mapboxgl = require('mapbox-gl');
 export default {
   name: "Prediction",
@@ -185,6 +188,31 @@ export default {
     }
   },
   mounted() {
+    var grid_center_coordinates = new Array();
+    //单个区域的数据
+    window.onload = function () {
+      var url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_data.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request.open("get", url);/*设置请求方法与路径*/
+      request.send(null);/*不发送数据到服务器*/
+      request.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
+          var grid_data = JSON.parse(request.responseText);
+          for(var i=0;i<grid_data.length;i++){
+            grid_center_coordinates[i] = grid_data[i].geometry.coordinates;
+          }
+          // console.log(grid_data.length)
+          // console.log(grid_data[0].id);
+          // console.log(grid_data[0].properties.pred);
+          // console.log(grid_data[0].geometry.coordinates);
+          // console.log(grid_data[0].geometry.coordinates[0]);
+          // console.log(grid_data[0].geometry.coordinates[1]);
+          // console.log(grid_center_coordinates.length);
+        }
+      }
+    }
+
     mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
     window.map1 = new mapboxgl.Map({
       container: 'map1', // container id 绑定的组件的id
@@ -197,8 +225,22 @@ export default {
     // map1.addControl(new mapboxgl.FullscreenControl(), "top-left");
     // map1.addControl(new mapboxgl.NavigationControl(), "top-left");
     //
-    // window.map1.on('mousemove', function (e) {
-    //   document.getElementById('info').innerHTML = getMouseLngLat(e);
+    map1.on('click', function (e) {
+      var current_region_index = getCurrentGridIndex(e.lngLat.toArray(),grid_center_coordinates);
+      console.log(current_region_index);
+      document.getElementById('info').innerHTML = getMouseLngLat(e) + '<br/>' + "grid index: " + current_region_index;
+    });
+
+    // map1.on('mousemove', function (e) {
+    //   document.getElementById('info').innerHTML =       /* innerHTML 属性设置或返回表格行的开始和结束标签之间的 HTML  */
+    //     // e.point is the x, y coordinates of the mousemove event relative
+    //     // to the top-left corner of the map
+    //     // JSON.stringify(e.point) + '<br />' +
+    //     // e.lngLat is the longitude, latitude geographical position of the event
+    //     JSON.stringify(e.lngLat);  /* JSON.stringify() 方法可以将任意的 JavaScript 值序列化成 JSON 字符串 */
+    //
+    //   // var features = map.queryRenderedFeatures(e.point);
+    //   // document.getElementById('features').innerHTML = JSON.stringify(features, null, 2);
     // });
 
     var radius = 0.05;
@@ -349,12 +391,20 @@ export default {
       map1.setLayoutProperty('pickup_intersection','visibility','none');
 
     });
+
+
     window.map2 = new mapboxgl.Map({
       container: 'map2', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
       center: [-73.96,40.78], // 初始坐标系
       zoom: 11,     // starting zoom 地图初始的拉伸比例
       antialias: true, //抗锯齿，通过false关闭提升性能
+    });
+
+    map2.on('click', function (e) {
+      var current_region_index = getCurrentGridIndex(e.lngLat.toArray(),grid_center_coordinates);
+      console.log(current_region_index);
+      document.getElementById('info').innerHTML = getMouseLngLat(e) + '<br/>' + "grid index: " + current_region_index;
     });
     var radius = 0.05;
     function pointOnCircle(i) {
@@ -472,146 +522,6 @@ export default {
 
       map2.setLayoutProperty('pickup_grid_pred','visibility','none');
       map2.setLayoutProperty('pickup_intersection_pred','visibility','none');
-
-
-//       map2.on('load', function () {
-// // Add a layer showing the places.
-//         map2.addLayer({
-//           "id": "places",
-//           "type": "symbol",
-//           "source": {
-//             "type": "geojson",
-//             "data": {
-//               "type": "FeatureCollection",
-//               "features": [{
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Make it Mount Pleasant</strong><p><a href=\"http://www.mtpleasantdc.com/makeitmtpleasant\" target=\"_blank\" title=\"Opens in a new window\">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>",
-//                   "icon": "theatre"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.038659, 38.931567]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Mad Men Season Five Finale Watch Party</strong><p>Head to Lounge 201 (201 Massachusetts Avenue NE) Sunday for a <a href=\"http://madmens5finale.eventbrite.com/\" target=\"_blank\" title=\"Opens in a new window\">Mad Men Season Five Finale Watch Party</a>, complete with 60s costume contest, Mad Men trivia, and retro food and drink. 8:00-11:00 p.m. $10 general admission, $20 admission and two hour open bar.</p>",
-//                   "icon": "theatre"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.003168, 38.894651]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href=\"http://tallulaeatbar.ticketleap.com/2012beachblanket/\" target=\"_blank\" title=\"Opens in a new window\">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>",
-//                   "icon": "bar"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.090372, 38.881189]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Ballston Arts & Crafts Market</strong><p>The <a href=\"http://ballstonarts-craftsmarket.blogspot.com/\" target=\"_blank\" title=\"Opens in a new window\">Ballston Arts & Crafts Market</a> sets up shop next to the Ballston metro this Saturday for the first of five dates this summer. Nearly 35 artists and crafters will be on hand selling their wares. 10:00-4:00 p.m.</p>",
-//                   "icon": "art-gallery"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.111561, 38.882342]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Seersucker Bike Ride and Social</strong><p>Feeling dandy? Get fancy, grab your bike, and take part in this year's <a href=\"http://dandiesandquaintrelles.com/2012/04/the-seersucker-social-is-set-for-june-9th-save-the-date-and-start-planning-your-look/\" target=\"_blank\" title=\"Opens in a new window\">Seersucker Social</a> bike ride from Dandies and Quaintrelles. After the ride enjoy a lawn party at Hillwood with jazz, cocktails, paper hat-making, and more. 11:00-7:00 p.m.</p>",
-//                   "icon": "bicycle"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.052477, 38.943951]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Capital Pride Parade</strong><p>The annual <a href=\"http://www.capitalpride.org/parade\" target=\"_blank\" title=\"Opens in a new window\">Capital Pride Parade</a> makes its way through Dupont this Saturday. 4:30 p.m. Free.</p>",
-//                   "icon": "star"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.043444, 38.909664]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Muhsinah</strong><p>Jazz-influenced hip hop artist <a href=\"http://www.muhsinah.com\" target=\"_blank\" title=\"Opens in a new window\">Muhsinah</a> plays the <a href=\"http://www.blackcatdc.com\">Black Cat</a> (1811 14th Street NW) tonight with <a href=\"http://www.exitclov.com\" target=\"_blank\" title=\"Opens in a new window\">Exit Clov</a> and <a href=\"http://godsilla.bandcamp.com\" target=\"_blank\" title=\"Opens in a new window\">Gods’illa</a>. 9:00 p.m. $12.</p>",
-//                   "icon": "music"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.031706, 38.914581]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>A Little Night Music</strong><p>The Arlington Players' production of Stephen Sondheim's  <a href=\"http://www.thearlingtonplayers.org/drupal-6.20/node/4661/show\" target=\"_blank\" title=\"Opens in a new window\"><em>A Little Night Music</em></a> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>",
-//                   "icon": "music"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.020945, 38.878241]
-//                 }
-//               }, {
-//                 "type": "Feature",
-//                 "properties": {
-//                   "description": "<strong>Truckeroo</strong><p><a href=\"http://www.truckeroodc.com/www/\" target=\"_blank\">Truckeroo</a> brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>",
-//                   "icon": "music"
-//                 },
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": [-77.007481, 38.876516]
-//                 }
-//               }]
-//             }
-//           },
-//           "layout": {
-//             "icon-image": "{icon}-15",
-//             "icon-allow-overlap": true
-//           }
-//         });
-//
-// // When a click event occurs on a feature in the places layer, open a popup at the
-// // location of the feature, with description HTML from its properties.
-//         map2.on('click', 'places', function (e) {
-//           var coordinates = e.features[0].geometry.coordinates.slice();
-//           var description = e.features[0].properties.description;
-//
-// // Ensure that if the map is zoomed out such that multiple
-// // copies of the feature are visible, the popup appears
-// // over the copy being pointed to.
-//           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-//             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-//           }
-//
-//           new mapboxgl.Popup()
-//             .setLngLat(coordinates)
-//             .setHTML(description)
-//             .addTo(map2);
-//         });
-//
-// // Change the cursor to a pointer when the mouse is over the places layer.
-//         map2.on('mouseenter', 'places', function () {
-//           map2.getCanvas().style.cursor = 'pointer';
-//         });
-//
-// // Change it back to a pointer when it leaves.
-//         map2.on('mouseleave', 'places', function () {
-//           map2.getCanvas().style.cursor = '';
-//         });
-//       });
-
     });
 
 
@@ -867,6 +777,8 @@ html,body{
   height:100%;
 }
 @import url('https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css');
+@import url('https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css');
+@import url('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.0/mapbox-gl-draw.css');
 /deep/ .el-submenu__title:hover{background-color:#383838 !important;}
 /deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
   color: #eeeeee;
