@@ -36,8 +36,9 @@
                 </template>
                 <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
 
-                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="HeatmapP">Heat Map(Partition)</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="HeatmapI">Heat Map(Intersection)</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="Choropleth">Choropleth Map</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-3" @click="Heatmap">Heat
+                  Map</el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-4" @click="threeD">3D Map</el-menu-item>
 
 <!--                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>-->
@@ -185,7 +186,7 @@ export default {
       document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="hidden";
     },
-    HeatmapP(){
+    Choropleth(){
       map.setPitch(0);
       map.setBearing(0);
       map.setZoom(11);
@@ -198,7 +199,7 @@ export default {
       document.getElementById("heatmapIcon").style.visibility="visible";
       document.getElementById("heatmapIcon2").style.visibility="hidden";
     },
-    HeatmapI(){
+    Heatmap(){
       map.setPitch(0);
       map.setBearing(0);
       map.setZoom(11);
