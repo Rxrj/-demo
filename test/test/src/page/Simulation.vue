@@ -16,11 +16,22 @@
               :picker-options="pickerOptions">
             </el-date-picker>
             <br>
+            <br>
+            <el-select v-model="value" placeholder="Taxis Numbers">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                style="font-size: 22px;width: 220px">
+              </el-option>
+            </el-select>
+            <br>
             <div>
               <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
               <br>
             </div>
-            <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
+            <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Run</el-button>
           </div>
         </el-aside>
         <el-main style="padding-top: 70px;margin: 0">
@@ -35,31 +46,25 @@
                   show-stops>
                 </el-slider>
                 <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
-                <div style="bottom:200px;right:665px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
-                  <div style="background-color:#FF0000;bottom:10px;right:140px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
-                  Idle Agents
+                <div style="bottom:200px;right:720px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+                  <div style="background-color:#FF0000;bottom:10px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="taxis"></div>
+                  Idle Taxis   40
                 </div>
-                <div style="bottom:150px;right:600px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
-                  <div style="background-color:#007cbf;bottom:10px;right:205px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
-                  Waiting Requests
+                <div style="bottom:150px;right:635px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
+                  <div style="background-color:#007cbf;bottom:10px;right:235px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="requests"></div>
+                  Waiting Requests   40
                 </div>
                 <div class="Evaluation" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font">416.317s</div></div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font">61.833s</div></div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font">14.411%</div></div>
                 </div>
-                <div class="Numbers" style="text-align: right">
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Agents<br/><div
-                    style="font-size: 25px;color:#409EFF" id="agents">14</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Requests<br/><div
-                    style="font-size: 25px;color:#409EFF" id="requests">14</div></div>
-                </div>
               </div>
             </el-col>
             <el-col :span="9">
-              <div class="charts" id="charts1" style="width: auto;height: 250px"></div>
-              <div class="charts" id="charts2" style="width: auto;height: 250px"></div>
-              <div class="charts" id="charts3" style="width: auto;height: 250px"></div>
+              <div class="charts" id="charts1" style="width: auto;height: 235px"></div>
+              <div class="charts" id="charts2" style="width: auto;height: 235px"></div>
+              <div class="charts" id="charts3" style="width: auto;height: 235px"></div>
             </el-col>
           </el-row>
 
@@ -108,8 +113,9 @@ export default {
         "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "#eeeeee", /* 填充的颜色 */
-          "fill-opacity": 0.3      /* 透明度 */
+          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
+          "fill-outline-color": "#eeeeee",
+          "fill-opacity": 0.5      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
@@ -158,10 +164,24 @@ export default {
     });
     var charts1 = echarts.init(document.getElementById('charts1'));
     var data1 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',400]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',320]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',417]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',290]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',300]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',410]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',400]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',420]}];
+    var data11 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
     var option = {
-      legend:{},
+      title:{
+        text:'Search Time',
+        left:'center',
+        textStyle:{
+          color:['#eeeeee']
+        }
+      },
+      legend: {
+        data: ['DROP', 'RD'],
+        padding:[40,0,0,0],
+        textStyle:{
+          color:['#eeeeee']
+        }
+      },
       grid:{
-        left:60
+
       },
       tooltip: {
         trigger: 'axis',
@@ -182,7 +202,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Search Time',
+        name:'Unit: Second',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -202,15 +222,25 @@ export default {
         }
       },
       series: [{
-        name: '',
+        name: 'DROP',
         type: 'line',
-        color:['#eeeeee'],
+        color:['#dd6b66'],
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
         data: data1
 
-      }]
+      },
+        {
+          name: 'RD',
+          type: 'line',
+          color:['#7289ab'],
+          hoverAnimation: false,
+          smooth: true,
+          symbolSize: 4,
+          data: data11
+
+        }]
     };
 
 
@@ -218,11 +248,22 @@ export default {
     charts1.setOption(option);
     var charts2 = echarts.init(document.getElementById('charts2'));
     var data2 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
+    var data22 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
 
     var option = {
-      legend:{},
-      grid:{
-        left:60
+      title:{
+        text:'Waiting Time',
+        left:'center',
+        textStyle:{
+          color:['#eeeeee']
+        }
+      },
+      legend: {
+        data: ['DROP', 'RD'],
+        padding:[40,0,0,0],
+        textStyle:{
+          color:['#eeeeee']
+        }
       },
       tooltip: {
         trigger: 'axis',
@@ -272,7 +313,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Waiting Time',
+        name:'Unit:Second',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -292,15 +333,26 @@ export default {
         }
       },
       series: [{
-        name: '',
+        name: 'DROP',
         type: 'line',
-        color:['#eeeeee'],
+        color:['#eedd78'],
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
         data: data2
 
-      }]
+      },
+        {
+          name: 'RD',
+          type: 'line',
+          color:['#73a373'],
+          hoverAnimation: false,
+          smooth: true,
+          symbolSize: 4,
+          data: data22
+
+        }
+        ]
     };
 
 
@@ -308,11 +360,22 @@ export default {
     charts2.setOption(option);
     var charts3 = echarts.init(document.getElementById('charts3'));
     var data3 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
+    var data33 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',16]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',10]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',16]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',6]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',10]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',20]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',15]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',18]}];
 
     var option = {
-      legend:{},
-      grid:{
-        left:70
+      title:{
+        text:'Expiration Percentage',
+        left:'center',
+        textStyle:{
+          color:['#eeeeee']
+        }
+      },
+      legend: {
+        data: ['DROP', 'RD'],
+        padding:[40,0,0,0],
+        textStyle:{
+          color:['#eeeeee']
+        }
       },
       tooltip: {
         trigger: 'axis',
@@ -362,7 +425,7 @@ export default {
         }
       },
       yAxis: {
-        name:'          Expiration Percentage',
+        name:'Unit:%',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -379,18 +442,28 @@ export default {
         },
         axisLabel:{
           color:'#eeeeee'
-        },
+        }
       },
       series: [{
-        name: '',
+        name: 'DROP',
         type: 'line',
-        color:['#eeeeee'],
+        color:['#759aa0'],
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
         data: data3
 
-      }]
+      },
+        {
+          name: 'RD',
+          type: 'line',
+          color:['#f49f42'],
+          hoverAnimation: false,
+          smooth: true,
+          symbolSize: 4,
+          data: data33
+
+        }]
     };
 
 
@@ -429,7 +502,17 @@ export default {
           }
         }]
       },
-      value: ''
+      value: '',
+      options: [{
+        value: '选项1',
+        label: '4000'
+      }, {
+        value: '选项2',
+        label: '5000'
+      }, {
+        value: '选项3',
+        label: '6000'
+      }],
     };
   },
 
@@ -446,17 +529,6 @@ function timeChange()
   date.setSeconds(sec+30);
   var h=date.getHours();//获取时
   var m=date.getMinutes();//获取分
-  if(m > 15)
-  {
-    if(agentsNumber < 0)
-      agentsNumber=11;
-    document.getElementById("agents").innerHTML = agentsNumber;
-    agentsNumber = 500 - m*12;
-  }
-  if(m > 15)
-  {
-    document.getElementById("requests").innerText = m*(m);
-  }
   if(m < 10)
   {
     document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
@@ -497,6 +569,12 @@ html,body{
   background-color: #2d2d2d;
   border: solid 2px #444444;
   color: #eeeeee;
+  font-size: 22px;
+  width: 220px;
+}
+
+/deep/ .el-checkbox__label{
+  font-size: 22px;
 }
 #map{
   margin: 0;
@@ -519,7 +597,7 @@ html,body{
 .Evaluation{
   position: fixed;
   left:20px;
-  top:320px;
+  top:400px;
   font-size: 22px;
   font-weight: 700;
   line-height: 50px;

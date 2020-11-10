@@ -63,8 +63,8 @@
             :step="1"
             show-stops>
           </el-slider>
-          <div style="height:100px;left:50px;top:80px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:75px;left:100px;position: absolute;font-size: 27px">200</div></div>
-          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime">Date Time: 2016-6-1 8:00</div>
+          <div style="height:90px;left:50px;top:75px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">200</div></div>
+          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="currentTime">Date Time: 2016-6-1 8:00</div>
           <div id="choosePD" style="visibility: visible">
             <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
               <div style="background-color:#FF0000;bottom:5px;right:115px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
@@ -78,21 +78,49 @@
             </div>
           </div>
           <div id="heatmapIcon" style="visibility: hidden">
-            <div style="background-color:rgb(255,255,255);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(255,208,166);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(255,170,127);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(240,64,64);bottom:200px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(181,10,9);bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:#00000000;bottom:350px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
+              <div style="right:-40px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><5</div>
+            </div>
+            <div style="background-color:rgb(255,208,166);bottom:300px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-60px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">5-10</div>
+            </div>
+            <div style="background-color:rgb(255,170,127);bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">10-30</div>
+            </div>
+            <div style="background-color:rgb(255,112,78);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">30-50</div>
+            </div>
+            <div style="background-color:rgb(240,64,64);bottom:150px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">50-70</div>
+            </div>
+            <div style="background-color:rgb(181,10,9);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>70</div>
+            </div>
           </div>
           <div id="heatmapIcon2" style="visibility: hidden">
-            <div style="background-color:rgba(33,102,172,0);bottom:200px;right:350px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(209,229,240);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(103,169,207);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(253,219,199);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(239,138,98);bottom:200px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
-            <div style="background-color:rgb(178,24,43);bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>
+            <div style="background-color:#00000000;bottom:350px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(209,229,240)">
+              <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><12</div>
+            </div>
+            <div style="background-color:rgb(209,229,240);bottom:300px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">12-24</div>
+            </div>
+            <div style="background-color:rgb(103,169,207);bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">24-36</div>
+            </div>
+            <div style="background-color:rgb(253,219,199);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">36-48</div>
+            </div>
+            <div style="background-color:rgb(239,138,98);bottom:150px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">48-60</div>
+            </div>
+            <div style="background-color:rgb(178,24,43);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>60</div>
+            </div>
           </div>
-          <div class="charts" id="charts1" style="left:40px;bottom:100px;position: absolute;width: 400px;height: 400px"></div>
+          <div style="left:40px;bottom:65px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
+            <div class="chartsBoard">Historical Curve</div>
+            <div class="charts" id="charts1" style="width: 400px;height: 400px"></div>
+          </div>
 
 
         </div>
@@ -348,7 +376,7 @@ export default {
             "interpolate", ["linear"],
             ["get", "mag"],
             0, 0,
-            20, 1
+            60, 1
           ],
           // Increase the heatmap color weight weight by zoom level
           // heatmap-intensity is a multiplier on top of heatmap-weight
@@ -422,12 +450,14 @@ export default {
 
         }
       },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+      legend: {
+        data: ['Pick Up', 'Drop Off'],
+        padding:[20,0,0,0],
+        textStyle:{
+          color:['#eeeeee']
+        }
       },
+
       xAxis: [
         {
           type: 'category',
@@ -466,15 +496,13 @@ export default {
       series: [
         {
           name: 'Pick Up',
-          type: 'bar',
-          stack: '搜索引擎',
+          type: 'line',
           data: [320, 432, 301, 334, 290, 230, 220,160, 172, 271, 374, 390, 230, 210,200],
           color:['#FF0000']
         },
         {
           name: 'Drop Off',
-          type: 'bar',
-          stack: '搜索引擎',
+          type: 'line',
           data: [320, 332, 301, 134, 290, 230, 200,162, 182, 291, 384, 309, 310, 220,300],
           color:['#007cbf']
         },
@@ -638,13 +666,24 @@ html,body{
   background: rgba(251,103,103,.5);
   text-align: left;
   color: #fff;
-  margin: 10px 10px 0 0;
-  padding: 5px 30px 0px 10px;
-  font-size: 22px;
-  line-height: 50px;
+  margin: 10px 10px 0 10px;
+  padding: 0px 30px 0px 10px;
+  font-size: 18px;
+  line-height: 40px;
   font-weight: 700;
   border-left: 12px solid #fb6767;
   text-shadow: 1px 1px 1px #000,1px 1px 1px #fff;
 }
-
+.chartsBoard{
+  background: rgba(100,191,255,.3);
+  text-align: left;
+  color: #fff;
+  margin: 10px 10px 0 10px;
+  padding: 0px 30px 0px 10px;
+  font-size: 18px;
+  line-height: 40px;
+  font-weight: 700;
+  border-left: 12px solid #64bfff;
+  text-shadow: 1px 1px 1px #000,1px 1px 1px #fff;
+}
 </style>
