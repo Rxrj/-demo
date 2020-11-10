@@ -17,7 +17,7 @@
             </el-date-picker>
             <br>
             <br>
-            <el-select v-model="value" placeholder="Taxis Numbers">
+            <el-select v-model="value" placeholder="Taxi Number">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -48,11 +48,11 @@
                 <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
                 <div style="bottom:200px;right:720px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#FF0000;bottom:10px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="taxis"></div>
-                  Idle Taxis   40
+                  Idle Taxis:   40
                 </div>
                 <div style="bottom:150px;right:635px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#007cbf;bottom:10px;right:235px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="requests"></div>
-                  Waiting Requests   40
+                   Waiting Requests:   40
                 </div>
                 <div class="Evaluation" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font">416.317s</div></div>
@@ -202,7 +202,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Unit: Second',
+        name:'(s)',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -313,7 +313,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Unit:Second',
+        name:'(s)',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
@@ -425,7 +425,7 @@ export default {
         }
       },
       yAxis: {
-        name:'Unit:%',
+        name:'(%)',
         nameTextStyle:{
           color: '#eeeeee',
           fontSize:15
