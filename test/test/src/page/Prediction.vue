@@ -89,8 +89,8 @@
           </el-col>
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimePre">Date Time: 2016-6-1 0:00</div>
+        <div style="left:1410px;top:100px;width:500px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">点击分区</div>
 <!--        <pre id='info'></pre>-->
-        <el-button id="info" type="info" plain class="left-button"></el-button>
 <!--        <div class= "heatmapIcon" id="heatmapIcon" style="visibility: hidden">-->
 <!--          <div style="background-color:rgb(255,255,255);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>-->
 <!--          <div style="background-color:rgb(255,208,166);bottom:200px;right:250px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>-->
@@ -107,42 +107,42 @@
 <!--          <div style="background-color:rgb(178,24,43);bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>-->
 <!--        </div>-->
         <div id="heatmapIcon" style="visibility: hidden">
-          <div style="background-color:#00000000;bottom:350px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
+          <div style="background-color:#00000000;bottom:350px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
             <div style="right:-40px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><5</div>
           </div>
-          <div style="background-color:rgb(255,208,166);bottom:300px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(255,208,166);bottom:300px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-60px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">5-10</div>
           </div>
-          <div style="background-color:rgb(255,170,127);bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(255,170,127);bottom:250px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">10-30</div>
           </div>
-          <div style="background-color:rgb(255,112,78);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(255,112,78);bottom:200px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">30-50</div>
           </div>
-          <div style="background-color:rgb(240,64,64);bottom:150px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(240,64,64);bottom:150px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">50-70</div>
           </div>
-          <div style="background-color:rgb(181,10,9);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(181,10,9);bottom:100px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>70</div>
           </div>
         </div>
         <div id="heatmapIcon2" style="visibility: hidden">
-          <div style="background-color:#00000000;bottom:350px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(209,229,240)">
+          <div style="background-color:#00000000;bottom:350px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(209,229,240)">
             <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><12</div>
           </div>
-          <div style="background-color:rgb(209,229,240);bottom:300px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(209,229,240);bottom:300px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">12-24</div>
           </div>
-          <div style="background-color:rgb(103,169,207);bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(103,169,207);bottom:250px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">24-36</div>
           </div>
-          <div style="background-color:rgb(253,219,199);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(253,219,199);bottom:200px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">36-48</div>
           </div>
-          <div style="background-color:rgb(239,138,98);bottom:150px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(239,138,98);bottom:150px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">48-60</div>
           </div>
-          <div style="background-color:rgb(178,24,43);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+          <div style="background-color:rgb(178,24,43);bottom:100px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
             <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>60</div>
           </div>
         </div>
@@ -201,7 +201,7 @@ export default {
       map2.setLayoutProperty('pickup_grid_pred','visibility','visible');
       // document.getElementById("choosePD").style.visibility="hidden";
       document.getElementById("heatmapIcon").style.visibility="visible";
-      // document.getElementById("heatmapIcon2").style.visibility="hidden";
+      document.getElementById("heatmapIcon2").style.visibility="hidden";
     },
     HeatmapI(){
       map1.setPitch(0);
@@ -219,7 +219,7 @@ export default {
       map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'visible');
       map2.setLayoutProperty('pickup_grid_pred','visibility','none');
       // document.getElementById("choosePD").style.visibility="hidden";
-      // document.getElementById("heatmapIcon").style.visibility="hidden";
+      document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="visible";
     },
 
@@ -291,7 +291,7 @@ export default {
         current_region_index = getCurrentGridIndex(e.lngLat.toArray(), grid_center_coordinates);
         console.log(current_region_index);
         // console.log(document.getElementsByName('el-date-picker placeholder'));
-        document.getElementById('info').innerHTML = getMouseLngLat(e) + '<br/>' + "grid index: " + current_region_index;
+        document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid index: " + current_region_index;
 
         // var current_intersection_index = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_index].intersections.coordinates);
         // var current_intersection_id = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_index].intersections.ids[current_intersection_index]);
@@ -481,14 +481,14 @@ export default {
         }
         var current_region_index = getCurrentGridIndex(e.lngLat.toArray(), grid_center_coordinates);
         // console.log(current_region_index);
-        document.getElementById('info').innerHTML = getMouseLngLat(e) + '<br/>' + "grid index: " + current_region_index;
+        document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid index: " + current_region_index;
         // var current_intersection_index = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_index].intersections.coordinates);
         // var current_intersection_id = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_index].intersections.ids[current_intersection_index]);
 
         var data1 = grid_data[current_region_index].properties.groundTruth.slice(0,288);
         var data2 = grid_data[current_region_index].properties.pred.slice(0,288);
         // var data3 = intersection_data[current_intersection_id].properties.groundTruth;
-        var data4 = intersection_data[current_intersection_id].properties.pred;
+        //var data4 = intersection_data[current_intersection_id].properties.pred;
         plotEcharts(data1,data2,data1,data2);
       });
       var radius = 0.05;

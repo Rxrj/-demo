@@ -42,11 +42,10 @@ function plotEcharts (data1,data2,data3,data4){
 
   var option = {
     title: {
-      text: 'GroundTruth vs Predicted Request in 2016-06-01',
-      subtext: 'Grid Prediction',//The New York TLC Trip Record YELLOW Data
+      text: 'Grid Prediction',
       left: 'center',
-      textStyle: {color:'#33CC00',fontSize: 12,},
-      subtextStyle: {color:'#33CC00',fontSize: 10,},
+      textStyle: {color:'#eeeeee',fontSize: 16,},
+      top:5
     },
     tooltip: {
       trigger: 'axis',
@@ -57,8 +56,8 @@ function plotEcharts (data1,data2,data3,data4){
     legend: {
       data: ['Ground Truth', 'Predicted Requests'],
       // left: 20,
-      top: 40,
-      textStyle: {color:'#33CC00',fontSize: 10,},
+      top: 30,
+      textStyle: {color:'#eeeeee',fontSize: 14,},
     },
     toolbox: {
       feature: {
@@ -109,13 +108,18 @@ function plotEcharts (data1,data2,data3,data4){
         type: 'category',
         boundaryGap: false,
         axisLine: {onZero: true},
-        axisLabel:{color:'#33cc00',fontSize:10},
+        axisLabel:{color:'#eeeeee',fontSize:14},
         data: timeData
       },
     yAxis: {
+      name:'Request',
+      nameTextStyle:{
+        color: '#eeeeee',
+        fontSize:14
+      },
       type: 'value',
       max: 180,
-      axisLabel:{color:'#33cc00',fontSize:10},
+      axisLabel:{color:'#eeeeee',fontSize:14},
     },
     series: [
       {
@@ -124,6 +128,7 @@ function plotEcharts (data1,data2,data3,data4){
         symbolSize: 4,
         // data: grid_data[current_region_index].properties.groundTruth.slice(0,288),
         data: data1,
+        color:['#FF0000']
       },
       {
         name: 'Predicted Requests',
@@ -131,6 +136,7 @@ function plotEcharts (data1,data2,data3,data4){
         symbolSize: 4,
         // data: grid_data[current_region_index].properties.pred,
         data: data2,
+        color:['#007cbf']
       }
     ]
   };
@@ -144,11 +150,10 @@ function plotEcharts (data1,data2,data3,data4){
 
   var option = {
     title: {
-      text: 'GroundTruth vs Predicted Request in 2016-06-01',
-      subtext: 'Intersection Prediction',//The New York TLC Trip Record YELLOW Data
+      text: 'Intersection Prediction',
       left: 'center',
-      textStyle: {color:'#33CC00',fontSize: 12,},
-      subtextStyle: {color:'#33CC00',fontSize: 10,},
+      textStyle: {color:'#eeeeee',fontSize: 16,},
+      top:5
     },
     tooltip: {
       trigger: 'axis',
@@ -159,8 +164,8 @@ function plotEcharts (data1,data2,data3,data4){
     legend: {
       data: ['Ground Truth', 'Predicted Requests'],
       // left: 20,
-      top: 40,
-      textStyle: {color:'#33CC00',fontSize: 10,},
+      top: 30,
+      textStyle: {color:'#eeeeee',fontSize: 14,},
     },
     toolbox: {
       feature: {
@@ -211,13 +216,18 @@ function plotEcharts (data1,data2,data3,data4){
         type: 'category',
         boundaryGap: false,
         axisLine: {onZero: true},
-        axisLabel:{color:'#33cc00',fontSize:10},
+        axisLabel:{color:'#eeeeee',fontSize:14},
         data: timeData
       },
     yAxis: {
+      name:'Request',
+      nameTextStyle:{
+        color: '#eeeeee',
+        fontSize:14
+      },
       type: 'value',
       max: 180,
-      axisLabel:{color:'#33cc00',fontSize:10},
+      axisLabel:{color:'#eeeeee',fontSize:14},
     },
     series: [
       {
@@ -226,6 +236,7 @@ function plotEcharts (data1,data2,data3,data4){
         symbolSize: 4,
         // data: grid_data[current_region_index].properties.groundTruth.slice(0,288),
         data: data3,
+        color:['#FF0000']
       },
       {
         name: 'Predicted Requests',
@@ -233,6 +244,7 @@ function plotEcharts (data1,data2,data3,data4){
         symbolSize: 4,
         // data: grid_data[current_region_index].properties.pred,
         data: data4,
+        color:['#007cbf']
       }
     ]
   };
