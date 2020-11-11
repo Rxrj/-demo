@@ -8,6 +8,10 @@ import ElementUI from 'element-ui';
 import locale from '../node_modules/element-ui/lib/locale/lang/en';
 import 'element-ui/lib/theme-chalk/index.css';
 
+import axios from 'axios'
+Vue.prototype.$http = axios
+
+
 Vue.use(ElementUI,{locale});
 
 Vue.config.productionTip = false

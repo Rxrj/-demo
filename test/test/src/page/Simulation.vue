@@ -224,7 +224,7 @@ export default {
       series: [{
         name: 'DROP',
         type: 'line',
-        color:['#dd6b66'],
+        color:['#FF0000'],
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
@@ -234,7 +234,7 @@ export default {
         {
           name: 'RD',
           type: 'line',
-          color:['#7289ab'],
+          color:['#007cbf'],
           hoverAnimation: false,
           smooth: true,
           symbolSize: 4,
@@ -335,7 +335,7 @@ export default {
       series: [{
         name: 'DROP',
         type: 'line',
-        color:['#eedd78'],
+        color:['#FF0000'],
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
@@ -345,7 +345,7 @@ export default {
         {
           name: 'RD',
           type: 'line',
-          color:['#73a373'],
+          color:['#007cbf'],
           hoverAnimation: false,
           smooth: true,
           symbolSize: 4,
@@ -447,7 +447,7 @@ export default {
       series: [{
         name: 'DROP',
         type: 'line',
-        color:['#759aa0'],
+        color:['#FF0000'],
         hoverAnimation: false,
         smooth: true,
         symbolSize: 4,
@@ -457,7 +457,7 @@ export default {
         {
           name: 'RD',
           type: 'line',
-          color:['#f49f42'],
+          color:['#007cbf'],
           hoverAnimation: false,
           smooth: true,
           symbolSize: 4,

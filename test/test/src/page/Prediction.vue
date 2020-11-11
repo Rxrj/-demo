@@ -20,7 +20,7 @@
 <!--            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>-->
 <!--            <br>-->
 <!--          </div>-->
-          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Start</el-button>
+          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Run</el-button>
         </div>
         <el-row class="tac">
           <el-col :span="12">
@@ -89,7 +89,7 @@
           </el-col>
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimePre">Date Time: 2016-6-1 0:00</div>
-        <div style="left:1410px;top:100px;width:500px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">点击分区</div>
+        <div style="left:1410px;top:100px;width:500px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
 <!--        <pre id='info'></pre>-->
 <!--        <div class= "heatmapIcon" id="heatmapIcon" style="visibility: hidden">-->
 <!--          <div style="background-color:rgb(255,255,255);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>-->
