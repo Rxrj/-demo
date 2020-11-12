@@ -55,9 +55,9 @@
                    Waiting Requests:   40
                 </div>
                 <div class="Evaluation" style="text-align: right">
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font">416.317s</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font">61.833s</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font">14.411%</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font" id="searchTimeNumber">416.317s</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font" id="waitingTimeNumber">61.833s</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font" id="expirationNumber">14.411%</div></div>
                 </div>
               </div>
             </el-col>
@@ -97,15 +97,15 @@ export default {
         map.setLayoutProperty('regions', 'visibility', 'visible');
       }
     },
-    initData:function (){
-      var url = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-      var request = new XMLHttpRequest();
+    initTreeData:function (){
+      var url1 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request1 = new XMLHttpRequest();
       // var grid_center_coordinates = new Array();
-      request.open("get", url);/*设置请求方法与路径*/
-      request.send(null);/*不发送数据到服务器*/
-      request.onload = function () {/*XHR对象获取到返回信息后执行*/
-        if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
-          DROP_expiration = JSON.parse(request.responseText).expirationPercentage.slice(0,288);
+      request1.open("get", url1);/*设置请求方法与路径*/
+      request1.send(null);/*不发送数据到服务器*/
+      request1.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request1.status == 200) {/*返回状态为200，即为数据获取成功*/
+          DROP_expiration = JSON.parse(request1.responseText).expirationPercentage.slice(0,288);
         }
       };
 
@@ -201,7 +201,7 @@ export default {
             yAxisIndex: [0],
             show: true,
             realtime: true,
-            start: 0,
+            start: 20,
             end: 60,
           },
           {
@@ -502,7 +502,7 @@ export default {
     }
   },
   mounted() {
-    this.initData();
+    this.initTreeData();
     this.drawCharts();
     mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
     window.map = new mapboxgl.Map({
@@ -560,12 +560,33 @@ export default {
       });
 
       var index=0;
+      var index2 = 0;
+      var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
       var timer = window.setInterval(function() {
         if(index < 1680){
           index++;
           map.getSource('resources').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_" + String(index) +
             ".geojson");
           map.getSource('agents').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_" + String(index) + ".geojson");
+          var sec=date.getSeconds();
+          date.setSeconds(sec+30);
+          var h=date.getHours();//获取时
+          var m=date.getMinutes();//获取分
+          if(m < 10)
+          {
+            document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+          }
+          else
+          {
+            document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+          }
+          if((index+1)%10 == 0)
+          {
+            document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
+            document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
+            document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
+            index2++;
+          }
         }else {
           window.clearInterval(timer);
         }
@@ -623,32 +644,7 @@ export default {
 
 }
 
-var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
-var t = null;
-t = setTimeout(timeChange,500);//開始运行
-var agentsNumber = 1700;
-function timeChange()
-{
-  clearTimeout(t);//清除定时器
-  var sec=date.getSeconds();
-  date.setSeconds(sec+30);
-  var h=date.getHours();//获取时
-  var m=date.getMinutes();//获取分
-  if(m < 10)
-  {
-    document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
-  }
-  else
-  {
-    document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
-  }
-  t = setTimeout(timeChange,500); //设定定时器，循环运行
-  if(h == 22)
-  {
-    clearTimeout(t);
-  }
 
-}
 </script>
 
 <style scoped>
