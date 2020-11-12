@@ -361,12 +361,11 @@ export default {
         });
         map1.addLayer({
           "id": "regions",
-          "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+          "type": "line",           /* fill类型一般用来表示一个面，一般较大 */
           "source": "regions",
           "paint": {
-            "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
-            "fill-outline-color": "#eeeeee",
-            "fill-opacity": 0.5      /* 透明度 */
+            "line-color": 'rgba(255,255,255,1)',
+            "line-width": 1
           },
           "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
         });
@@ -544,12 +543,11 @@ export default {
 
         map2.addLayer({
           "id": "regions",
-          "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+          "type": "line",           /* fill类型一般用来表示一个面，一般较大 */
           "source": "regions",
           "paint": {
-            "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
-            "fill-outline-color": "#eeeeee",
-            "fill-opacity": 0.5      /* 透明度 */
+            "line-color": 'rgba(255,255,255,1)',
+            "line-width": 1
           },
           "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
         });

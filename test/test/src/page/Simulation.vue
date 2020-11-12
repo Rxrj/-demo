@@ -74,6 +74,12 @@
 </template>
 
 <script type="text/ecmascript-6">
+var DROP_expiration;
+var DROP_search;
+var DROP_wait;
+var RD_expiration;
+var RD_search;
+var RD_wait;
 import Header from "../components/Header";
 import echarts from 'echarts'
 import '@/assets/css/all.css'
@@ -90,9 +96,414 @@ export default {
       else{
         map.setLayoutProperty('regions', 'visibility', 'visible');
       }
+    },
+    initData:function (){
+      var url = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request.open("get", url);/*设置请求方法与路径*/
+      request.send(null);/*不发送数据到服务器*/
+      request.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
+          DROP_expiration = JSON.parse(request.responseText).expirationPercentage.slice(0,288);
+        }
+      };
+
+      var url2 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_search.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request2 = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request2.open("get", url2);/*设置请求方法与路径*/
+      request2.send(null);/*不发送数据到服务器*/
+      request2.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request2.status == 200) {/*返回状态为200，即为数据获取成功*/
+          DROP_search = JSON.parse(request2.responseText).searchTime.slice(0,288);
+        }
+      };
+
+      var url3 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_wait.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request3 = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request3.open("get", url3);/*设置请求方法与路径*/
+      request3.send(null);/*不发送数据到服务器*/
+      request3.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request3.status == 200) {/*返回状态为200，即为数据获取成功*/
+          DROP_wait = JSON.parse(request3.responseText).waitTime.slice(0,288);
+        }
+      };
+
+      var url4 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request4 = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request4.open("get", url4);/*设置请求方法与路径*/
+      request4.send(null);/*不发送数据到服务器*/
+      request4.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request4.status == 200) {/*返回状态为200，即为数据获取成功*/
+          RD_expiration = JSON.parse(request4.responseText).expirationPrcentage.slice(0,288);
+        }
+      };
+
+      var url5 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_search.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request5 = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request5.open("get", url5);/*设置请求方法与路径*/
+      request5.send(null);/*不发送数据到服务器*/
+      request5.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request5.status == 200) {/*返回状态为200，即为数据获取成功*/
+          RD_search = JSON.parse(request5.responseText).searchTime.slice(0,288);
+        }
+      };
+
+      var url6 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_wait.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request6 = new XMLHttpRequest();
+      // var grid_center_coordinates = new Array();
+      request6.open("get", url6);/*设置请求方法与路径*/
+      request6.send(null);/*不发送数据到服务器*/
+      request6.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request6.status == 200) {/*返回状态为200，即为数据获取成功*/
+          RD_wait = JSON.parse(request6.responseText).waitTime.slice(0,288);
+        }
+      };
+    },
+    drawCharts(){
+      window.charts1 = echarts.init(document.getElementById('charts1'));
+      charts1.setOption({
+        title:{
+          text:'Search Time',
+          left:'center',
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        legend: {
+          data: ['DROP', 'RD'],
+          padding:[40,0,0,0],
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type:'shadow'
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 5,
+            end: 95,
+          },
+          {
+            type: 'slider',
+            yAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 0,
+            end: 60,
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            xAxisIndex: [0],
+            start: 5,
+            end: 95,
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            yAxisIndex: [0],
+            start: 0,
+            end: 50,
+          }
+        ],
+        xAxis: [
+          {
+            type: 'category',
+            data: ['08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00'],
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            name:'(s)',
+            nameTextStyle:{
+              color: '#eeeeee',
+              fontSize:15
+            },
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'DROP',
+            type: 'line',
+            data: DROP_search,
+            color:['#FF0000']
+          },
+          {
+            name: 'RD',
+            type: 'line',
+            data: RD_search,
+            color:['#007cbf']
+          }]
+      });
+
+      var charts2 = echarts.init(document.getElementById('charts2'));
+      var data2 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
+      var data22 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
+
+      var option = {
+        title:{
+          text:'Waiting Time',
+          left:'center',
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        legend: {
+          data: ['DROP', 'RD'],
+          padding:[40,0,0,0],
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 5,
+            end: 95,
+          },
+          {
+            type: 'slider',
+            yAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 60,
+            end: 100,
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            xAxisIndex: [0],
+            start: 5,
+            end: 95,
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            yAxisIndex: [0],
+            start: 0,
+            end: 50,
+          }
+        ],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type:'shadow'
+          }
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00'],
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            name:'(s)',
+            nameTextStyle:{
+              color: '#eeeeee',
+              fontSize:15
+            },
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'DROP',
+            type: 'line',
+            data: DROP_wait,
+            color:['#FF0000']
+          },
+          {
+            name: 'RD',
+            type: 'line',
+            data: RD_wait,
+            color:['#007cbf']
+          }]
+      };
+
+
+      // 使用刚指定的配置项和数据显示图表。
+      charts2.setOption(option);
+      var charts3 = echarts.init(document.getElementById('charts3'));
+
+      var option = {
+        title:{
+          text:'Expiration Percentage',
+          left:'center',
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        legend: {
+          data: ['DROP', 'RD'],
+          padding:[40,0,0,0],
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 5,
+            end: 95,
+          },
+          {
+            type: 'slider',
+            yAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 0,
+            end: 100,
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            xAxisIndex: [0],
+            start: 5,
+            end: 95,
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            yAxisIndex: [0],
+            start: 0,
+            end: 50,
+          }
+        ],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type:'shadow'
+          }
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00'],
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            name:'(%)',
+            nameTextStyle:{
+              color: '#eeeeee',
+              fontSize:15
+            },
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'DROP',
+            type: 'line',
+            data: DROP_expiration,
+            color:['#FF0000']
+          },
+          {
+            name: 'RD',
+            type: 'line',
+            data: RD_expiration,
+            color:['#007cbf']
+          }]
+      };
+
+
+      // 使用刚指定的配置项和数据显示图表。
+      charts3.setOption(option);
     }
   },
   mounted() {
+    this.initData();
+    this.drawCharts();
     mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
@@ -110,12 +521,11 @@ export default {
 
       map.addLayer({
         "id": "regions",
-        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+        "type": "line",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
         "paint": {
-          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
-          "fill-outline-color": "#eeeeee",
-          "fill-opacity": 0.5      /* 透明度 */
+          "line-color": 'rgba(255,255,255,1)',
+          "line-width": 1.5
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
@@ -162,313 +572,8 @@ export default {
       }, 500);
 
     });
-    var charts1 = echarts.init(document.getElementById('charts1'));
-    var data1 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',400]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',320]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',417]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',290]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',300]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',410]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',400]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',420]}];
-    var data11 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
-    var option = {
-      title:{
-        text:'Search Time',
-        left:'center',
-        textStyle:{
-          color:['#eeeeee']
-        }
-      },
-      legend: {
-        data: ['DROP', 'RD'],
-        padding:[40,0,0,0],
-        textStyle:{
-          color:['#eeeeee']
-        }
-      },
-      grid:{
-
-      },
-      tooltip: {
-        trigger: 'axis',
-      },
-      xAxis: {
-        type: 'time',
-        splitLine: {
-          show: false
-        },
-        splitNumber:8,
-        axisLine:{
-          lineStyle:{
-            color: '#eeeeee'
-          }
-        },
-        axisLabel:{
-          color:'#eeeeee'
-        }
-      },
-      yAxis: {
-        name:'(s)',
-        nameTextStyle:{
-          color: '#eeeeee',
-          fontSize:15
-        },
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: false
-        },
-        axisLine:{
-          lineStyle:{
-            color: '#eeeeee'
-          }
-        },
-        axisLabel:{
-          color:'#eeeeee'
-        }
-      },
-      series: [{
-        name: 'DROP',
-        type: 'line',
-        color:['#FF0000'],
-        hoverAnimation: false,
-        smooth: true,
-        symbolSize: 4,
-        data: data1
-
-      },
-        {
-          name: 'RD',
-          type: 'line',
-          color:['#007cbf'],
-          hoverAnimation: false,
-          smooth: true,
-          symbolSize: 4,
-          data: data11
-
-        }]
-    };
 
 
-    // 使用刚指定的配置项和数据显示图表。
-    charts1.setOption(option);
-    var charts2 = echarts.init(document.getElementById('charts2'));
-    var data2 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
-    var data22 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
-
-    var option = {
-      title:{
-        text:'Waiting Time',
-        left:'center',
-        textStyle:{
-          color:['#eeeeee']
-        }
-      },
-      legend: {
-        data: ['DROP', 'RD'],
-        padding:[40,0,0,0],
-        textStyle:{
-          color:['#eeeeee']
-        }
-      },
-      tooltip: {
-        trigger: 'axis',
-        formatter: function (params) {
-          params = params[0];
-          var date = new Date(params.name);
-          var hour = date.getHours();
-          var minutes = date.getMinutes();
-          if(hour < 10){
-            hour = '0' + hour;
-          }
-          if(minutes < 10){
-            minutes = '0' + minutes;
-          }
-          var dateStr = hour + ':' + minutes;
-          return dateStr + ' ' + params.value[1];
-        },
-        axisPointer: {
-          animation: false
-        }
-      },
-      xAxis: {
-        type: 'time',
-        splitLine: {
-          show: false
-        },
-        splitNumber:8,
-        axisLine:{
-          lineStyle:{
-            color: '#eeeeee'
-          }
-        },
-        axisLabel:{
-          formatter:function(value,index){
-            var date = new Date(value);
-            var hour = date.getHours();
-            var minutes = date.getMinutes();
-            if(hour < 10){
-              hour = '0' + hour;
-            }
-            if(minutes < 10){
-              minutes = '0' + minutes;
-            }
-            return hour + ':' + minutes;
-          },
-          color:'#eeeeee'
-        }
-      },
-      yAxis: {
-        name:'(s)',
-        nameTextStyle:{
-          color: '#eeeeee',
-          fontSize:15
-        },
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: false
-        },
-        axisLine:{
-          lineStyle:{
-            color: '#eeeeee'
-          }
-        },
-        axisLabel:{
-          color:'#eeeeee'
-        }
-      },
-      series: [{
-        name: 'DROP',
-        type: 'line',
-        color:['#FF0000'],
-        hoverAnimation: false,
-        smooth: true,
-        symbolSize: 4,
-        data: data2
-
-      },
-        {
-          name: 'RD',
-          type: 'line',
-          color:['#007cbf'],
-          hoverAnimation: false,
-          smooth: true,
-          symbolSize: 4,
-          data: data22
-
-        }
-        ]
-    };
-
-
-    // 使用刚指定的配置项和数据显示图表。
-    charts2.setOption(option);
-    var charts3 = echarts.init(document.getElementById('charts3'));
-    var data3 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
-    var data33 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',16]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',10]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',16]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',6]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',10]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',20]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',15]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',18]}];
-
-    var option = {
-      title:{
-        text:'Expiration Percentage',
-        left:'center',
-        textStyle:{
-          color:['#eeeeee']
-        }
-      },
-      legend: {
-        data: ['DROP', 'RD'],
-        padding:[40,0,0,0],
-        textStyle:{
-          color:['#eeeeee']
-        }
-      },
-      tooltip: {
-        trigger: 'axis',
-        formatter: function (params) {
-          params = params[0];
-          var date = new Date(params.name);
-          var hour = date.getHours();
-          var minutes = date.getMinutes();
-          if(hour < 10){
-            hour = '0' + hour;
-          }
-          if(minutes < 10){
-            minutes = '0' + minutes;
-          }
-          var dateStr = hour + ':' + minutes;
-          return dateStr + ' ' + params.value[1];
-        },
-        axisPointer: {
-          animation: false
-        }
-      },
-      xAxis: {
-        type: 'time',
-        splitLine: {
-          show: false
-        },
-        splitNumber:8,
-        axisLine:{
-          lineStyle:{
-            color: '#eeeeee'
-          }
-        },
-        axisLabel:{
-          formatter:function(value,index){
-            var date = new Date(value);
-            var hour = date.getHours();
-            var minutes = date.getMinutes();
-            if(hour < 10){
-              hour = '0' + hour;
-            }
-            if(minutes < 10){
-              minutes = '0' + minutes;
-            }
-            return hour + ':' + minutes;
-          },
-          color:'#eeeeee'
-        }
-      },
-      yAxis: {
-        name:'(%)',
-        nameTextStyle:{
-          color: '#eeeeee',
-          fontSize:15
-        },
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: false
-        },
-        axisLine:{
-          lineStyle:{
-            color: '#eeeeee'
-          }
-        },
-        axisLabel:{
-          color:'#eeeeee'
-        }
-      },
-      series: [{
-        name: 'DROP',
-        type: 'line',
-        color:['#FF0000'],
-        hoverAnimation: false,
-        smooth: true,
-        symbolSize: 4,
-        data: data3
-
-      },
-        {
-          name: 'RD',
-          type: 'line',
-          color:['#007cbf'],
-          hoverAnimation: false,
-          smooth: true,
-          symbolSize: 4,
-          data: data33
-
-        }]
-    };
-
-
-    // 使用刚指定的配置项和数据显示图表。
-    charts3.setOption(option);
   },
   data() {
     return {
