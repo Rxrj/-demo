@@ -110,15 +110,15 @@ export default {
 
       map.addLayer({
         "id": "regions",
-        "type": "fill",           /* fill类型一般用来表示一个面，一般较大 */
+        "type": "line",
         "source": "regions",
         "paint": {
-          "fill-color": "rgba(0,0,0,0)", /* 填充的颜色 */
-          "fill-outline-color": "#eeeeee",
-          "fill-opacity": 0.5      /* 透明度 */
+          "line-color": 'rgba(255,255,255,1)',
+          "line-width": 1.5
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
+
       map.addSource('resources', {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_0.geojson"
