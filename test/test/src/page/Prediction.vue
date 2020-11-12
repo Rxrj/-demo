@@ -155,6 +155,7 @@
 <script type="text/ecmascript-6">
 import Header from "../components/Header";
 import echarts from 'echarts'
+import axios from "axios";
 import '@/assets/css/all.css'
 import {getMouseLngLat} from "../assets/js/utils";
 import {getCurrentGridIndex} from "../assets/js/utils";
@@ -164,9 +165,12 @@ const mapboxgl = require('mapbox-gl');
 var grid_data;
 var grid_center_coordinates = new Array();
 var current_region_id;
-var intersection_data = new Array();
+
+var intersection_data;
 var current_intersection_index;
 var current_intersection_id;
+
+var dayOfMonth = 1;
 
 
 export default {
@@ -248,8 +252,6 @@ export default {
     },
 
     initIntersectionData:function (){
-      //单个区域的数据
-      // window.onload = function () {
       // intersection数据
       //   let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data_3day.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
         let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data_3day.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
@@ -266,27 +268,15 @@ export default {
             console.log("loading intersection data...")
           }
         };
-      // };
     },
 
-    getIntersectionData:function (index){
-      let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data/intersection_"+String(index)+".geojson";/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-      let request = new XMLHttpRequest();
-      request.timeout = 3000;
-      request.ontimeout = function (event) {
-        alert("Loading Intersection Data Time out！");
-      }
-      request.open("get", url);/*设置请求方法与路径*/
-      request.send("");/*不发送数据到服务器*/
-      request.onload = function () {/*XHR对象获取到返回信息后执行*/
-        if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
-          intersection_data[0] = JSON.parse(request.responseText);
-          console.log("loading intersection data...")
-          console.log(intersection_data[0])
-          console.log(intersection_data[0].id)
-          console.log(intersection_data[0].properties)
-        }
-      };
+    getIntersectionData() {
+      axios.get('../../static/intersection_data.geojson').then(response => {
+        // console.log(response.data);
+        intersection_data = response.data;
+      }, response => {
+        console.log("error");
+      });
     },
 
     initMap:function () {
@@ -303,41 +293,22 @@ export default {
       // map1.addControl(new mapboxgl.NavigationControl(), "top-left");
       //
       map1.on('click', (e)=>{
-
+        if (typeof this.valueTime != "object"){
+          this.valueTime = new Date(this.valueTime);
+        }
+        dayOfMonth = this.valueTime.getDate();
         current_region_id = getCurrentGridIndex(e.lngLat.toArray(), grid_center_coordinates);
-
         current_intersection_index = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_id].intersections.coordinates);
         current_intersection_id = grid_data[current_region_id].intersections.ids[current_intersection_index];
-        // console.log(document.getElementsByName('el-date-picker placeholder'));
         document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid id: " + current_region_id + " intersection id: " + current_intersection_id;
 
-        if (typeof intersection_data[0] == "undefined"){
-          console.log("loading...");
-          this.getIntersectionData(current_intersection_id);
-
-        }
-        console.log(current_intersection_id);
-        console.log(intersection_data.length);
-        console.log(intersection_data[0]);
-        console.log(intersection_data);
-        let data1 = grid_data[current_region_id].properties.groundTruth.slice(0,288);
-        let data2 = grid_data[current_region_id].properties.pred.slice(0,288);
-        var data3 = intersection_data[0].properties.groundTruth;
-        var data4 = intersection_data[0].properties.pred;
+        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        let data2 = grid_data[current_region_id].properties.pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        let data3 = intersection_data[current_intersection_id].properties.groundTruth;
+        let data4 = intersection_data[current_intersection_id].properties.pred;
         plotEcharts(data1,data2,data3,data4);
       });
 
-      // map1.on('mousemove', function (e) {
-      //   document.getElementById('info').innerHTML =       /* innerHTML 属性设置或返回表格行的开始和结束标签之间的 HTML  */
-      //     // e.point is the x, y coordinates of the mousemove event relative
-      //     // to the top-left corner of the map
-      //     // JSON.stringify(e.point) + '<br />' +
-      //     // e.lngLat is the longitude, latitude geographical position of the event
-      //     JSON.stringify(e.lngLat);  /* JSON.stringify() 方法可以将任意的 JavaScript 值序列化成 JSON 字符串 */
-      //
-      //   // var features = map.queryRenderedFeatures(e.point);
-      //   // document.getElementById('features').innerHTML = JSON.stringify(features, null, 2);
-      // });
 
       var radius = 0.05;
 
@@ -498,27 +469,23 @@ export default {
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
 
-      map2.on('click', function (e) {
-        // if (grid_center_coordinates.length == 0){
-        //   this.$options.methods.initData();
-        // }
-        current_region_id = getCurrentGridIndex(e.lngLat.toArray(), grid_center_coordinates);
-        // console.log(current_region_index);
+      map2.on('click', (e)=> {
 
+        if (typeof this.valueTime != "object"){
+          this.valueTime = new Date(this.valueTime);
+        }
+        dayOfMonth = this.valueTime.getDate();
+        current_region_id = getCurrentGridIndex(e.lngLat.toArray(), grid_center_coordinates);
         current_intersection_index = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_id].intersections.coordinates);
         current_intersection_id = grid_data[current_region_id].intersections.ids[current_intersection_index];
 
-        console.log(current_region_id)
-        console.log(current_intersection_index)
-        console.log(current_intersection_id)
-        console.log(grid_data[current_region_id].intersections.ids)
         document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid id: " + current_region_id + " intersection id: "+ current_intersection_id;
 
-        let data1 = grid_data[current_region_id].properties.groundTruth.slice(0,288);
-        let data2 = grid_data[current_region_id].properties.pred.slice(0,288);
-        // var data3 = intersection_data[current_intersection_id].properties.groundTruth;
-        //var data4 = intersection_data[current_intersection_id].properties.pred;
-        plotEcharts(data1,data2,data1,data2);
+        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        let data2 = grid_data[current_region_id].properties.pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        let data3 = intersection_data[current_intersection_id].properties.groundTruth;
+        let data4 = intersection_data[current_intersection_id].properties.pred;
+        plotEcharts(data1,data2,data3,data4);
       });
       var radius = 0.05;
 
@@ -645,7 +612,7 @@ export default {
   mounted() {
       this.initGridData();
 
-      // this.initIntersectionData();
+      this.getIntersectionData();
 
       this.initMap();
 
