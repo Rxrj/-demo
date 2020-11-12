@@ -337,7 +337,7 @@ export default {
         });
         map1.addLayer({
           "id": "regions",
-          "type": "line",
+          "type": "line",           /* fill类型一般用来表示一个面，一般较大 */
           "source": "regions",
           "paint": {
             "line-color": 'rgba(255,255,255,1)',
@@ -513,7 +513,7 @@ export default {
 
         map2.addLayer({
           "id": "regions",
-          "type": "line",
+          "type": "line",           /* fill类型一般用来表示一个面，一般较大 */
           "source": "regions",
           "paint": {
             "line-color": 'rgba(255,255,255,1)',
