@@ -20,7 +20,7 @@
             <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 5px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
             <br>
           </div>
-          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Run</el-button>
+          <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee" @click="runAnalysis">Run</el-button>
         </div>
         <el-row class="tac">
           <el-col :span="12">
@@ -96,7 +96,7 @@
             :step="1"
             show-stops>
           </el-slider>
-          <div style="height:90px;left:50px;top:75px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">200</div></div>
+          <div style="height:90px;left:50px;top:75px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
           <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-6-1 8:00</div>
           <div id="choosePD" style="visibility: visible">
             <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
@@ -170,6 +170,7 @@ var choosenDate;
 var comparison;
 var pickupComparison;
 var dropoffComparison;
+var runClick = false;
 //一个月内的所有工作日的数据
 var dataMonth;
 var pickupMonth;
@@ -182,6 +183,51 @@ export default {
   name: "Analysis",
   components: {Header},
   methods: {
+    runAnalysis(){
+      alert("Start Run");
+      runClick = true;
+      if(runClick == true){
+        var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
+        var indexT = 96;
+        var index=0;
+        var timer = window.setInterval(function() {
+          if(index < 168){
+            index++;
+            map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
+              ".geojson");
+            map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
+              ".geojson");
+            map.getSource('regionRequests').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
+              ".geojson");
+            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(indexT) +
+              ".geojson");
+            var min=date.getMinutes();
+            date.setMinutes(min+5);
+            var h=date.getHours();//获取时
+            var m=date.getMinutes();//获取分
+            if(m < 10)
+            {
+              document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+            }
+            else
+            {
+              document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+            }
+            document.getElementById("requestNumber").innerHTML =  pickupData[indexT]+dropoffData[indexT];
+            indexT++;
+          }else {
+            //移除添加的source和layer
+            map.removeLayer('pickup');
+            map.removeLayer('dropoff');
+            map.removeSource('pickup');
+            map.removeSource('dropoff');
+            map.removeLayer('regionRequests');
+            map.removeSource('regionRequests');
+            window.clearInterval(timer);
+          }
+        }, 1000);
+      }
+    },
     handleChange() {
       var check = this.checked;
       if (!check) {
@@ -811,23 +857,7 @@ export default {
       });
 
 
-      var index=0;
-      var timer = window.setInterval(function() {
-        if(index < 168){
-          index++;
-          map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
-            ".geojson");
-          map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
-            ".geojson");
-        }else {
-          //移除添加的source和layer
-          map.removeLayer('pickup');
-          map.removeLayer('dropoff');
-          map.removeSource('pickup');
-          map.removeSource('dropoff');
-          window.clearInterval(timer);
-        }
-      }, 1000);
+
 
       map.addSource("regionRequests", {
         "type": "geojson",
@@ -853,19 +883,6 @@ export default {
           "fill-opacity" : 0.95
         }
       });
-      var index=0;
-      var timer = window.setInterval(function() {
-        if(index < 168){
-          index++;
-          map.getSource('regionRequests').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/region_requests/region_request_" + String(index) +
-            ".geojson");
-        }else {
-          //移除添加的source和layer
-          map.removeLayer('regionRequests');
-          map.removeSource('regionRequests');
-          window.clearInterval(timer);
-        }
-      }, 1000);
       map.setLayoutProperty('regionRequests','visibility','none');
 
       map.addSource('pickup_pred',{
@@ -926,23 +943,6 @@ export default {
           ],
         },
       });
-      var indexP=0;
-      var timerP = window.setInterval(function() {
-        if(indexP < 47){
-          indexP++;
-          // if(indexP < 10){
-          //   map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/groundTruth/intersection_0" + String(index) +
-          //     ".geojson");
-          // }
-          // else
-          // {
-            map.getSource('pickup_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(index) +
-              ".geojson");
-          // }
-        }else {
-          window.clearInterval(timerP);
-        }
-      }, 1000);
       map.setLayoutProperty('pickup_pred-heatmap','visibility','none');
 
     });
@@ -1001,32 +1001,7 @@ export default {
   },
 
 }
-var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
-var t = null;
-t = setTimeout(timeChange,1000);//開始运行
-function timeChange()
-{
-  clearTimeout(t);//清除定时器
-  var min=date.getMinutes();
-  date.setMinutes(min+5);
-  var h=date.getHours();//获取时
-  var m=date.getMinutes();//获取分
-  if(m < 10)
-  {
-    document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
-  }
-  else
-  {
-    document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
-  }
-  t = setTimeout(timeChange,1000); //设定定时器，循环运行
-  if(h == 22)
-  {
-    clearTimeout(t);
-  }
-  document.getElementById("requestNumber").innerHTML =  (h+m)*15;
 
-}
 
 </script>
 

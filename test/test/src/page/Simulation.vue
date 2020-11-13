@@ -84,6 +84,7 @@ import Header from "../components/Header";
 import echarts from 'echarts'
 import '@/assets/css/all.css'
 const mapboxgl = require('mapbox-gl');
+
 export default {
   name: "Simulation",
   components: {Header},
@@ -98,9 +99,8 @@ export default {
       }
     },
     initTreeData:function (){
-      var url1 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-      var request1 = new XMLHttpRequest();
-      // var grid_center_coordinates = new Array();
+      let url1 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      let request1 = new XMLHttpRequest();
       request1.open("get", url1);/*设置请求方法与路径*/
       request1.send(null);/*不发送数据到服务器*/
       request1.onload = function () {/*XHR对象获取到返回信息后执行*/
@@ -108,10 +108,8 @@ export default {
           DROP_expiration = JSON.parse(request1.responseText).expirationPercentage.slice(0,288);
         }
       };
-
       var url2 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_search.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       var request2 = new XMLHttpRequest();
-      // var grid_center_coordinates = new Array();
       request2.open("get", url2);/*设置请求方法与路径*/
       request2.send(null);/*不发送数据到服务器*/
       request2.onload = function () {/*XHR对象获取到返回信息后执行*/
@@ -122,7 +120,6 @@ export default {
 
       var url3 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_wait.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       var request3 = new XMLHttpRequest();
-      // var grid_center_coordinates = new Array();
       request3.open("get", url3);/*设置请求方法与路径*/
       request3.send(null);/*不发送数据到服务器*/
       request3.onload = function () {/*XHR对象获取到返回信息后执行*/
@@ -133,7 +130,6 @@ export default {
 
       var url4 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_expiration.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       var request4 = new XMLHttpRequest();
-      // var grid_center_coordinates = new Array();
       request4.open("get", url4);/*设置请求方法与路径*/
       request4.send(null);/*不发送数据到服务器*/
       request4.onload = function () {/*XHR对象获取到返回信息后执行*/
@@ -144,7 +140,6 @@ export default {
 
       var url5 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_search.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       var request5 = new XMLHttpRequest();
-      // var grid_center_coordinates = new Array();
       request5.open("get", url5);/*设置请求方法与路径*/
       request5.send(null);/*不发送数据到服务器*/
       request5.onload = function () {/*XHR对象获取到返回信息后执行*/
@@ -155,7 +150,6 @@ export default {
 
       var url6 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_wait.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       var request6 = new XMLHttpRequest();
-      // var grid_center_coordinates = new Array();
       request6.open("get", url6);/*设置请求方法与路径*/
       request6.send(null);/*不发送数据到服务器*/
       request6.onload = function () {/*XHR对象获取到返回信息后执行*/
@@ -163,6 +157,7 @@ export default {
           RD_wait = JSON.parse(request6.responseText).waitTime.slice(0,288);
         }
       };
+      //alert("Loading Data Succeed");
     },
     drawCharts(){
       window.charts1 = echarts.init(document.getElementById('charts1'));
@@ -503,7 +498,6 @@ export default {
   },
   mounted() {
     this.initTreeData();
-    this.drawCharts();
     mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
@@ -592,8 +586,10 @@ export default {
         }
       }, 500);
 
+
     });
 
+    this.drawCharts();
 
   },
   data() {
@@ -628,7 +624,7 @@ export default {
           }
         }]
       },
-      value: '',
+      value: '4000',
       options: [{
         value: '选项1',
         label: '4000'
@@ -641,7 +637,6 @@ export default {
       }],
     };
   },
-
 }
 
 
