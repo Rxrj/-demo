@@ -170,6 +170,10 @@ var choosenDate;
 var comparison;
 var pickupComparison;
 var dropoffComparison;
+//一个月内的所有工作日的数据
+var dataMonth;
+var pickupMonth;
+var dropoffMonth;
 import Header from "../components/Header";
 import echarts from 'echarts'
 import '@/assets/css/all.css'
@@ -321,6 +325,34 @@ export default {
             dropoffComparison = comparison.dropoff.slice(0,288);
           }
         };
+
+        //获得整个月的数据
+      dataMonth=new Array();
+      pickupMonth=new Array();
+      dropoffMonth=new Array();
+      for(var i=0;i<30;i++) {
+        dataMonth[i] = new Array();
+        pickupMonth[i] = new Array();
+        dropoffMonth[i] = new Array();
+      }
+      var index = 0;
+      var url3;
+      var request3;
+      for(index=0;index < 30;index++){
+        url3 = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_"+index+".geojson";
+        request3 = new XMLHttpRequest();
+        request3.open("get", url3);/*设置请求方法与路径*/
+        request3.send(null);/*不发送数据到服务器*/
+        request3.onload = function () {/*XHR对象获取到返回信息后执行*/
+          if (request3.status == 200) {/*返回状态为200，即为数据获取成功*/
+            dataMonth[index] = JSON.parse(request3.responseText);
+            pickupMonth[index] = dataMonth[index].pickup.slice(0,288);
+            dropoffMonth[index] = dataMonth[index].dropoff.slice(0,288);
+
+          }
+        };
+      }
+      //alert(pickupMonth[1]);
 
     },
     drawChart(){
@@ -723,7 +755,7 @@ export default {
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-      center: [-73.96,40.78], // 初始坐标系
+      center: [-73.96,40.785], // 初始坐标系
       zoom: 11,     // starting zoom 地图初始的拉伸比例
       antialias: true, //抗锯齿，通过false关闭提升性能
     });

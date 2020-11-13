@@ -89,7 +89,7 @@
           </el-col>
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimePre">Date Time: 2016-6-1 0:00</div>
-        <div style="left:1410px;top:100px;width:500px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
+        <div style="left:1410px;top:100px;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
 <!--        <pre id='info'></pre>-->
 <!--        <div class= "heatmapIcon" id="heatmapIcon" style="visibility: hidden">-->
 <!--          <div style="background-color:rgb(255,255,255);bottom:200px;right:300px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 20px"></div>-->
@@ -284,7 +284,7 @@ export default {
       window.map1 = new mapboxgl.Map({
         container: 'map1', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.96, 40.78], // 初始坐标系
+        center: [-73.96,40.785], // 初始坐标系
         zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
@@ -464,7 +464,7 @@ export default {
       window.map2 = new mapboxgl.Map({
         container: 'map2', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.96, 40.78], // 初始坐标系
+        center: [-73.96,40.785], // 初始坐标系
         zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });

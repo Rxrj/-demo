@@ -6,8 +6,8 @@
                     style="padding-top:20px;float:right;font-size: 20px;color:#409EFF;line-height: 15px;"><div
         style="text-align: right">Spatial-Temporal Demand</div><br/> Prediction and Competitive Supply</el-menu-item>
       <el-menu-item index="/" class="header-item" style="left:100px">Request Analysis</el-menu-item>
-      <el-menu-item index="/Prediction" class="header-item" style="left:100px">Request Prediction</el-menu-item>
-      <el-menu-item index="/Simulation" class="header-item" style="left:100px">Simulation</el-menu-item>
+      <el-menu-item index="/Prediction" class="header-item" style="left:170px">Request Prediction</el-menu-item>
+      <el-menu-item index="/Simulation" class="header-item" style="left:250px">Simulation</el-menu-item>
     </el-menu>
   </el-header>
 </template>

@@ -508,7 +508,7 @@ export default {
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-      center: [-73.96,40.78], // 初始坐标系
+      center: [-73.96,40.785], // 初始坐标系
       zoom: 11,     // starting zoom 地图初始的拉伸比例
       antialias: true, //抗锯齿，通过false关闭提升性能
     });
