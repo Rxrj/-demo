@@ -1,0 +1,1 @@
+test/test/static/intersection_data.geojson filter=lfs diff=lfs merge=lfs -text
