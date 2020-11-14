@@ -44,7 +44,7 @@
                   width="60%"
                   :before-close="handleClose">
                   <el-row>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsComparison"></div></el-col>
+                    <el-col :span="24"><div style="height: 500px;" id="chartsComparison"></div></el-col>
 <!--                    <el-col :span="12"><div style="height: 500px" id="chartsDropoff"></div></el-col>-->
                   </el-row>
                 </el-dialog>

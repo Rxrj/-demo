@@ -74,6 +74,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+import $ from "jquery";
+
 var DROP_expiration;
 var DROP_search;
 var DROP_wait;
@@ -158,8 +160,11 @@ export default {
         }
       };
       //alert("Loading Data Succeed");
+
+
     },
     drawCharts(){
+      //SearchTime
       window.charts1 = echarts.init(document.getElementById('charts1'));
       charts1.setOption({
         title:{
@@ -257,21 +262,53 @@ export default {
           {
             name: 'DROP',
             type: 'line',
-            data: DROP_search,
+            data: [],
             color:['#FF0000']
           },
           {
             name: 'RD',
             type: 'line',
-            data: RD_search,
+            data: [],
             color:['#007cbf']
           }]
       });
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_search.json",
+        dataType:'JSON',
+        success:function(data){
+          charts1.setOption({
+            series: [
+              {
+                name: 'DROP',
+                type: 'line',
+                data: data.searchTime,
+                color:['#FF0000']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_search.json",
+        dataType:'JSON',
+        success:function(data){
+          charts1.setOption({
+            series: [
+              {
+                name: 'RD',
+                type: 'line',
+                data: data.searchTime,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
 
+      //WaitingTime
       var charts2 = echarts.init(document.getElementById('charts2'));
-      var data2 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',35]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',65]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',60]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',20]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',25]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',65]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',55]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',68]}];
-      var data22 =[{"name":'2016/6/1 8:00:00',"value":['2016/6/1 8:00:00',12]},{"name":'2016/6/1 10:00:00',"value":['2016/6/1 10:00:00',8]},{"name":'2016/6/1 12:00:00',"value":['2016/6/1 12:00:00',14]},{"name":'2016/6/1 14:00:00',"value":['2016/6/1 14:00:00',2]},{"name":'2016/6/1 16:00:00',"value":['2016/6/1 16:00:00',5]},{"name":'2016/6/1 18:00:00',"value":['2016/6/1 18:00:00',12]},{"name":'2016/6/1 20:00:00',"value":['2016/6/1 20:00:00',9]},{"name":'2016/6/1 22:00:00',"value":['2016/6/1 22:00:00',13]}];
-
       var option = {
         title:{
           text:'Waiting Time',
@@ -378,12 +415,44 @@ export default {
             color:['#007cbf']
           }]
       };
-
-
-      // 使用刚指定的配置项和数据显示图表。
       charts2.setOption(option);
-      var charts3 = echarts.init(document.getElementById('charts3'));
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_wait.json",
+        dataType:'JSON',
+        success:function(data){
+          charts2.setOption({
+            series: [
+              {
+                name: 'DROP',
+                type: 'line',
+                data: data.waitTime,
+                color:['#FF0000']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_wait.json",
+        dataType:'JSON',
+        success:function(data){
+          charts2.setOption({
+            series: [
+              {
+                name: 'RD',
+                type: 'line',
+                data: data.waitTime,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
 
+      //ExpirationPercentage
+      var charts3 = echarts.init(document.getElementById('charts3'));
       var option = {
         title:{
           text:'Expiration Percentage',
@@ -490,10 +559,41 @@ export default {
             color:['#007cbf']
           }]
       };
-
-
-      // 使用刚指定的配置项和数据显示图表。
       charts3.setOption(option);
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json",
+        dataType:'JSON',
+        success:function(data){
+          charts3.setOption({
+            series: [
+              {
+                name: 'DROP',
+                type: 'line',
+                data: data.expirationPercentage,
+                color:['#FF0000']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_expiration.json",
+        dataType:'JSON',
+        success:function(data){
+          charts3.setOption({
+            series: [
+              {
+                name: 'RD',
+                type: 'line',
+                data: data.expirationPrcentage,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
     }
   },
   mounted() {

@@ -56,11 +56,21 @@
                   width="90%"
                   :before-close="handleClose">
                   <el-row>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsWorkingPick">nihao</div></el-col>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsWorkingDrop">nihao</div></el-col>
+                    <el-col :span="12"><div style="height: 500px;" id="chartsWorkingPick"></div></el-col>
+                    <el-col :span="12"><div style="height: 500px;" id="chartsWorkingDrop"></div></el-col>
                   </el-row>
                 </el-dialog>
-                <el-menu-item style="font-size: 18px;">Holidays</el-menu-item>
+                <el-menu-item style="font-size: 18px;" @click="drawChartHolidays">Holidays</el-menu-item>
+                <el-dialog
+                  title="Weekends of the Whole Month"
+                  :visible.sync="dialogVisibleHolidays"
+                  width="90%"
+                  :before-close="handleClose">
+                  <el-row>
+                    <el-col :span="12"><div style="height: 500px;" id="chartsHolidaysPick"></div></el-col>
+                    <el-col :span="12"><div style="height: 500px;" id="chartsHolidaysDrop"></div></el-col>
+                  </el-row>
+                </el-dialog>
                 <el-menu-item style="font-size: 18px;padding-left: 5px" @click="chooseTime">Holidays and Working Days</el-menu-item>
                 <el-date-picker
                   id="valueTime2"
@@ -176,8 +186,9 @@ var dataMonth;
 var pickupMonth;
 var dropoffMonth;
 import Header from "../components/Header";
-import echarts from 'echarts'
-import '@/assets/css/all.css'
+import echarts from 'echarts';
+import '@/assets/css/all.css';
+import $ from 'jquery';
 const mapboxgl = require('mapbox-gl');
 export default {
   name: "Analysis",
@@ -346,6 +357,7 @@ export default {
       this.drawChartComparison();
     },
     initData:function (){
+      //2016-06-01的数据
         var url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff_data.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
         var request = new XMLHttpRequest();
         // var grid_center_coordinates = new Array();
@@ -360,6 +372,7 @@ export default {
         };
 
 
+        //选择的日期之后的数据
         var url2 = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_10.geojson";/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
         var request2 = new XMLHttpRequest();
         request2.open("get", url2);/*设置请求方法与路径*/
@@ -372,139 +385,166 @@ export default {
           }
         };
 
-        //获得整个月的数据
-      dataMonth=new Array();
-      pickupMonth=new Array();
-      dropoffMonth=new Array();
-      for(var i=0;i<30;i++) {
-        dataMonth[i] = new Array();
-        pickupMonth[i] = new Array();
-        dropoffMonth[i] = new Array();
-      }
-      var index = 0;
-      var url3;
-      var request3;
-      for(index=0;index < 30;index++){
-        url3 = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_"+index+".geojson";
-        request3 = new XMLHttpRequest();
-        request3.open("get", url3);/*设置请求方法与路径*/
-        request3.send(null);/*不发送数据到服务器*/
-        request3.onload = function () {/*XHR对象获取到返回信息后执行*/
-          if (request3.status == 200) {/*返回状态为200，即为数据获取成功*/
-            dataMonth[index] = JSON.parse(request3.responseText);
-            pickupMonth[index] = dataMonth[index].pickup.slice(0,288);
-            dropoffMonth[index] = dataMonth[index].dropoff.slice(0,288);
-
-          }
-        };
-      }
-      //alert(pickupMonth[1]);
+      //   //获得整个月的数据(还未可行)
+      // dataMonth=new Array();
+      // pickupMonth=new Array();
+      // dropoffMonth=new Array();
+      // for(var i=0;i<30;i++) {
+      //   dataMonth[i] = new Array();
+      //   pickupMonth[i] = new Array();
+      //   dropoffMonth[i] = new Array();
+      // }
+      // var index = 0;
+      // var url3;
+      // var request3;
+      // for(index=0;index < 30;index++){
+      //   url3 = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_"+index+".geojson";
+      //   request3 = new XMLHttpRequest();
+      //   request3.open("get", url3);/*设置请求方法与路径*/
+      //   request3.send(null);/*不发送数据到服务器*/
+      //   request3.onload = function () {/*XHR对象获取到返回信息后执行*/
+      //     if (request3.status == 200) {/*返回状态为200，即为数据获取成功*/
+      //       dataMonth[index] = JSON.parse(request3.responseText);
+      //       pickupMonth[index] = dataMonth[index].pickup.slice(0,288);
+      //       dropoffMonth[index] = dataMonth[index].dropoff.slice(0,288);
+      //
+      //     }
+      //   };
+      // }
+      // //alert(pickupMonth[1]);
 
     },
+    //画地图上的图表
     drawChart(){
-      //echarts图表
+      //echarts进行初始化
       window.charts1 = echarts.init(document.getElementById('charts1'));
-          // 绘制图表
+      // 绘制图表
+      charts1.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+
+          }
+        },
+        legend: {
+          data: ['Pick Up', 'Drop Off'],
+          padding:[20,0,0,0],
+          textStyle:{
+            color:['#eeeeee']
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start:33,
+            end: 92,
+            //组件的背景颜色
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            xAxisIndex: [0],
+            start: 33,
+            end: 92,
+          },
+          {
+            type: 'slider',
+            yAxisIndex: [0],
+            show: true,
+            realtime: true,
+            start: 50,
+            end: 100,
+
+          },
+          {
+            type: 'inside',
+            realtime: true,
+            yAxisIndex: [0],
+            start: 33,
+            end: 75,
+          },
+
+        ],
+        xAxis: [
+          {
+            type: 'category',
+            data: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'],
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: '#eeeeee',//左边线的颜色
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#eeeeee',//坐标值得具体的颜色
+
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'Pick Up',
+            type: 'line',
+            data: [],
+            color:['#FF0000']
+          },
+          {
+            name: 'Drop Off',
+            type: 'line',
+            data: [],
+            color:['#007cbf']
+          },
+        ],
+      });
+      charts1.showLoading();
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff_data.geojson",
+        dataType:'JSON',
+        success:function(data){
+          charts1.hideLoading();             //隐藏加载效果
           charts1.setOption({
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
-
-              }
-            },
-            legend: {
-              data: ['Pick Up', 'Drop Off'],
-              padding:[20,0,0,0],
-              textStyle:{
-                color:['#eeeeee']
-              }
-            },
-            dataZoom: [
-              {
-                type: 'slider',
-                xAxisIndex: [0],
-                show: true,
-                realtime: true,
-                start:33,
-                end: 92,
-                 //组件的背景颜色
-              },
-              {
-                type: 'inside',
-                realtime: true,
-                xAxisIndex: [0],
-                start: 33,
-                end: 92,
-              },
-              {
-                type: 'slider',
-                yAxisIndex: [0],
-                show: true,
-                realtime: true,
-                start: 50,
-                end: 100,
-
-              },
-              {
-                type: 'inside',
-                realtime: true,
-                yAxisIndex: [0],
-                start: 33,
-                end: 75,
-              },
-
-            ],
-            xAxis: [
-              {
-                type: 'category',
-                data: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'],
-                axisLine: {
-                  lineStyle: {
-                    type: 'solid',
-                    color: '#eeeeee',//左边线的颜色
-                  }
-                },
-                axisLabel: {
-                  textStyle: {
-                    color: '#eeeeee',//坐标值得具体的颜色
-                  }
-                }
-              }
-            ],
-            yAxis: [
-              {
-                type: 'value',
-                axisLine: {
-                  lineStyle: {
-                    type: 'solid',
-                    color: '#eeeeee',//左边线的颜色
-                  }
-                },
-                axisLabel: {
-                  textStyle: {
-                    color: '#eeeeee',//坐标值得具体的颜色
-
-                  }
-                }
-              }
-            ],
             series: [
               {
                 name: 'Pick Up',
                 type: 'line',
-                data: pickupData,
+                data: data.pickup,
                 color:['#FF0000']
               },
               {
                 name: 'Drop Off',
                 type: 'line',
-                data: dropoffData,
+                data: data.dropoff,
                 color:['#007cbf']
               },
-            ],
-          });
-        },
+            ]
+          })
+        }
+      })
+
+    },
     drawChartWorking(){
       this.dialogVisibleWorking = true;
       this.$nextTick(() => {
@@ -526,7 +566,7 @@ export default {
           },
 
           legend: {
-            data: choosenDate,
+            data: ['2016-6-1(Wed)','2016-6-2(Thu)'],
             padding:[20,0,0,0],
             textStyle:{
               color:['#252525']
@@ -587,19 +627,678 @@ export default {
           ],
           series: [
             {
-              name: choosenDate[0],
+              name: '2016-6-1(Wed)',
               type: 'line',
-              data: pickupData,
+              data: [],
               color:['#FF0000']
             },
             {
-              name: choosenDate[1],
+              name: '2016-6-2(Thu)',
               type: 'line',
-              data: pickupComparison,
-              color:['#007cbf']
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-3(Fri)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-6(Mon)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-7(Tue)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
             },
           ],
         });
+        window.chartsWorkingDrop = echarts.init(document.getElementById('chartsWorkingDrop'));
+        // 绘制图表
+        chartsWorkingDrop.setOption({
+          title: {
+            text: 'Pick Up',
+            left: 'center',
+            textStyle: {fontSize: 16,},
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+
+            }
+          },
+
+          legend: {
+            data: ['2016-6-1(Wed)','2016-6-2(Thu)'],
+            padding:[20,0,0,0],
+            textStyle:{
+              color:['#252525']
+            },
+            top:10
+          },
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: [0],
+              show: true,
+              realtime: true,
+              start: 33,
+              end: 92,
+            },
+            {
+              type: 'slider',
+              yAxisIndex: [0],
+              show: true,
+              realtime: true,
+              start: 33,
+              end: 100,
+            },
+          ],
+          xAxis: [
+            {
+              type: 'category',
+              data: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'],
+              axisLine: {
+                lineStyle: {
+                  type: 'solid',
+                  color: '#252525',//左边线的颜色
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  color: '#252525',//坐标值得具体的颜色
+                }
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  type: 'solid',
+                  color: '#252525',//左边线的颜色
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  color: '#252525',//坐标值得具体的颜色
+
+                }
+              }
+            }
+          ],
+          series: [
+            {
+              name: '2016-6-1(Wed)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-2(Thu)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-3(Fri)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-6(Mon)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-7(Tue)',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+          ],
+        });
+      })
+
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_1.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-1(Wed)',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-1(Wed)',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_2.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-2(Thu)',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-2(Thu)',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+    },
+    drawChartHolidays(){
+      this.dialogVisibleHolidays = true;
+      this.$nextTick(() => {
+        //echarts图表
+        window.chartsHolidaysPick = echarts.init(document.getElementById('chartsHolidaysPick'));
+        // 绘制图表
+        chartsHolidaysPick.setOption({
+          title: {
+            text: 'Pick Up',
+            left: 'center',
+            textStyle: {fontSize: 16,},
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+
+            }
+          },
+
+          legend: {
+            data: ['2016-6-4','2016-6-5','2016-6-11','2016-6-12','2016-6-18','2016-6-19','2016-6-25','2016-6-26'],
+            padding:[20,0,0,0],
+            textStyle:{
+              color:['#252525']
+            },
+            top:10
+          },
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: [0],
+              show: true,
+              realtime: true,
+              start: 33,
+              end: 92,
+            },
+            {
+              type: 'slider',
+              yAxisIndex: [0],
+              show: true,
+              realtime: true,
+              start: 33,
+              end: 100,
+            },
+          ],
+          xAxis: [
+            {
+              type: 'category',
+              data: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'],
+              axisLine: {
+                lineStyle: {
+                  type: 'solid',
+                  color: '#252525',//左边线的颜色
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  color: '#252525',//坐标值得具体的颜色
+                }
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  type: 'solid',
+                  color: '#252525',//左边线的颜色
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  color: '#252525',//坐标值得具体的颜色
+
+                }
+              }
+            }
+          ],
+          series: [
+            {
+              name: '2016-6-4',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-5',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-11',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-12',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-18',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-19',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-25',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-26',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+          ],
+        });
+        window.chartsHolidaysDrop = echarts.init(document.getElementById('chartsHolidaysDrop'));
+        // 绘制图表
+        chartsHolidaysDrop.setOption({
+          title: {
+            text: 'Pick Up',
+            left: 'center',
+            textStyle: {fontSize: 16,},
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+
+            }
+          },
+
+          legend: {
+            data: ['2016-6-4','2016-6-5','2016-6-11','2016-6-12','2016-6-18','2016-6-19','2016-6-25','2016-6-26'],
+            padding:[20,0,0,0],
+            textStyle:{
+              color:['#252525']
+            },
+            top:10
+          },
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: [0],
+              show: true,
+              realtime: true,
+              start: 33,
+              end: 92,
+            },
+            {
+              type: 'slider',
+              yAxisIndex: [0],
+              show: true,
+              realtime: true,
+              start: 33,
+              end: 100,
+            },
+          ],
+          xAxis: [
+            {
+              type: 'category',
+              data: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'],
+              axisLine: {
+                lineStyle: {
+                  type: 'solid',
+                  color: '#252525',//左边线的颜色
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  color: '#252525',//坐标值得具体的颜色
+                }
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  type: 'solid',
+                  color: '#252525',//左边线的颜色
+                }
+              },
+              axisLabel: {
+                textStyle: {
+                  color: '#252525',//坐标值得具体的颜色
+
+                }
+              }
+            }
+          ],
+          series: [
+            {
+              name: '2016-6-4',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-5',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-11',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-12',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-18',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-19',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-25',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-26',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+          ],
+        });
+      })
+
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_3.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-4',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-4',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_4.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-5',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-5',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_10.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-11',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-11',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_11.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-12',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-12',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_17.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-18',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-18',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_18.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-19',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-19',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_24.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-25',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-25',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_25.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsHolidaysPick.setOption({
+            series: [
+              {
+                name: '2016-6-26',
+                type: 'line',
+                data: data.pickup,
+                color:['#FF0000']
+              },
+            ]
+          })
+          chartsHolidaysDrop.setOption({
+            series: [
+              {
+                name: '2016-6-26',
+                type: 'line',
+                data: data.dropoff,
+                color:['#007cbf']
+              },
+            ]
+          })
+        }
       })
     },
     drawChartComparison(){
@@ -949,11 +1648,13 @@ export default {
 
     this.initData();
     this.drawChart();
+
   },
   data() {
     return {
       dialogVisible:false,
       dialogVisibleWorking:false,
+      dialogVisibleHolidays:false,
       checked: true,
       pickupSelect:true,
       dropoffSelect:true,
