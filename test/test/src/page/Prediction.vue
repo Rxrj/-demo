@@ -32,11 +32,22 @@
               style="left: 25px;font-weight: 700">
               <el-submenu default-active="1-1" index="1" style="width: 250px;background-color: #252525">
                 <template slot="title">
-                  <span style="color: #eeeeee;font-size: 20px" class="item-title">Partition Option</span>
+                  <span style="color: #eeeeee;font-size: 20px" class="item-title">Option</span>
                 </template>
                 <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-1" @click="handleChange"><div>Partition Visible</div></el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="HeatmapG">Hexagon Grid</el-menu-item>
                 <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="HeatmapI">Intersection</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-4" @click="showComparison" id="showComparison" >Prediction Comparison</el-menu-item>
+                <el-dialog
+                  title="Prediction Comparison"
+                  :visible.sync="dialogVisible"
+                  width="60%"
+                  :before-close="handleClose">
+                  <el-row>
+                    <el-col :span="12"><div style="height: 500px;" id="chartsComparison"></div></el-col>
+<!--                    <el-col :span="12"><div style="height: 500px" id="chartsDropoff"></div></el-col>-->
+                  </el-row>
+                </el-dialog>
               </el-submenu>
             </el-menu>
           </el-col>
@@ -159,12 +170,12 @@ import axios from "axios";
 import '@/assets/css/all.css'
 import {getMouseLngLat} from "../assets/js/utils";
 import {getCurrentGridIndex} from "../assets/js/utils";
-import {plotEcharts} from "../assets/js/utils";
+import {plotEcharts,plotEchartsGrid,plotEchartsIntersection,plotEchartsComparison} from "../assets/js/utils";
 const mapboxgl = require('mapbox-gl');
 
 var grid_data;
 var grid_center_coordinates = new Array();
-var current_region_id;
+var current_region_id = 0;
 
 var intersection_data;
 var current_intersection_index;
@@ -176,26 +187,25 @@ var dayOfMonth = 1;
 export default {
   name: "Prediction",
   components: {Header},
-  methods:{
-    handleChange(){
+  methods: {
+    handleChange() {
       // var check = this.checked;
       var check = !this.checked;
       this.checked = check;
-      if(!check){
+      if (!check) {
         map1.setLayoutProperty('regions', 'visibility', 'none');
         map2.setLayoutProperty('regions', 'visibility', 'none');
-      }
-      else{
+      } else {
         map1.setLayoutProperty('regions', 'visibility', 'visible');
         map2.setLayoutProperty('regions', 'visibility', 'visible');
       }
     },
-    HeatmapG(){
+    HeatmapG() {
       map1.setPitch(0);
       map1.setBearing(0);
       // map.setZoom(11);
       map1.setLayoutProperty('pickup_intersection', 'visibility', 'none');
-      map1.setLayoutProperty('pickup_grid','visibility','visible');
+      map1.setLayoutProperty('pickup_grid', 'visibility', 'visible');
       // document.getElementById("choosePD").style.visibility="hidden";
       // document.getElementById("heatmapIcon").style.visibility="visible";
       // document.getElementById("heatmapIcon2").style.visibility="hidden";
@@ -204,17 +214,17 @@ export default {
       map2.setBearing(0);
       // map.setZoom(11);
       map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'none');
-      map2.setLayoutProperty('pickup_grid_pred','visibility','visible');
+      map2.setLayoutProperty('pickup_grid_pred', 'visibility', 'visible');
       // document.getElementById("choosePD").style.visibility="hidden";
-      document.getElementById("heatmapIcon").style.visibility="visible";
-      document.getElementById("heatmapIcon2").style.visibility="hidden";
+      document.getElementById("heatmapIcon").style.visibility = "visible";
+      document.getElementById("heatmapIcon2").style.visibility = "hidden";
     },
-    HeatmapI(){
+    HeatmapI() {
       map1.setPitch(0);
       map1.setBearing(0);
       // map.setZoom(11);
       map1.setLayoutProperty('pickup_intersection', 'visibility', 'visible');
-      map1.setLayoutProperty('pickup_grid','visibility','none');
+      map1.setLayoutProperty('pickup_grid', 'visibility', 'none');
       // document.getElementById("choosePD").style.visibility="hidden";
       // document.getElementById("heatmapIcon").style.visibility="hidden";
       // document.getElementById("heatmapIcon2").style.visibility="visible";
@@ -223,51 +233,60 @@ export default {
       map2.setBearing(0);
       // map.setZoom(11);
       map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'visible');
-      map2.setLayoutProperty('pickup_grid_pred','visibility','none');
+      map2.setLayoutProperty('pickup_grid_pred', 'visibility', 'none');
       // document.getElementById("choosePD").style.visibility="hidden";
-      document.getElementById("heatmapIcon").style.visibility="hidden";
-      document.getElementById("heatmapIcon2").style.visibility="visible";
+      document.getElementById("heatmapIcon").style.visibility = "hidden";
+      document.getElementById("heatmapIcon2").style.visibility = "visible";
     },
 
-    initGridData:function (){
+    initGridData: function () {
       //单个区域的数据
+      // let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_data.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      // let request = new XMLHttpRequest();
+      // request.timeout = 3000;
+      // request.ontimeout = function (event) {
+      //   alert("Loading Grid Data Time out！");
+      // }
+      // request.open("get", url);/*设置请求方法与路径*/
+      // request.send("");/*不发送数据到服务器*/
+      // request.onload = function () {/*XHR对象获取到返回信息后执行*/
+      //   if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
+      //     grid_data = JSON.parse(request.responseText);
+      //     console.log("loading grid data...")
+      //     for(let i=0;i<grid_data.length;i++) {
+      //       grid_center_coordinates[i] = grid_data[i].geometry.coordinates;
+      //     }
+      //   }
+      // };
 
-      let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_data.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      axios.get('../../static/grid_data2.geojson').then(response => {
+        // console.log(response.data);
+        grid_data = response.data;
+        for (let i = 0; i < grid_data.length; i++) {
+          grid_center_coordinates[i] = grid_data[i].geometry.coordinates;
+        }
+      }, response => {
+        console.log("error");
+      });
+    },
+
+    initIntersectionData: function () {
+      // intersection数据
+      //   let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data_3day.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data_3day.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       let request = new XMLHttpRequest();
       request.timeout = 3000;
       request.ontimeout = function (event) {
-        alert("Loading Grid Data Time out！");
+        alert("Loading Intersection Data Time out！");
       }
       request.open("get", url);/*设置请求方法与路径*/
       request.send("");/*不发送数据到服务器*/
       request.onload = function () {/*XHR对象获取到返回信息后执行*/
         if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
-          grid_data = JSON.parse(request.responseText);
-          console.log("loading grid data...")
-          for(let i=0;i<grid_data.length;i++) {
-            grid_center_coordinates[i] = grid_data[i].geometry.coordinates;
-          }
+          intersection_data = JSON.parse(request.responseText);
+          console.log("loading intersection data...")
         }
       };
-    },
-
-    initIntersectionData:function (){
-      // intersection数据
-      //   let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data_3day.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-        let url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_data_3day.geojson"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-        let request = new XMLHttpRequest();
-        request.timeout = 3000;
-        request.ontimeout = function (event) {
-          alert("Loading Intersection Data Time out！");
-        }
-        request.open("get", url);/*设置请求方法与路径*/
-        request.send("");/*不发送数据到服务器*/
-        request.onload = function () {/*XHR对象获取到返回信息后执行*/
-          if (request.status == 200) {/*返回状态为200，即为数据获取成功*/
-            intersection_data = JSON.parse(request.responseText);
-            console.log("loading intersection data...")
-          }
-        };
     },
 
     getIntersectionData() {
@@ -279,12 +298,12 @@ export default {
       });
     },
 
-    initMap:function () {
+    initMap: function () {
       mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
       window.map1 = new mapboxgl.Map({
         container: 'map1', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.96,40.785], // 初始坐标系
+        center: [-73.96, 40.785], // 初始坐标系
         zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
@@ -292,8 +311,8 @@ export default {
       // map1.addControl(new mapboxgl.FullscreenControl(), "top-left");
       // map1.addControl(new mapboxgl.NavigationControl(), "top-left");
       //
-      map1.on('click', (e)=>{
-        if (typeof this.valueTime != "object"){
+      map1.on('click', (e) => {
+        if (typeof this.valueTime != "object") {
           this.valueTime = new Date(this.valueTime);
         }
         dayOfMonth = this.valueTime.getDate();
@@ -302,11 +321,16 @@ export default {
         current_intersection_id = grid_data[current_region_id].intersections.ids[current_intersection_index];
         document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid id: " + current_region_id + " intersection id: " + current_intersection_id;
 
-        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288*(dayOfMonth-1),dayOfMonth*288);
-        let data2 = grid_data[current_region_id].properties.pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+        let data2 = grid_data[current_region_id].properties.pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
         let data3 = intersection_data[current_intersection_id].properties.groundTruth;
         let data4 = intersection_data[current_intersection_id].properties.pred;
-        plotEcharts(data1,data2,data3,data4);
+        // let data3 = grid_data[current_region_id].properties.dcrnn_pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        // let data4 = grid_data[current_region_id].properties.stgcn_pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        // plotEcharts(data1,data2,data3,data4);
+        plotEchartsGrid(data1, data2);
+        plotEchartsIntersection(data3, data4);
+        // plotEchartsComparison(data1,data2,data3,data4);
       });
 
 
@@ -383,7 +407,6 @@ export default {
             window.clearInterval(timer);
           }
         }, 1000);
-
 
         map1.addSource('pickup_intersection', {
           "type": "geojson",
@@ -464,14 +487,14 @@ export default {
       window.map2 = new mapboxgl.Map({
         container: 'map2', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-        center: [-73.96,40.785], // 初始坐标系
+        center: [-73.96, 40.785], // 初始坐标系
         zoom: 11,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
 
-      map2.on('click', (e)=> {
+      map2.on('click', (e) => {
 
-        if (typeof this.valueTime != "object"){
+        if (typeof this.valueTime != "object") {
           this.valueTime = new Date(this.valueTime);
         }
         dayOfMonth = this.valueTime.getDate();
@@ -479,13 +502,18 @@ export default {
         current_intersection_index = getCurrentGridIndex(e.lngLat.toArray(), grid_data[current_region_id].intersections.coordinates);
         current_intersection_id = grid_data[current_region_id].intersections.ids[current_intersection_index];
 
-        document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid id: " + current_region_id + " intersection id: "+ current_intersection_id;
+        document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid id: " + current_region_id + " intersection id: " + current_intersection_id;
 
-        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288*(dayOfMonth-1),dayOfMonth*288);
-        let data2 = grid_data[current_region_id].properties.pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+        let data2 = grid_data[current_region_id].properties.pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
         let data3 = intersection_data[current_intersection_id].properties.groundTruth;
         let data4 = intersection_data[current_intersection_id].properties.pred;
-        plotEcharts(data1,data2,data3,data4);
+        // let data3 = grid_data[current_region_id].properties.dcrnn_pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        // let data4 = grid_data[current_region_id].properties.stgcn_pred.slice(288*(dayOfMonth-1),dayOfMonth*288);
+        // plotEcharts(data1,data2,data3,data4);
+        plotEchartsGrid(data1, data2);
+        plotEchartsIntersection(data3, data4);
+        // plotEchartsComparison(data1,data2,data3,data4);
       });
       var radius = 0.05;
 
@@ -606,7 +634,138 @@ export default {
         map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'none');
       });
     },
-
+    showComparison() {
+      this.dialogVisible = true;
+      let data1 = grid_data[current_region_id].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+      let data2 = grid_data[current_region_id].properties.pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+      let data3 = grid_data[current_region_id].properties.dcrnn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+      let data4 = grid_data[current_region_id].properties.stgcn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+      plotEchartsComparison(data1, data2, data3, data4);
+    },
+    // plotEchartsComparison(data1, data2, data3, data4) {
+    //   this.$nextTick(() => {
+    //     var day = this.valueTime2.getDate();
+    //     var week = this.valueTime2.getDay();
+    //     // 指定图表的配置项和数据
+    //     let charts = echarts.init(document.getElementById('chartsComparison'));
+    //     var timeData = ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'];
+    //
+    //     var option = {
+    //       title: {
+    //         text: 'Grid Prediction',
+    //         left: 'center',
+    //         textStyle: {color: '#eeeeee', fontSize: 16,},
+    //         top: 5
+    //       },
+    //       tooltip: {
+    //         trigger: 'axis',
+    //         axisPointer: {
+    //           animation: false
+    //         }
+    //       },
+    //       legend: {
+    //         data: ['Ground Truth', 'Our ST-GCSL', 'DCRNN', 'STGCN'],
+    //         // left: 20,
+    //         top: 30,
+    //         textStyle: {color: '#eeeeee', fontSize: 14,},
+    //       },
+    //       toolbox: {
+    //         feature: {
+    //           dataZoom: {
+    //             yAxisIndex: 'none'
+    //           },
+    //           restore: {},
+    //           saveAsImage: {}
+    //         }
+    //       },
+    //       axisPointer: {
+    //         link: {xAxisIndex: 'all'}
+    //       },
+    //       dataZoom: [
+    //         {
+    //           type: 'slider',
+    //           xAxisIndex: [0],
+    //           show: true,
+    //           realtime: true,
+    //           start: 5,
+    //           end: 95,
+    //         },
+    //         {
+    //           type: 'slider',
+    //           yAxisIndex: [0],
+    //           show: true,
+    //           realtime: true,
+    //           start: 0,
+    //           end: 50,
+    //         },
+    //         {
+    //           type: 'inside',
+    //           realtime: true,
+    //           xAxisIndex: [0],
+    //           start: 5,
+    //           end: 95,
+    //         },
+    //         {
+    //           type: 'inside',
+    //           realtime: true,
+    //           yAxisIndex: [0],
+    //           start: 0,
+    //           end: 50,
+    //         }
+    //       ],
+    //       xAxis:
+    //         {
+    //           type: 'category',
+    //           boundaryGap: false,
+    //           axisLine: {onZero: true},
+    //           axisLabel: {color: '#eeeeee', fontSize: 14},
+    //           data: timeData
+    //         },
+    //       yAxis: {
+    //         name: 'Request',
+    //         nameTextStyle: {
+    //           color: '#eeeeee',
+    //           fontSize: 14
+    //         },
+    //         type: 'value',
+    //         max: 180,
+    //         axisLabel: {color: '#eeeeee', fontSize: 14},
+    //       },
+    //       series: [
+    //         {
+    //           name: 'Ground Truth',
+    //           type: 'line',
+    //           symbolSize: 4,
+    //           data: data1,
+    //           color: ['#FF0000']
+    //         },
+    //         {
+    //           name: 'Our ST-GCSL',
+    //           type: 'line',
+    //           symbolSize: 4,
+    //           data: data2,
+    //           color: ['#007cbf']
+    //         },
+    //         {
+    //           name: 'DCRNN',
+    //           type: 'line',
+    //           symbolSize: 4,
+    //           data: data3,
+    //           color: ['#003abf']
+    //         },
+    //         {
+    //           name: 'STGCN',
+    //           type: 'line',
+    //           symbolSize: 4,
+    //           data: data4,
+    //           color: ['#121cbc']
+    //         }
+    //       ]
+    //     };
+    //     // 使用刚指定的配置项和数据显示图表。
+    //     charts.setOption(option);
+    //   })
+    // },
   },
 
   mounted() {
@@ -622,10 +781,17 @@ export default {
       let data3 = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 2.0, 2.0, 3.0, 4.0, 5.0, 3.0, 4.0, 4.0, 5.0, 5.0, 3.0, 3.0, 0.0, 3.0, 1.0, 1.0, 4.0, 0.0, 0.0, 0.0, 2.0, 1.0, 4.0, 6.0, 4.0, 8.0, 9.0, 4.0, 12.0, 4.0, 1.0, 1.0, 3.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 4.0, 2.0, 9.0, 4.0, 2.0, 5.0, 2.0, 2.0, 3.0, 1.0, 1.0, 3.0, 1.0, 2.0, 3.0, 1.0, 1.0, 3.0, 1.0, 4.0, 1.0, 1.0, 1.0, 1.0, 4.0, 0.0, 2.0, 3.0, 0.0, 0.0, 2.0, 2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 3.0, 3.0, 5.0, 5.0, 6.0, 3.0, 2.0, 4.0, 1.0, 4.0, 6.0, 3.0, 0.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 3.0, 3.0, 2.0, 0.0, 2.0, 7.0, 5.0, 4.0, 4.0, 3.0, 2.0, 1.0, 0.0, 1.0, 1.0, 3.0, 3.0, 2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 2.0, 0.0, 1.0, 3.0, 0.0, 3.0, 5.0, 5.0, 3.0, 4.0, 5.0, 1.0, 5.0, 4.0, 4.0, 7.0, 6.0, 4.0, 5.0, 2.0, 1.0, 3.0, 3.0, 5.0, 2.0, 5.0, 7.0, 10.0, 5.0, 5.0, 2.0, 0.0, 3.0, 1.0, 4.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 2.0, 5.0, 3.0, 4.0, 3.0, 3.0, 4.0, 5.0, 2.0, 4.0, 4.0, 5.0, 4.0, 5.0, 1.0, 1.0, 4.0, 1.0, 5.0, 1.0, 2.0, 0.0, 5.0, 2.0, 2.0, 5.0, 4.0, 1.0, 0.0, 0.0, 1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 4.0, 4.0, 11.0, 5.0, 4.0, 4.0, 6.0, 6.0, 0.0, 5.0, 3.0, 1.0, 3.0, 0.0, 2.0, 3.0, 2.0, 3.0, 2.0, 1.0, 4.0, 2.0, 1.0, 2.0, 1.0, 0.0, 2.0, 2.0, 4.0, 2.0, 0.0, 1.0, 3.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 6.0, 6.0, 6.0, 2.0, 7.0, 7.0, 4.0, 3.0, 5.0, 3.0, 2.0, 2.0, 4.0, 0.0, 0.0, 2.0, 0.0, 2.0, 0.0, 1.0, 3.0, 4.0, 2.0, 3.0, 5.0, 0.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.0, 2.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 2.0, 4.0, 1.0, 7.0, 8.0, 5.0, 1.0, 3.0, 6.0, 3.0, 6.0, 3.0, 7.0, 3.0, 2.0, 1.0, 3.0, 3.0, 5.0, 2.0, 2.0, 2.0, 5.0, 5.0, 3.0, 2.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 2.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 3.0, 4.0, 7.0, 8.0, 7.0, 8.0, 4.0, 2.0, 7.0, 5.0, 1.0, 3.0, 4.0, 2.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 0.0, 1.0, 1.0, 4.0, 4.0, 4.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 2.0, 3.0, 6.0, 3.0, 3.0, 4.0, 3.0, 3.0, 6.0, 4.0, 4.0, 2.0, 2.0, 4.0, 0.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 7.0, 4.0, 4.0, 6.0, 2.0, 1.0, 2.0, 2.0, 0.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 3.0, 0.0, 3.0, 4.0, 1.0, 2.0, 4.0, 3.0, 0.0, 1.0, 8.0, 4.0, 5.0, 1.0, 6.0, 6.0, 7.0, 2.0, 2.0, 1.0, 4.0, 1.0, 1.0, 2.0, 3.0, 4.0, 4.0, 6.0, 4.0, 3.0, 4.0, 3.0, 3.0, 2.0, 2.0, 2.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 3.0, 0.0, 4.0, 2.0, 3.0, 0.0, 6.0, 2.0, 5.0, 1.0, 2.0, 2.0, 3.0, 2.0, 6.0, 4.0, 1.0, 3.0, 0.0, 1.0, 7.0, 2.0, 3.0, 2.0, 1.0, 2.0, 2.0, 1.0, 2.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 2.0, 4.0, 1.0, 6.0, 5.0, 3.0, 0.0, 5.0, 0.0, 5.0, 1.0, 2.0, 1.0, 1.0, 0.0, 3.0, 3.0, 2.0, 1.0, 6.0, 1.0, 2.0, 2.0, 4.0, 1.0, 2.0, 1.0, 1.0, 0.0, 2.0, 0.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 6.0, 5.0, 8.0, 2.0, 7.0, 6.0, 3.0, 4.0, 6.0, 1.0, 4.0, 2.0, 3.0, 3.0, 4.0, 4.0, 2.0, 3.0, 6.0, 1.0, 3.0, 2.0, 4.0, 4.0, 5.0, 3.0, 2.0, 3.0, 3.0, 2.0, 0.0, 3.0, 0.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 3.0, 0.0, 5.0, 6.0, 7.0, 2.0, 6.0, 4.0, 4.0, 0.0, 1.0, 2.0, 2.0, 1.0, 4.0, 0.0, 4.0, 3.0, 1.0, 2.0, 0.0, 5.0, 1.0, 8.0, 8.0, 3.0, 1.0, 3.0, 5.0, 3.0, 0.0, 1.0, 1.0, 2.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.0, 1.0, 1.0, 4.0, 3.0, 7.0, 9.0, 2.0, 3.0, 7.0, 4.0, 2.0, 4.0, 2.0, 3.0, 3.0, 1.0, 4.0, 0.0, 3.0, 2.0, 1.0, 4.0, 2.0, 4.0, 3.0, 4.0, 3.0, 1.0, 3.0, 3.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 2.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 2.0, 3.0, 2.0, 6.0, 6.0, 2.0, 3.0, 3.0, 0.0, 3.0, 0.0, 1.0, 1.0, 3.0, 3.0, 2.0, 2.0, 1.0, 3.0, 2.0, 1.0, 0.0, 4.0, 2.0, 4.0, 6.0, 4.0, 6.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 2.0, 2.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 3.0, 2.0, 2.0, 5.0, 5.0, 1.0, 4.0, 3.0, 6.0, 1.0, 4.0, 5.0, 4.0, 4.0, 3.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 3.0, 4.0, 0.0, 4.0, 3.0, 6.0, 2.0, 2.0, 0.0, 2.0, 2.0, 3.0, 5.0, 0.0, 3.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 2.0, 0.0, 0.0, 2.0, 2.0, 3.0, 1.0, 4.0, 5.0, 1.0, 3.0, 6.0, 1.0, 5.0, 1.0, 3.0, 0.0, 4.0, 1.0, 1.0, 1.0, 4.0, 4.0, 7.0, 3.0, 5.0, 2.0, 3.0, 2.0, 2.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 1.0, 2.0, 5.0, 2.0, 4.0, 2.0, 3.0, 3.0, 0.0, 2.0, 0.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, 0.0, 2.0, 3.0, 2.0, 5.0, 1.0, 2.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 2.0, 2.0, 6.0, 4.0, 5.0, 4.0, 1.0, 3.0, 3.0, 6.0, 2.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 2.0, 2.0, 2.0, 3.0, 3.0, 1.0, 4.0, 3.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 3.0, 1.0, 2.0, 3.0, 4.0, 5.0, 3.0, 2.0, 2.0, 2.0, 0.0, 5.0, 0.0, 3.0, 2.0, 5.0, 1.0, 1.0, 3.0, 2.0, 1.0, 4.0, 1.0, 3.0, 4.0, 4.0, 0.0, 1.0, 4.0, 4.0, 2.0, 3.0, 1.0, 2.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 3.0, 1.0, 6.0, 2.0, 5.0, 6.0, 4.0, 0.0, 2.0, 6.0, 3.0, 4.0, 7.0, 0.0, 2.0, 0.0, 2.0, 1.0, 3.0, 2.0, 3.0, 0.0, 4.0, 2.0, 4.0, 2.0, 3.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2.0, 3.0, 1.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 2.0, 4.0, 5.0, 2.0, 3.0, 4.0, 3.0, 5.0, 4.0, 5.0, 3.0, 2.0, 3.0, 1.0, 2.0, 2.0, 2.0, 5.0, 1.0, 2.0, 1.0, 1.0, 2.0, 4.0, 4.0, 2.0, 2.0, 1.0, 5.0, 4.0, 0.0, 0.0, 3.0, 1.0, 1.0, 0.0, 2.0, 1.0, 1.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 3.0, 1.0, 1.0, 3.0, 1.0, 5.0, 4.0, 4.0, 1.0, 2.0, 3.0, 6.0, 5.0, 6.0, 1.0, 3.0, 2.0, 3.0, 1.0, 4.0, 3.0, 2.0, 4.0, 6.0, 6.0, 3.0, 3.0, 5.0, 4.0, 3.0, 3.0, 2.0, 1.0, 3.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 2.0, 3.0, 2.0, 1.0, 1.0, 5.0, 5.0, 3.0, 1.0, 7.0, 6.0, 5.0, 5.0, 3.0, 6.0, 2.0, 3.0, 1.0, 4.0, 2.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 0.0, 1.0, 0.0, 1.0, 2.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 3.0, 0.0, 5.0, 1.0, 9.0, 1.0, 6.0, 2.0, 3.0, 3.0, 3.0, 1.0, 2.0, 2.0, 1.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 3.0, 3.0, 0.0, 3.0, 2.0, 2.0, 2.0, 1.0, 1.0, 0.0, 2.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 3.0, 3.0, 3.0, 0.0, 3.0, 1.0, 9.0, 4.0, 5.0, 2.0, 1.0, 2.0, 6.0, 3.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.0, 3.0, 2.0, 1.0, 5.0, 2.0, 2.0, 1.0, 3.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 4.0, 2.0, 2.0, 0.0, 4.0, 5.0, 5.0, 5.0, 4.0, 1.0, 3.0, 5.0, 1.0, 2.0, 2.0, 1.0, 3.0, 3.0, 0.0, 1.0, 1.0, 2.0, 4.0, 1.0, 5.0, 4.0, 3.0, 2.0, 1.0, 5.0, 3.0, 2.0, 3.0, 0.0, 1.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0, 2.0, 4.0, 4.0, 2.0, 3.0, 1.0, 4.0, 1.0, 3.0, 2.0, 2.0, 1.0, 3.0, 0.0, 0.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1.0, 4.0, 1.0, 2.0, 1.0, 3.0, 2.0, 2.0, 0.0, 2.0, 0.0, 1.0, 3.0, 0.0];
       let data4 = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 2.0, 2.0, 3.0, 4.0, 5.0, 3.0, 4.0, 4.0, 5.0, 5.0, 3.0, 3.0, 0.0, 3.0, 1.0, 1.0, 4.0, 0.0, 0.0, 0.0, 2.0, 1.0, 4.0, 6.0, 4.0, 8.0, 9.0, 4.0, 13.0, 4.0, 1.0, 1.0, 3.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 4.0, 2.0, 9.0, 4.0, 2.0, 5.0, 2.0, 2.0, 3.0, 1.0, 1.0, 3.0, 1.0, 2.0, 3.0, 1.0, 1.0, 3.0, 1.0, 4.0, 1.0, 1.0, 0.0, 1.0, 4.0, 0.0, 2.0, 3.0, 0.0, 0.0, 2.0, 2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 3.0, 3.0, 5.0, 5.0, 6.0, 3.0, 2.0, 4.0, 1.0, 4.0, 6.0, 3.0, 0.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 3.0, 3.0, 2.0, 0.0, 2.0, 7.0, 5.0, 4.0, 4.0, 3.0, 2.0, 1.0, 0.0, 2.0, 1.0, 3.0, 3.0, 2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 2.0, 0.0, 1.0, 3.0, 0.0, 3.0, 5.0, 5.0, 3.0, 4.0, 5.0, 1.0, 5.0, 4.0, 4.0, 7.0, 6.0, 4.0, 5.0, 2.0, 1.0, 3.0, 2.0, 5.0, 2.0, 5.0, 7.0, 10.0, 5.0, 5.0, 2.0, 0.0, 3.0, 1.0, 4.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 2.0, 5.0, 3.0, 4.0, 3.0, 3.0, 4.0, 5.0, 2.0, 4.0, 4.0, 5.0, 4.0, 5.0, 1.0, 1.0, 4.0, 1.0, 5.0, 1.0, 2.0, 0.0, 5.0, 2.0, 2.0, 5.0, 4.0, 1.0, 0.0, 0.0, 1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 4.0, 4.0, 11.0, 5.0, 4.0, 4.0, 6.0, 6.0, 0.0, 5.0, 3.0, 1.0, 3.0, 0.0, 2.0, 3.0, 2.0, 3.0, 2.0, 1.0, 4.0, 2.0, 1.0, 2.0, 1.0, 0.0, 2.0, 2.0, 4.0, 2.0, 0.0, 1.0, 3.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 6.0, 6.0, 6.0, 2.0, 7.0, 8.0, 4.0, 3.0, 5.0, 3.0, 2.0, 2.0, 4.0, 0.0, 0.0, 2.0, 0.0, 2.0, 0.0, 1.0, 3.0, 4.0, 2.0, 3.0, 5.0, 0.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.0, 2.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 2.0, 4.0, 1.0, 7.0, 8.0, 5.0, 1.0, 3.0, 6.0, 3.0, 6.0, 3.0, 7.0, 3.0, 2.0, 1.0, 3.0, 3.0, 5.0, 2.0, 2.0, 2.0, 5.0, 5.0, 3.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 3.0, 4.0, 7.0, 8.0, 7.0, 8.0, 4.0, 2.0, 7.0, 5.0, 1.0, 3.0, 4.0, 2.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 0.0, 1.0, 1.0, 4.0, 4.0, 4.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 2.0, 3.0, 6.0, 3.0, 3.0, 4.0, 3.0, 3.0, 6.0, 4.0, 4.0, 2.0, 2.0, 4.0, 0.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 7.0, 4.0, 4.0, 6.0, 2.0, 1.0, 2.0, 2.0, 0.0, 1.0, 1.0, 3.0, 2.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 3.0, 0.0, 3.0, 4.0, 1.0, 2.0, 4.0, 3.0, 0.0, 1.0, 8.0, 4.0, 5.0, 1.0, 6.0, 6.0, 7.0, 2.0, 2.0, 1.0, 4.0, 1.0, 1.0, 2.0, 3.0, 4.0, 4.0, 6.0, 4.0, 3.0, 4.0, 3.0, 2.0, 2.0, 2.0, 2.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 3.0, 0.0, 4.0, 2.0, 3.0, 0.0, 6.0, 2.0, 5.0, 1.0, 2.0, 2.0, 3.0, 2.0, 6.0, 4.0, 1.0, 3.0, 0.0, 1.0, 7.0, 2.0, 3.0, 2.0, 1.0, 2.0, 2.0, 1.0, 2.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 2.0, 4.0, 1.0, 6.0, 5.0, 3.0, 0.0, 5.0, 0.0, 5.0, 1.0, 2.0, 1.0, 1.0, 0.0, 3.0, 3.0, 2.0, 1.0, 6.0, 1.0, 2.0, 2.0, 4.0, 1.0, 2.0, 1.0, 1.0, 0.0, 2.0, 0.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.0, 6.0, 5.0, 8.0, 2.0, 7.0, 6.0, 3.0, 4.0, 6.0, 1.0, 4.0, 2.0, 3.0, 3.0, 4.0, 4.0, 2.0, 3.0, 6.0, 1.0, 3.0, 2.0, 4.0, 4.0, 5.0, 3.0, 2.0, 3.0, 3.0, 2.0, 0.0, 3.0, 0.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 3.0, 0.0, 5.0, 6.0, 7.0, 2.0, 6.0, 4.0, 4.0, 0.0, 1.0, 2.0, 2.0, 1.0, 4.0, 0.0, 4.0, 3.0, 1.0, 2.0, 0.0, 5.0, 1.0, 8.0, 8.0, 3.0, 1.0, 3.0, 5.0, 3.0, 0.0, 1.0, 1.0, 2.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.0, 1.0, 1.0, 4.0, 3.0, 7.0, 9.0, 2.0, 3.0, 6.0, 4.0, 2.0, 4.0, 2.0, 3.0, 3.0, 1.0, 4.0, 0.0, 3.0, 2.0, 1.0, 4.0, 2.0, 4.0, 3.0, 4.0, 3.0, 1.0, 3.0, 3.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 2.0, 2.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 2.0, 3.0, 2.0, 6.0, 6.0, 2.0, 3.0, 3.0, 0.0, 3.0, 0.0, 1.0, 1.0, 3.0, 3.0, 2.0, 2.0, 1.0, 3.0, 2.0, 1.0, 0.0, 4.0, 2.0, 4.0, 6.0, 4.0, 6.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 2.0, 2.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 3.0, 2.0, 2.0, 5.0, 5.0, 1.0, 4.0, 3.0, 6.0, 1.0, 4.0, 4.0, 4.0, 4.0, 3.0, 5.0, 1.0, 1.0, 1.0, 4.0, 2.0, 3.0, 4.0, 0.0, 4.0, 3.0, 5.0, 2.0, 2.0, 0.0, 2.0, 2.0, 3.0, 5.0, 0.0, 3.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 2.0, 0.0, 0.0, 2.0, 2.0, 3.0, 1.0, 4.0, 5.0, 1.0, 3.0, 6.0, 1.0, 5.0, 1.0, 3.0, 0.0, 4.0, 1.0, 1.0, 1.0, 4.0, 4.0, 7.0, 3.0, 5.0, 2.0, 3.0, 2.0, 2.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 1.0, 2.0, 5.0, 2.0, 4.0, 2.0, 3.0, 3.0, 0.0, 2.0, 0.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, 0.0, 2.0, 3.0, 2.0, 5.0, 1.0, 2.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 0.0, 2.0, 2.0, 6.0, 4.0, 5.0, 4.0, 1.0, 3.0, 3.0, 6.0, 2.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0.0, 2.0, 1.0, 0.0, 0.0, 2.0, 2.0, 2.0, 3.0, 3.0, 1.0, 4.0, 3.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 3.0, 1.0, 2.0, 3.0, 4.0, 5.0, 3.0, 2.0, 2.0, 2.0, 0.0, 5.0, 0.0, 3.0, 2.0, 5.0, 1.0, 1.0, 3.0, 2.0, 1.0, 4.0, 1.0, 3.0, 4.0, 4.0, 0.0, 1.0, 4.0, 4.0, 2.0, 3.0, 1.0, 2.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 3.0, 1.0, 6.0, 2.0, 5.0, 6.0, 4.0, 0.0, 2.0, 6.0, 3.0, 4.0, 7.0, 0.0, 2.0, 0.0, 2.0, 0.0, 3.0, 2.0, 3.0, 0.0, 4.0, 2.0, 4.0, 2.0, 3.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2.0, 3.0, 1.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 2.0, 4.0, 5.0, 2.0, 3.0, 4.0, 3.0, 5.0, 4.0, 5.0, 3.0, 2.0, 3.0, 1.0, 2.0, 2.0, 2.0, 5.0, 1.0, 2.0, 1.0, 1.0, 2.0, 4.0, 4.0, 2.0, 2.0, 1.0, 5.0, 4.0, 0.0, 0.0, 3.0, 1.0, 1.0, 0.0, 2.0, 1.0, 1.0, 2.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 3.0, 1.0, 1.0, 3.0, 1.0, 4.0, 4.0, 4.0, 1.0, 2.0, 3.0, 6.0, 4.0, 6.0, 1.0, 3.0, 2.0, 3.0, 1.0, 4.0, 3.0, 2.0, 4.0, 6.0, 6.0, 3.0, 2.0, 5.0, 4.0, 3.0, 3.0, 2.0, 1.0, 3.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 2.0, 3.0, 2.0, 1.0, 1.0, 5.0, 5.0, 3.0, 1.0, 7.0, 6.0, 5.0, 5.0, 3.0, 6.0, 2.0, 3.0, 1.0, 4.0, 2.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 0.0, 1.0, 0.0, 1.0, 2.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 3.0, 0.0, 5.0, 1.0, 9.0, 1.0, 6.0, 2.0, 3.0, 3.0, 3.0, 1.0, 2.0, 2.0, 1.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 3.0, 3.0, 0.0, 3.0, 2.0, 2.0, 2.0, 1.0, 1.0, 0.0, 2.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0, 4.0, 3.0, 3.0, 3.0, 4.0, 6.0, 3.0, 2.0, 1.0, 2.0, 2.0, 2.0, 3.0, 0.0, 2.0, 1.0, 2.0, 2.0, 3.0, 1.0, 2.0, 0.0, 2.0, 3.0, 3.0, 3.0, 3.0, 2.0, 1.0, 2.0, 2.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 4.0, 3.0, 3.0, 3.0, 3.0, 3.0, 5.0, 6.0, 4.0, 3.0, 2.0, 0.0, 3.0, 1.0, 1.0, 1.0, 0.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1.0, 3.0, 3.0, 3.0, 3.0, 3.0, 1.0, 2.0, 2.0, 0.0, 1.0, 1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 2.0, 3.0, 3.0, 5.0, 2.0, 3.0, 3.0, 6.0, 4.0, 4.0, 3.0, 0.0, 0.0, 2.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, 3.0, 4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0];
 
-      plotEcharts(data1,data2,data3,data4);
+      // let data3 = [5.0, 6.0, 9.0, 3.0, 3.0, 6.0, 4.0, 5.0, 10.0, 6.0, 3.0, 2.0, 3.0, 4.0, 4.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, 2.0, 3.0, 3.0, 4.0, 5.0, 6.0, 7.0, 9.0, 13.0, 12.0, 14.0, 15.0, 17.0, 20.0, 20.0, 21.0, 28.0, 32.0, 39.0, 40.0, 41.0, 41.0, 40.0, 44.0, 44.0, 52.0, 56.0, 54.0, 58.0, 62.0, 62.0, 62.0, 63.0, 62.0, 64.0, 65.0, 64.0, 71.0, 71.0, 66.0, 63.0, 65.0, 64.0, 62.0, 53.0, 54.0, 55.0, 56.0, 54.0, 49.0, 48.0, 49.0, 50.0, 53.0, 54.0, 53.0, 50.0, 48.0, 48.0, 48.0, 47.0, 47.0, 49.0, 49.0, 50.0, 50.0, 50.0, 53.0, 54.0, 53.0, 51.0, 53.0, 54.0, 51.0, 51.0, 53.0, 53.0, 55.0, 57.0, 57.0, 59.0, 57.0, 57.0, 59.0, 60.0, 60.0, 60.0, 59.0, 57.0, 59.0, 59.0, 58.0, 58.0, 55.0, 55.0, 53.0, 54.0, 53.0, 53.0, 51.0, 52.0, 54.0, 54.0, 55.0, 53.0, 53.0, 52.0, 54.0, 54.0, 55.0, 55.0, 54.0, 56.0, 57.0, 60.0, 61.0, 62.0, 61.0, 63.0, 66.0, 66.0, 63.0, 63.0, 63.0, 64.0, 61.0, 63.0, 62.0, 62.0, 60.0, 61.0, 61.0, 61.0, 59.0, 54.0, 50.0, 50.0, 54.0, 47.0, 45.0, 55.0, 52.0, 53.0, 53.0, 54.0, 63.0, 67.0, 63.0, 66.0, 68.0, 63.0, 65.0, 63.0, 62.0, 64.0, 62.0, 67.0, 63.0, 60.0, 60.0, 57.0, 58.0, 61.0, 59.0, 60.0, 62.0, 56.0, 56.0, 51.0, 50.0, 53.0, 52.0, 49.0, 51.0, 50.0, 43.0, 44.0, 40.0, 41.0, 40.0, 42.0, 42.0, 42.0, 38.0, 35.0, 36.0, 34.0, 33.0, 34.0, 32.0, 32.0, 29.0, 27.0, 28.0, 28.0, 28.0, 29.0, 26.0, 24.0, 24.0, 24.0, 22.0, 22.0, 21.0, 21.0, 21.0, 22.0, 18.0, 19.0, 18.0, 17.0, 15.0, 13.0, 13.0, 13.0, 12.0, 12.0, 11.0, 10.0, 9.0, 9.0, 8.0];
+      // let data4 = [5.0, 6.0, 9.0, 3.0, 3.0, 6.0, 4.0, 5.0, 10.0, 6.0, 4.0, 4.0, 3.0, 3.0, 3.0, 3.0, 2.0, 2.0, 2.0, 3.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, 3.0, 5.0, 7.0, 9.0, 10.0, 14.0, 14.0, 14.0, 13.0, 16.0, 20.0, 23.0, 23.0, 25.0, 30.0, 35.0, 39.0, 45.0, 46.0, 42.0, 44.0, 45.0, 50.0, 53.0, 53.0, 56.0, 59.0, 60.0, 60.0, 60.0, 61.0, 62.0, 63.0, 63.0, 68.0, 70.0, 66.0, 63.0, 63.0, 62.0, 62.0, 58.0, 57.0, 56.0, 55.0, 53.0, 50.0, 49.0, 50.0, 51.0, 53.0, 53.0, 53.0, 51.0, 49.0, 48.0, 48.0, 47.0, 46.0, 47.0, 49.0, 52.0, 53.0, 52.0, 55.0, 55.0, 52.0, 50.0, 52.0, 53.0, 50.0, 49.0, 52.0, 52.0, 54.0, 56.0, 56.0, 59.0, 56.0, 57.0, 58.0, 59.0, 60.0, 59.0, 59.0, 56.0, 57.0, 59.0, 56.0, 56.0, 54.0, 54.0, 52.0, 53.0, 52.0, 52.0, 50.0, 51.0, 55.0, 55.0, 54.0, 54.0, 52.0, 50.0, 52.0, 53.0, 54.0, 53.0, 54.0, 57.0, 58.0, 61.0, 63.0, 63.0, 61.0, 62.0, 65.0, 65.0, 59.0, 60.0, 61.0, 62.0, 61.0, 64.0, 63.0, 61.0, 58.0, 60.0, 60.0, 60.0, 60.0, 55.0, 50.0, 50.0, 52.0, 50.0, 49.0, 53.0, 53.0, 55.0, 55.0, 57.0, 63.0, 66.0, 67.0, 68.0, 69.0, 66.0, 66.0, 66.0, 63.0, 63.0, 62.0, 66.0, 63.0, 61.0, 60.0, 57.0, 58.0, 62.0, 61.0, 62.0, 64.0, 60.0, 60.0, 55.0, 54.0, 54.0, 53.0, 52.0, 51.0, 50.0, 46.0, 46.0, 43.0, 43.0, 41.0, 43.0, 43.0, 43.0, 40.0, 37.0, 36.0, 35.0, 35.0, 36.0, 34.0, 33.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 27.0, 25.0, 26.0, 26.0, 25.0, 24.0, 23.0, 22.0, 23.0, 24.0, 20.0, 20.0, 21.0, 19.0, 18.0, 16.0, 15.0, 14.0, 13.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 8.0, 8.0, 8.0];
+
+    // plotEcharts(data1,data2,data3,data4);
+      plotEchartsGrid(data1,data2);
+      plotEchartsIntersection(data3,data4);
+      // plotEchartsCompare(data1,data2,data3,data4);
   },
   data() {
     return {
+      dialogVisible: false,
       checked: true,
       activeIndex: '1',
       activeIndex2: '1',
@@ -735,7 +901,7 @@ html,body{
 .Evaluation{
   position: fixed;
   left:35px;
-  top:500px;
+  top:550px;
   font-size: 22px;
   font-weight: 700;
   line-height: 50px;
