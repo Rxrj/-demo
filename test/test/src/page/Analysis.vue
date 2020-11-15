@@ -102,9 +102,8 @@
         <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
           <el-slider
             v-model="valueSlider"
-            max="22"
-            :step="1"
-            show-stops>
+            min="8"
+            >
           </el-slider>
           <div style="height:90px;left:50px;top:75px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
           <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-6-1 8:00</div>
@@ -1658,7 +1657,7 @@ export default {
       checked: true,
       pickupSelect:true,
       dropoffSelect:true,
-      valueSlider:0,
+      valueSlider:8,
       valueTime:"2016-6-1",
       valueTime2:'',
       pickerOptions: {

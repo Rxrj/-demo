@@ -657,7 +657,7 @@ export default {
           title: {
             text: 'Grid Prediction',
             left: 'center',
-            textStyle: {color: '#eeeeee', fontSize: 16,},
+            textStyle: {color: '#252525', fontSize: 16,},
             top: 5
           },
           tooltip: {
@@ -670,7 +670,7 @@ export default {
             data: ['Ground Truth', 'Our ST-GCSL', 'DCRNN', 'STGCN'],
             // left: 20,
             top: 30,
-            textStyle: {color: '#eeeeee', fontSize: 14,},
+            textStyle: {color: '#252525', fontSize: 14,},
           },
           toolbox: {
             feature: {
@@ -721,18 +721,18 @@ export default {
               type: 'category',
               boundaryGap: false,
               axisLine: {onZero: true},
-              axisLabel: {color: '#eeeeee', fontSize: 14},
+              axisLabel: {color: '#252525', fontSize: 14},
               data: timeData
             },
           yAxis: {
             name: 'Request',
             nameTextStyle: {
-              color: '#eeeeee',
+              color: '#252525',
               fontSize: 14
             },
             type: 'value',
             max: 180,
-            axisLabel: {color: '#eeeeee', fontSize: 14},
+            axisLabel: {color: '#252525', fontSize: 14},
           },
           series: [
             {
@@ -740,28 +740,28 @@ export default {
               type: 'line',
               symbolSize: 4,
               data: data1,
-              color: ['#FF0000']
+              color: ['#05f8d6']
             },
             {
               name: 'Our ST-GCSL',
               type: 'line',
               symbolSize: 4,
               data: data2,
-              color: ['#007cbf']
+              color: ['#0082fc']
             },
             {
               name: 'DCRNN',
               type: 'line',
               symbolSize: 4,
               data: data3,
-              color: ['#003abf']
+              color: ['#fdd845']
             },
             {
               name: 'STGCN',
               type: 'line',
               symbolSize: 4,
               data: data4,
-              color: ['#121cbc']
+              color: ['#f47a75']
             }
           ]
         };
