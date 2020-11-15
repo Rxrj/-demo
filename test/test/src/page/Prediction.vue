@@ -45,7 +45,6 @@
                   :before-close="handleClose">
                   <el-row>
                     <el-col :span="24"><div style="height: 500px;" id="chartsComparison"></div></el-col>
-<!--                    <el-col :span="12"><div style="height: 500px" id="chartsDropoff"></div></el-col>-->
                   </el-row>
                 </el-dialog>
               </el-submenu>
@@ -99,7 +98,8 @@
             <div class="charts" id="charts2" style="width: auto;height: 46%"></div>
           </el-col>
         </el-row>
-        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime">Date Time: 2016-6-1 0:00</div>
+        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime" v-if="showTimeGrid">Date Time: 2016-6-1 0:00</div>
+        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime2" v-if="showTimeIntersection">Date Time: 2016-6-1 0:00</div>
         <div style="left:1410px;top:100px;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
 <!--        <pre id='info'></pre>-->
 <!--        <div class= "heatmapIcon" id="heatmapIcon" style="visibility: hidden">-->
@@ -184,7 +184,7 @@ var current_intersection_id;
 
 var dayOfMonth = 1;
 var runClick = false;
-var isShowGridData = true;
+// var isShowGridData = true;
 export default {
   name: "Prediction",
   components: {Header},
@@ -194,7 +194,7 @@ export default {
       runClick = true;
       // var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
       if(runClick == true){
-        if (isShowGridData) {
+        if (this.showTimeGrid) {
           var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
           var index = 96;
           var timer = window.setInterval(function () {
@@ -222,11 +222,12 @@ export default {
             }
           }, 1000);
         }
+        // if(this.showTimeIntersection){
         else{
           var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
           var index = 16;
           var timer = window.setInterval(function () {
-            if (index < 40) {
+            if (index < 44) {
               index++;
               map1.getSource('pickup_intersection').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(index) + ".geojson");
               map2.getSource('pickup_intersection_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_pred/intersection_" + String(index) + ".geojson");
@@ -236,9 +237,9 @@ export default {
               var h = date.getHours();//获取时
               var m = date.getMinutes();//获取分
               if (m < 10) {
-                document.getElementById("currentTime").innerHTML = "Date Time: 2016-6-1 " + h + ":0" + m;
+                document.getElementById("currentTime2").innerHTML = "Date Time: 2016-6-1 " + h + ":0" + m;
               } else {
-                document.getElementById("currentTime").innerHTML = "Date Time: 2016-6-1 " + h + ":" + m;
+                document.getElementById("currentTime2").innerHTML = "Date Time: 2016-6-1 " + h + ":" + m;
               }
             } else {
               window.clearInterval(timer);
@@ -261,7 +262,9 @@ export default {
       }
     },
     HeatmapG() {
-      isShowGridData = true;
+      // isShowGridData = true;
+      this.showTimeGrid = true;
+      this.showTimeIntersection = false;
       map1.setPitch(0);
       map1.setBearing(0);
       // map.setZoom(11);
@@ -277,7 +280,9 @@ export default {
       document.getElementById("heatmapIcon2").style.visibility = "hidden";
     },
     HeatmapI() {
-      isShowGridData = false;
+      // isShowGridData = false;
+      this.showTimeGrid = false;
+      this.showTimeIntersection = true,
       map1.setPitch(0);
       map1.setBearing(0);
       // map.setZoom(11);
@@ -643,9 +648,9 @@ export default {
       let data2 = grid_data[current_region_id].properties.pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
       let data3 = grid_data[current_region_id].properties.dcrnn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
       let data4 = grid_data[current_region_id].properties.stgcn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
-      this.plotEchartsComparison(data1, data2, data3, data4);
+      this.plotEchartsComparison(data1, data2, data3, data4,current_region_id);
     },
-    plotEchartsComparison(data1, data2, data3, data4) {
+    plotEchartsComparison(data1, data2, data3, data4,grid_id) {
       this.$nextTick(() => {
         // var day = this.valueTime.getDate();
         // var week = this.valueTime.getDay();
@@ -655,7 +660,7 @@ export default {
 
         var option = {
           title: {
-            text: 'Grid Prediction',
+            text: 'Prediction Comparison in Grid '+String(grid_id),
             left: 'center',
             textStyle: {color: '#252525', fontSize: 16,},
             top: 5
@@ -748,6 +753,7 @@ export default {
               symbolSize: 4,
               data: data2,
               color: ['#0082fc']
+
             },
             {
               name: 'DCRNN',
@@ -795,6 +801,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      showTimeGrid: true,
+      showTimeIntersection: false,
       checked: true,
       activeIndex: '1',
       activeIndex2: '1',
@@ -830,31 +838,7 @@ export default {
   },
 
 }
-// var date = new Date(2016,5,1,0,0);//注意月份是0-11，1月为0，12月为11
-// var t = null;
-// t = setTimeout(timeChange,1000);//開始运行
-// function timeChange()
-// {
-//   clearTimeout(t);//清除定时器
-//   var min=date.getMinutes();
-//   date.setMinutes(min+30);
-//   var h=date.getHours();//获取时
-//   var m=date.getMinutes();//获取分
-//   if(m < 10)
-//   {
-//     document.getElementById("currentTimePre").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
-//   }
-//   else
-//   {
-//     document.getElementById("currentTimePre").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
-//   }
-//   t = setTimeout(timeChange,1000); //设定定时器，循环运行
-//   if(h == 24)
-//   {
-//     clearTimeout(t);
-//   }
-//
-// }
+
 </script>
 
 <style scoped>
