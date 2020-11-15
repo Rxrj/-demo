@@ -102,8 +102,11 @@
         <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
           <el-slider
             v-model="valueSlider"
-            min="8"
-            >
+            max="24"
+            :step="1"
+            :marks="marksSlider"
+            @change="getValueSlider"
+            show-stops>
           </el-slider>
           <div style="height:90px;left:50px;top:75px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
           <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-6-1 8:00</div>
@@ -184,6 +187,7 @@ var runClick = false;
 var dataMonth;
 var pickupMonth;
 var dropoffMonth;
+var changeValueSlider = false;
 import Header from "../components/Header";
 import echarts from 'echarts';
 import '@/assets/css/all.css';
@@ -193,16 +197,22 @@ export default {
   name: "Analysis",
   components: {Header},
   methods: {
+    getValueSlider(){
+      changeValueSlider = true;
+      //alert(this.valueSlider);
+    },
     runAnalysis(){
       alert("Start Run");
       runClick = true;
-      if(runClick == true){
+      const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
+     if(runClick == true){
         var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
         var indexT = 96;
         var index=0;
         var timer = window.setInterval(function() {
           if(index < 168){
             index++;
+            console.log(index);
             map.getSource('pickup').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/pickup/pickup_" + String(index) +
               ".geojson");
             map.getSource('dropoff').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/dropoff/dropoff_" + String(index) +
@@ -214,6 +224,16 @@ export default {
             var min=date.getMinutes();
             date.setMinutes(min+5);
             var h=date.getHours();//获取时
+            if(changeValueSlider == false)
+              that.valueSlider = h;//时间条会随着时间移动
+            if(changeValueSlider == true)
+            {
+              index = (that.valueSlider - 8) * 12;
+              //alert(index);
+              date.setHours(that.valueSlider,0);
+              //alert(date.getHours());
+              changeValueSlider = false;
+            }
             var m=date.getMinutes();//获取分
             if(m < 10)
             {
@@ -1658,6 +1678,33 @@ export default {
       pickupSelect:true,
       dropoffSelect:true,
       valueSlider:8,
+      marksSlider:{
+        0:'0',
+        1:'1',
+        2:'2',
+        3:'3',
+        4:'4',
+        5:'5',
+        6:'6',
+        7:'7',
+        8:'8',
+        9:'9',
+        10:'10',
+        11:'11',
+        12:'12',
+        13:'13',
+        14:'14',
+        15:'15',
+        16:'16',
+        17:'17',
+        18:'18',
+        19:'19',
+        20:'20',
+        21:'21',
+        22:'22',
+        23:'23',
+        24:'24',
+      },
       valueTime:"2016-6-1",
       valueTime2:'',
       pickerOptions: {
@@ -1742,6 +1789,10 @@ html,body{
   font-size: 22px;
 }
 
+/deep/ .el-slider__marks-text{
+  color: #3a8ee6;
+  font-size: 12px;
+}
 
 
 .el-menu{
@@ -1786,9 +1837,9 @@ html,body{
   margin: 0;
   position: fixed;
   z-index: 1000;
-  width: 500px;
-  bottom: 50px;
-  left: 850px;
+  width: 400px;
+  bottom: 690px;
+  right:5px;
 }
 .numberBoard{
   background: rgba(251,103,103,.5);
