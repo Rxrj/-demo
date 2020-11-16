@@ -57,7 +57,7 @@ function plotEchartsGrid(data1,data2){
       data: ['Ground Truth', 'Predicted Requests'],
       // left: 20,
       top: 30,
-      textStyle: {color:'#eeeeee',fontSize: 14,},
+      textStyle: {color:'#eeeeee',fontSize: 14,fontWeight:600},
     },
     toolbox: {
       feature: {
@@ -107,8 +107,8 @@ function plotEchartsGrid(data1,data2){
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: {onZero: true},
-        axisLabel:{color:'#eeeeee',fontSize:14},
+        axisLine: {onZero: true,lineStyle:{color:'#eeeeee',fontWeight:600}},
+        axisLabel:{color:'#eeeeee',fontSize:14,fontWeight:600},
         data: timeData
       },
     yAxis: {
@@ -119,7 +119,8 @@ function plotEchartsGrid(data1,data2){
       },
       type: 'value',
       max: 180,
-      axisLabel:{color:'#eeeeee',fontSize:14},
+      axisLine: {lineStyle:{color:'#eeeeee',fontWeight:600}},
+      axisLabel:{color:'#eeeeee',fontSize:14,fontWeight:600},
     },
     series: [
       {
@@ -168,7 +169,7 @@ function plotEchartsIntersection(data1,data2){
       data: ['Ground Truth', 'Predicted Requests'],
       // left: 20,
       top: 30,
-      textStyle: {color:'#eeeeee',fontSize: 14,},
+      textStyle: {color:'#eeeeee',fontSize: 14,fontWeight:600},
     },
     toolbox: {
       feature: {
@@ -218,8 +219,8 @@ function plotEchartsIntersection(data1,data2){
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: {onZero: true},
-        axisLabel:{color:'#eeeeee',fontSize:14},
+        axisLine: {onZero: true,lineStyle:{color:'#eeeeee',fontWeight:600}},
+        axisLabel:{color:'#eeeeee',fontSize:14,fontWeight:600},
         data: timeData
       },
     yAxis: {
@@ -230,7 +231,8 @@ function plotEchartsIntersection(data1,data2){
       },
       type: 'value',
       max: 180,
-      axisLabel:{color:'#eeeeee',fontSize:14},
+      axisLine: {lineStyle:{color:'#eeeeee',fontWeight:600}},
+      axisLabel:{color:'#eeeeee',fontSize:14,fontWeight:600},
     },
     series: [
       {

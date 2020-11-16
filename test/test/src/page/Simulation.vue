@@ -49,11 +49,11 @@
                 <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
                 <div style="bottom:200px;right:720px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#FF0000;bottom:10px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="taxis"></div>
-                  Idle Taxis:   40
+                  <div style="bottom:0px;right:-10px;position: absolute;width: 200px">Idle Taxis:    </div><div style="bottom:0px;right:-20px;position: absolute;" id="taxisNumber">40</div>
                 </div>
                 <div style="bottom:150px;right:635px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#007cbf;bottom:10px;right:235px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="requests"></div>
-                   Waiting Requests:   40
+                  <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;right:-15px;position: absolute;" id="requestsNumber">40</div>
                 </div>
                 <div class="Evaluation" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font" id="searchTimeNumber">416.317s</div></div>
@@ -62,10 +62,10 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="9">
-              <div class="charts" id="charts1" style="width: auto;height: 235px"></div>
-              <div class="charts" id="charts2" style="width: auto;height: 235px"></div>
-              <div class="charts" id="charts3" style="width: auto;height: 235px"></div>
+            <el-col :span="9" style="height: 90%">
+              <div class="charts" id="charts1" style="width: auto;height: 33%"></div>
+              <div class="charts" id="charts2" style="width: auto;height: 33%"></div>
+              <div class="charts" id="charts3" style="width: auto;height: 33%"></div>
             </el-col>
           </el-row>
 
@@ -83,6 +83,8 @@ var DROP_wait;
 var RD_expiration;
 var RD_search;
 var RD_wait;
+var waiting_requests;
+var idle_taxis;
 var runClick = false;
 var changeValueSlider = false;
 import Header from "../components/Header";
@@ -143,6 +145,8 @@ export default {
               document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
               document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
               document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
+              document.getElementById("taxisNumber").innerHTML= idle_taxis[index2];
+              document.getElementById("requestsNumber").innerHTML= waiting_requests[index2];
               index2++;
             }
           }else {
@@ -220,6 +224,29 @@ export default {
         }
       };
       //alert("Loading Data Succeed");
+
+      //获取空车和请求数
+      var url7 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/waiting_requests.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request7 = new XMLHttpRequest();
+      request7.open("get", url7);/*设置请求方法与路径*/
+      request7.send(null);/*不发送数据到服务器*/
+      request7.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request7.status == 200) {/*返回状态为200，即为数据获取成功*/
+          waiting_requests = JSON.parse(request7.responseText).waitingRequests.slice(0,288);
+        }
+      };
+      //alert(waiting_requests);
+
+      var url8 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/idle_taxis.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var request8 = new XMLHttpRequest();
+      request8.open("get", url8);/*设置请求方法与路径*/
+      request8.send(null);/*不发送数据到服务器*/
+      request8.onload = function () {/*XHR对象获取到返回信息后执行*/
+        if (request8.status == 200) {/*返回状态为200，即为数据获取成功*/
+          idle_taxis = JSON.parse(request8.responseText).idleTaxis.slice(0,288);
+        }
+      };
+      //alert(idle_taxis);
 
 
     },
@@ -829,6 +856,11 @@ html,body{
 /deep/ .el-checkbox__label{
   font-size: 22px;
 }
+
+/deep/ .el-slider__marks-text{
+  color: #3a8ee6;
+  font-size: 12px;
+}
 #map{
   margin: 0;
   padding: 0;
@@ -844,7 +876,7 @@ html,body{
   position: fixed;
   z-index: 1000;
   width: 500px;
-  bottom: 50px;
+  bottom: 70px;
   left: 600px;
 }
 .Evaluation{

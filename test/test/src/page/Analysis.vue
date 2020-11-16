@@ -51,18 +51,18 @@
                 </template>
                 <el-menu-item style="font-size: 18px;" @click="drawChartWorking">Working Days</el-menu-item>
                 <el-dialog
-                  title="Workingdays of the whole month"
+                  title="Workingdays of June"
                   :visible.sync="dialogVisibleWorking"
                   width="90%"
                   :before-close="handleClose">
                   <el-row>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsWorkingPick"></div></el-col>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsWorkingDrop"></div></el-col>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsWorkingPick"></div></el-col>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsWorkingDrop"></div></el-col>
                   </el-row>
                 </el-dialog>
                 <el-menu-item style="font-size: 18px;" @click="drawChartHolidays">Holidays</el-menu-item>
                 <el-dialog
-                  title="Weekends of the Whole Month"
+                  title="Weekends of June"
                   :visible.sync="dialogVisibleHolidays"
                   width="90%"
                   :before-close="handleClose">
@@ -108,7 +108,7 @@
             @change="getValueSlider"
             show-stops>
           </el-slider>
-          <div style="height:90px;left:50px;top:75px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Request</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
+          <div style="height:90px;left:50px;top:75px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Requests</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
           <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-6-1 8:00</div>
           <div id="choosePD" style="visibility: visible">
             <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
@@ -162,7 +162,7 @@
               <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>60</div>
             </div>
           </div>
-          <div style="left:40px;bottom:65px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
+          <div style="left:40px;bottom:80px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
             <div class="chartsBoard">Request Curve</div>
             <div class="charts" id="charts1" style="width: 400px;height: 400px;padding-left: 10px"></div>
           </div>
@@ -450,7 +450,9 @@ export default {
           data: ['Pick Up', 'Drop Off'],
           padding:[20,0,0,0],
           textStyle:{
-            color:['#eeeeee']
+            color:['#eeeeee'],
+            fontSize:16,
+            fontWeight:1000
           }
         },
         dataZoom: [
@@ -496,11 +498,13 @@ export default {
               lineStyle: {
                 type: 'solid',
                 color: '#eeeeee',//左边线的颜色
+                fontWeight:1000
               }
             },
             axisLabel: {
               textStyle: {
                 color: '#eeeeee',//坐标值得具体的颜色
+                fontWeight:1000
               }
             }
           }
@@ -512,12 +516,13 @@ export default {
               lineStyle: {
                 type: 'solid',
                 color: '#eeeeee',//左边线的颜色
+                fontWeight:1000
               }
             },
             axisLabel: {
               textStyle: {
                 color: '#eeeeee',//坐标值得具体的颜色
-
+                fontWeight:1000
               }
             }
           }
@@ -576,6 +581,9 @@ export default {
             left: 'center',
             textStyle: {fontSize: 16,},
           },
+          grid:{
+            top:100
+          },
           tooltip: {
             trigger: 'axis',
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -585,7 +593,7 @@ export default {
           },
 
           legend: {
-            data: ['2016-6-1(Wed)','2016-6-2(Thu)'],
+            data: ['2016-6-1','2016-6-2','2016-6-3','2016-6-6','2016-6-7','2016-6-8','2016-6-9','2016-6-10','2016-6-13','2016-6-14','2016-6-15','2016-6-16','2016-6-17','2016-6-20','2016-6-21','2016-6-22','2016-6-23','2016-6-24','2016-6-27','2016-6-28','2016-6-29','2016-6-30'],
             padding:[20,0,0,0],
             textStyle:{
               color:['#252525']
@@ -646,31 +654,133 @@ export default {
           ],
           series: [
             {
-              name: '2016-6-1(Wed)',
+              name: '2016-6-1',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-2(Thu)',
+              name: '2016-6-2',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-3(Fri)',
+              name: '2016-6-3',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-6(Mon)',
+              name: '2016-6-6',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-7(Tue)',
+              name: '2016-6-7',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-8',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-9',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-10',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-13',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-14',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-15',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-16',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-17',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-20',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-21',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-22',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-23',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-24',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-27',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-28',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-29',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-30',
               type: 'line',
               data: [],
               color:['#FF0000']
@@ -681,9 +791,12 @@ export default {
         // 绘制图表
         chartsWorkingDrop.setOption({
           title: {
-            text: 'Pick Up',
+            text: 'Drop Off',
             left: 'center',
             textStyle: {fontSize: 16,},
+          },
+          grid:{
+            top:100
           },
           tooltip: {
             trigger: 'axis',
@@ -694,7 +807,7 @@ export default {
           },
 
           legend: {
-            data: ['2016-6-1(Wed)','2016-6-2(Thu)'],
+            data: ['2016-6-1','2016-6-2','2016-6-3','2016-6-6','2016-6-7','2016-6-8','2016-6-9','2016-6-10','2016-6-13','2016-6-14','2016-6-15','2016-6-16','2016-6-17','2016-6-20','2016-6-21','2016-6-22','2016-6-23','2016-6-24','2016-6-27','2016-6-28','2016-6-29','2016-6-30'],
             padding:[20,0,0,0],
             textStyle:{
               color:['#252525']
@@ -755,31 +868,133 @@ export default {
           ],
           series: [
             {
-              name: '2016-6-1(Wed)',
+              name: '2016-6-1',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-2(Thu)',
+              name: '2016-6-2',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-3(Fri)',
+              name: '2016-6-3',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-6(Mon)',
+              name: '2016-6-6',
               type: 'line',
               data: [],
               color:['#FF0000']
             },
             {
-              name: '2016-6-7(Tue)',
+              name: '2016-6-7',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-8',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-9',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-10',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-13',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-14',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-15',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-16',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-17',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-20',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-21',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-22',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-23',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-24',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-27',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-28',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-29',
+              type: 'line',
+              data: [],
+              color:['#FF0000']
+            },
+            {
+              name: '2016-6-30',
               type: 'line',
               data: [],
               color:['#FF0000']
@@ -790,26 +1005,53 @@ export default {
 
       $.ajax({
         type:'get',
-        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_1.geojson",
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_0.geojson",
         dataType:'JSON',
         success:function(data){
           chartsWorkingPick.setOption({
             series: [
               {
-                name: '2016-6-1(Wed)',
+                name: '2016-6-1',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#0780cf']
               },
             ]
           })
           chartsWorkingDrop.setOption({
             series: [
               {
-                name: '2016-6-1(Wed)',
+                name: '2016-6-1',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#0780cf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_1.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-2',
+                type: 'line',
+                data: data.pickup,
+                color:['#765005']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-2',
+                type: 'line',
+                data: data.dropoff,
+                color:['#765005']
               },
             ]
           })
@@ -823,25 +1065,539 @@ export default {
           chartsWorkingPick.setOption({
             series: [
               {
-                name: '2016-6-2(Thu)',
+                name: '2016-6-3',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#fa6d1d']
               },
             ]
           })
           chartsWorkingDrop.setOption({
             series: [
               {
-                name: '2016-6-2(Thu)',
+                name: '2016-6-3',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#fa6d1d']
               },
             ]
           })
         }
       })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_5.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-6',
+                type: 'line',
+                data: data.pickup,
+                color:['#0e2c82']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-6',
+                type: 'line',
+                data: data.dropoff,
+                color:['#0e2c82']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_6.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-7',
+                type: 'line',
+                data: data.pickup,
+                color:['#b6b51f']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-7',
+                type: 'line',
+                data: data.dropoff,
+                color:['#b6b51f']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_7.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-8',
+                type: 'line',
+                data: data.pickup,
+                color:['#da1f18']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-8',
+                type: 'line',
+                data: data.dropoff,
+                color:['#da1f18']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_8.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-9',
+                type: 'line',
+                data: data.pickup,
+                color:['#701866']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-9',
+                type: 'line',
+                data: data.dropoff,
+                color:['#701866']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_9.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-10',
+                type: 'line',
+                data: data.pickup,
+                color:['#f47a75']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-10',
+                type: 'line',
+                data: data.dropoff,
+                color:['#f47a75']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_12.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-13',
+                type: 'line',
+                data: data.pickup,
+                color:['#009db2']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-13',
+                type: 'line',
+                data: data.dropoff,
+                color:['#009db2']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_13.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-14',
+                type: 'line',
+                data: data.pickup,
+                color:['#024b51']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-14',
+                type: 'line',
+                data: data.dropoff,
+                color:['#024b51']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_14.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-15',
+                type: 'line',
+                data: data.pickup,
+                color:['#0780cf']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-15',
+                type: 'line',
+                data: data.dropoff,
+                color:['#0780cf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_15.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-16',
+                type: 'line',
+                data: data.pickup,
+                color:['#765005']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-16',
+                type: 'line',
+                data: data.dropoff,
+                color:['#765005']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_16.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-17',
+                type: 'line',
+                data: data.pickup,
+                color:['#63b2ee']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-17',
+                type: 'line',
+                data: data.dropoff,
+                color:['#63b2ee']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_19.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-20',
+                type: 'line',
+                data: data.pickup,
+                color:['#76da91']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-20',
+                type: 'line',
+                data: data.dropoff,
+                color:['#76da91']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_20.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-21',
+                type: 'line',
+                data: data.pickup,
+                color:['#f8cb7f']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-21',
+                type: 'line',
+                data: data.dropoff,
+                color:['#f8cb7f']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_21.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-22',
+                type: 'line',
+                data: data.pickup,
+                color:['#f89588']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-22',
+                type: 'line',
+                data: data.dropoff,
+                color:['#f89588']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_22.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-23',
+                type: 'line',
+                data: data.pickup,
+                color:['#7cd6cf']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-23',
+                type: 'line',
+                data: data.dropoff,
+                color:['#7cd6cf']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_23.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-24',
+                type: 'line',
+                data: data.pickup,
+                color:['#9192ab']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-24',
+                type: 'line',
+                data: data.dropoff,
+                color:['#9192ab']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_26.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-27',
+                type: 'line',
+                data: data.pickup,
+                color:['#7898e1']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-27',
+                type: 'line',
+                data: data.dropoff,
+                color:['#7898e1']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_27.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-28',
+                type: 'line',
+                data: data.pickup,
+                color:['#efa666']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-28',
+                type: 'line',
+                data: data.dropoff,
+                color:['#efa666']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_28.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-29',
+                type: 'line',
+                data: data.pickup,
+                color:['#eddd86']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-29',
+                type: 'line',
+                data: data.dropoff,
+                color:['#eddd86']
+              },
+            ]
+          })
+        }
+      })
+      $.ajax({
+        type:'get',
+        url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_29.geojson",
+        dataType:'JSON',
+        success:function(data){
+          chartsWorkingPick.setOption({
+            series: [
+              {
+                name: '2016-6-30',
+                type: 'line',
+                data: data.pickup,
+                color:['#9987ce']
+              },
+            ]
+          })
+          chartsWorkingDrop.setOption({
+            series: [
+              {
+                name: '2016-6-30',
+                type: 'line',
+                data: data.dropoff,
+                color:['#9987ce']
+              },
+            ]
+          })
+        }
+      })
+
     },
     drawChartHolidays(){
       this.dialogVisibleHolidays = true;
@@ -1114,7 +1870,7 @@ export default {
                 name: '2016-6-4',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#71ae46']
               },
             ]
           })
@@ -1124,7 +1880,7 @@ export default {
                 name: '2016-6-4',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#71ae46']
               },
             ]
           })
@@ -1141,7 +1897,7 @@ export default {
                 name: '2016-6-5',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#96b744']
               },
             ]
           })
@@ -1151,7 +1907,7 @@ export default {
                 name: '2016-6-5',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#96b744']
               },
             ]
           })
@@ -1168,7 +1924,7 @@ export default {
                 name: '2016-6-11',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#c4cc38']
               },
             ]
           })
@@ -1178,7 +1934,7 @@ export default {
                 name: '2016-6-11',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#c4cc38']
               },
             ]
           })
@@ -1195,7 +1951,7 @@ export default {
                 name: '2016-6-12',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#ebe12a']
               },
             ]
           })
@@ -1205,7 +1961,7 @@ export default {
                 name: '2016-6-12',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#ebe12a']
               },
             ]
           })
@@ -1222,7 +1978,7 @@ export default {
                 name: '2016-6-18',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#eab026']
               },
             ]
           })
@@ -1232,7 +1988,7 @@ export default {
                 name: '2016-6-18',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#eab026']
               },
             ]
           })
@@ -1249,7 +2005,7 @@ export default {
                 name: '2016-6-19',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#e3852b']
               },
             ]
           })
@@ -1259,7 +2015,7 @@ export default {
                 name: '2016-6-19',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#e3852b']
               },
             ]
           })
@@ -1276,7 +2032,7 @@ export default {
                 name: '2016-6-25',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#d85d2a']
               },
             ]
           })
@@ -1286,7 +2042,7 @@ export default {
                 name: '2016-6-25',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#d85d2a']
               },
             ]
           })
@@ -1303,7 +2059,7 @@ export default {
                 name: '2016-6-26',
                 type: 'line',
                 data: data.pickup,
-                color:['#FF0000']
+                color:['#ce2626']
               },
             ]
           })
@@ -1313,7 +2069,7 @@ export default {
                 name: '2016-6-26',
                 type: 'line',
                 data: data.dropoff,
-                color:['#007cbf']
+                color:['#ce2626']
               },
             ]
           })
@@ -1835,10 +2591,9 @@ html,body{
 .el-slider{
   padding: 20px;
   margin: 0;
-  position: fixed;
-  z-index: 1000;
+  position: absolute;
   width: 400px;
-  bottom: 690px;
+  top: 120px;
   right:5px;
 }
 .numberBoard{
@@ -1847,7 +2602,7 @@ html,body{
   color: #fff;
   margin: 10px 10px 0 10px;
   padding: 0px 30px 0px 10px;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 40px;
   font-weight: 700;
   border-left: 12px solid #fb6767;
@@ -1859,7 +2614,7 @@ html,body{
   color: #fff;
   margin: 10px 10px 0 10px;
   padding: 0px 30px 0px 10px;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 40px;
   font-weight: 700;
   border-left: 12px solid #64bfff;
