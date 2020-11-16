@@ -31,7 +31,7 @@
               <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
               <br>
             </div>
-            <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Run</el-button>
+            <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee" @click="runSimulation">Run</el-button>
           </div>
         </el-aside>
         <el-main style="padding-top: 70px;margin: 0">
@@ -39,10 +39,11 @@
             <el-col :span="15" style="height: 100%;margin: 0;padding: 0">
               <div id="map" style="border-radius: 10px;box-shadow: 0 2px 5px black">
                 <el-slider
-                  v-model="value2"
+                  v-model="valueSlider"
                   max="24"
                   :step="1"
-                  style="left:570px"
+                  :marks="marksSlider"
+                  @change="getValueSlider"
                   show-stops>
                 </el-slider>
                 <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
@@ -82,6 +83,8 @@ var DROP_wait;
 var RD_expiration;
 var RD_search;
 var RD_wait;
+var runClick = false;
+var changeValueSlider = false;
 import Header from "../components/Header";
 import echarts from 'echarts'
 import '@/assets/css/all.css'
@@ -91,6 +94,63 @@ export default {
   name: "Simulation",
   components: {Header},
   methods:{
+    getValueSlider(){
+      changeValueSlider = true;
+      //alert(this.valueSlider);
+    },
+    runSimulation(){
+      runClick = true;
+      const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
+      if(runClick == true)
+      {
+        alert("Start Run");
+        var index=0;
+        var index2 = 0;
+        var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
+        var timer = window.setInterval(function() {
+          if(index < 1680){
+            index++;
+            map.getSource('resources').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_" + String(index) +
+              ".geojson");
+            map.getSource('agents').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_" + String(index) + ".geojson");
+            var sec=date.getSeconds();
+            date.setSeconds(sec+30);
+            var h=date.getHours();//获取时
+            var m=date.getMinutes();//获取分
+            console.log(index);
+            console.log(index2);
+            if(changeValueSlider == false)
+              that.valueSlider = h;//时间条会随着时间移动
+            if(changeValueSlider == true)
+            {
+              index = (that.valueSlider - 8) * 120;
+              index2 = (that.valueSlider - 8)*12;
+              //alert(index);
+              date.setHours(that.valueSlider,0);
+              //alert(date.getHours());
+              changeValueSlider = false;
+            }
+            if(m < 10)
+            {
+              document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+            }
+            else
+            {
+              document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+            }
+            if((index+1)%10 == 0)
+            {
+              document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
+              document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
+              document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
+              index2++;
+            }
+          }else {
+            window.clearInterval(timer);
+          }
+        }, 500);
+      }
+    },
     handleChange(){
       var check = this.checked;
       if(!check){
@@ -653,38 +713,7 @@ export default {
         }
       });
 
-      var index=0;
-      var index2 = 0;
-      var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
-      var timer = window.setInterval(function() {
-        if(index < 1680){
-          index++;
-          map.getSource('resources').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_" + String(index) +
-            ".geojson");
-          map.getSource('agents').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_" + String(index) + ".geojson");
-          var sec=date.getSeconds();
-          date.setSeconds(sec+30);
-          var h=date.getHours();//获取时
-          var m=date.getMinutes();//获取分
-          if(m < 10)
-          {
-            document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
-          }
-          else
-          {
-            document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
-          }
-          if((index+1)%10 == 0)
-          {
-            document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
-            document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
-            document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
-            index2++;
-          }
-        }else {
-          window.clearInterval(timer);
-        }
-      }, 500);
+
 
 
     });
@@ -699,6 +728,34 @@ export default {
       activeIndex2: '1',
       maps: null,
       valueTime:"2016-6-1",
+      valueSlider:8,
+      marksSlider:{
+        0:'0',
+        1:'1',
+        2:'2',
+        3:'3',
+        4:'4',
+        5:'5',
+        6:'6',
+        7:'7',
+        8:'8',
+        9:'9',
+        10:'10',
+        11:'11',
+        12:'12',
+        13:'13',
+        14:'14',
+        15:'15',
+        16:'16',
+        17:'17',
+        18:'18',
+        19:'19',
+        20:'20',
+        21:'21',
+        22:'22',
+        23:'23',
+        24:'24',
+      },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();

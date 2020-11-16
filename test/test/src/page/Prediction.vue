@@ -63,9 +63,11 @@
 <!--                <div style="color: #eeeeee; font-weight: bold;text-align:center">MAPE(%)<br/><div class="font">16.677</div></div>-->
 
               <el-slider
-                v-model="value1"
+                v-model="valueSlider"
                 max="24"
                 :step="1"
+                :marks="marksSlider"
+                @change="getValueSlider"
                 show-stops>
               </el-slider>
 <!--              <p style="left:80px;top:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="groud truth data">Ground Truth</p>-->
@@ -82,12 +84,7 @@
 
               <p style="color: #eeeeee;position:absolute;left:550px;top:20px;font-size: 22px;font-weight: 700">Predicted Request</p>
 
-              <el-slider
-                v-model="value2"
-                max="24"
-                :step="1"
-                show-stops>
-              </el-slider>
+
 <!--              <p style="left:80px;top:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee" id="predicted data">Predicted Data</p>-->
 
 
@@ -184,13 +181,19 @@ var current_intersection_id;
 
 var dayOfMonth = 1;
 var runClick = false;
+var changeValueSlider = false;
 // var isShowGridData = true;
 export default {
   name: "Prediction",
   components: {Header},
   methods: {
+    getValueSlider(){
+      changeValueSlider = true;
+      //alert(this.valueSlider);
+    },
     runPrediction(){
       alert("Start Run");
+      const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
       runClick = true;
       // var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
       if(runClick == true){
@@ -202,11 +205,20 @@ export default {
               index++;
               map1.getSource('pickup_grid').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_groundTruth/grid_" + String(index) + ".geojson");
               map2.getSource('pickup_grid_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_pred/grid_" + String(index) + ".geojson");
-
               var min = date.getMinutes();
               date.setMinutes(min + 5);
               var h = date.getHours();//获取时
               var m = date.getMinutes();//获取分
+              if(changeValueSlider == false)
+                that.valueSlider = h;//时间条会随着时间移动
+              if(changeValueSlider == true)
+              {
+                index = (that.valueSlider) * 12;
+                //alert(index);
+                date.setHours(that.valueSlider,0);
+                //alert(date.getHours());
+                changeValueSlider = false;
+              }
               if (m < 10) {
                 document.getElementById("currentTime").innerHTML = "Date Time: 2016-6-1 " + h + ":0" + m;
               } else {
@@ -236,6 +248,17 @@ export default {
               date.setMinutes(min + 30);
               var h = date.getHours();//获取时
               var m = date.getMinutes();//获取分
+              if(changeValueSlider == false)
+                that.valueSlider = h;//时间条会随着时间移动
+              if(changeValueSlider == true)
+              {
+                index = (that.valueSlider) * 2;
+                //alert(index);
+                date.setHours(that.valueSlider,0);
+                //alert(date.getHours());
+                changeValueSlider = false;
+              }
+              //alert(index);
               if (m < 10) {
                 document.getElementById("currentTime2").innerHTML = "Date Time: 2016-6-1 " + h + ":0" + m;
               } else {
@@ -808,6 +831,34 @@ export default {
       activeIndex2: '1',
       maps: null,
       valueTime:"2016-6-1",
+      valueSlider:0,
+      marksSlider:{
+        0:'0',
+        1:'1',
+        2:'2',
+        3:'3',
+        4:'4',
+        5:'5',
+        6:'6',
+        7:'7',
+        8:'8',
+        9:'9',
+        10:'10',
+        11:'11',
+        12:'12',
+        13:'13',
+        14:'14',
+        15:'15',
+        16:'16',
+        17:'17',
+        18:'18',
+        19:'19',
+        20:'20',
+        21:'21',
+        22:'22',
+        23:'23',
+        24:'24',
+      },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -867,6 +918,11 @@ html,body{
   border: solid 2px #444444;
   color: #eeeeee;
 }
+/deep/ .el-slider__marks-text{
+  color: #3a8ee6;
+  font-size: 12px;
+}
+
 #map{
   margin: 0;
   padding: 0;
