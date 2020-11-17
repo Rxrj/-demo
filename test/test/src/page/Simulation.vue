@@ -300,7 +300,7 @@ export default {
       window.chartsSearchTime = echarts.init(document.getElementById('charts1'));
       chartsSearchTime.setOption({
         title:{
-          text:'Search Time',
+          text:'Idle Time',
           left:'center',
           textStyle:{
             color:['#eeeeee']
