@@ -46,7 +46,7 @@
                   @change="getValueSlider"
                   show-stops>
                 </el-slider>
-                <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
+                <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-06-01 08:00</div>
                 <div style="bottom:200px;right:720px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#FF0000;bottom:10px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="taxis"></div>
                   <div style="bottom:0px;right:-10px;position: absolute;width: 200px">Idle Taxis:    </div><div style="bottom:0px;right:-20px;position: absolute;" id="taxisNumber">4000</div>
@@ -134,14 +134,15 @@ export default {
               //alert(date.getHours());
               changeValueSlider = false;
             }
-            if(m < 10)
-            {
-              document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
-            }
-            else
-            {
-              document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
-            }
+            // if(m < 10)
+            // {
+            //   document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+            // }
+            // else
+            // {
+            //   document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+            // }
+            document.getElementById("currentTimeSim").innerHTML = "Date Time: " + date.format("yyyy-MM-dd hh:mm");
             if((index+1)%10 == 0 || index == 1)
             {
               //alert(index);

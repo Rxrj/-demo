@@ -108,7 +108,7 @@
             show-stops>
           </el-slider>
           <div style="height:90px;left:50px;top:75px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Requests</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
-          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-6-1 8:00</div>
+          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-06-01 08:00</div>
           <div id="choosePD" style="visibility: visible">
             <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
               <div style="background-color:#FF0000;bottom:5px;right:115px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
@@ -244,14 +244,15 @@ export default {
               seriesIndex: 1,//这行不能省
               dataIndex:index+96
             });
-            if(m < 10)
-            {
-              document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
-            }
-            else
-            {
-              document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
-            }
+            // if(m < 10)
+            // {
+            //   document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
+            // }
+            // else
+            // {
+            //   document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
+            // }
+            document.getElementById("currentTime").innerHTML = "Date Time: " + date.format("yyyy-MM-dd hh:mm");
             document.getElementById("requestNumber").innerHTML =  pickupData[indexT]+dropoffData[indexT];
             indexT++;
           }else {
