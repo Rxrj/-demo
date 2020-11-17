@@ -16,10 +16,10 @@
             :picker-options="pickerOptions">
           </el-date-picker>
           <br>
-<!--          <div>-->
-<!--            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>-->
-<!--            <br>-->
-<!--          </div>-->
+          <div>
+            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+            <br>
+          </div>
           <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee" @click="runPrediction">Run</el-button>
         </div>
         <el-row class="tac">
@@ -34,10 +34,9 @@
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Option</span>
                 </template>
-                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-1" @click="handleChange"><div>Partition Visible</div></el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="HeatmapG">Hexagon Grid</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="HeatmapI">Intersection</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-4" @click="showComparison" id="showComparison" >Prediction Comparison</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-1" @click="HeatmapG">Hexagon Grid</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2" @click="HeatmapI">Intersection</el-menu-item>
+                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="showComparison" id="showComparison" >Prediction Comparison</el-menu-item>
                 <el-dialog
                   title="Prediction Comparison"
                   :visible.sync="dialogVisible"
@@ -521,7 +520,7 @@ export default {
 
 
 
-        map1.setLayoutProperty('pickup_grid', 'visibility', 'none');
+        map1.setLayoutProperty('pickup_grid', 'visibility', 'visible');
         map1.setLayoutProperty('pickup_intersection', 'visibility', 'none');
 
       });
@@ -660,18 +659,22 @@ export default {
           },
         });
 
-        map2.setLayoutProperty('pickup_grid_pred', 'visibility', 'none');
+        map2.setLayoutProperty('pickup_grid_pred', 'visibility', 'visible');
         map2.setLayoutProperty('pickup_intersection_pred', 'visibility', 'none');
       });
     },
 
     showComparison() {
-      this.dialogVisible = true;
-      let data1 = grid_data[current_region_id].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
-      let data2 = grid_data[current_region_id].properties.pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
-      let data3 = grid_data[current_region_id].properties.dcrnn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
-      let data4 = grid_data[current_region_id].properties.stgcn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
-      this.plotEchartsComparison(data1, data2, data3, data4,current_region_id);
+      if(current_intersection_id == undefined)
+        alert("Please click a grid to get the comparison!");
+      else{
+        this.dialogVisible = true;
+        let data1 = grid_data[current_region_id].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+        let data2 = grid_data[current_region_id].properties.pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+        let data3 = grid_data[current_region_id].properties.dcrnn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+        let data4 = grid_data[current_region_id].properties.stgcn_pred.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
+        this.plotEchartsComparison(data1, data2, data3, data4,current_region_id);
+      }
     },
     plotEchartsComparison(data1, data2, data3, data4,grid_id) {
       this.$nextTick(() => {
@@ -689,6 +692,7 @@ export default {
             top: 5
           },
           tooltip: {
+            transitionDuration: 0,
             trigger: 'axis',
             axisPointer: {
               animation: false
@@ -748,19 +752,21 @@ export default {
             {
               type: 'category',
               boundaryGap: false,
-              axisLine: {onZero: true},
-              axisLabel: {color: '#252525', fontSize: 14},
+              axisLine: {onZero: true,fontWeight:700},
+              axisLabel: {color: '#252525', fontSize: 14,fontWeight:700},
               data: timeData
             },
           yAxis: {
             name: 'Request',
             nameTextStyle: {
               color: '#252525',
-              fontSize: 14
+              fontSize: 14,
+              fontWeight:700
             },
             type: 'value',
             max: 180,
-            axisLabel: {color: '#252525', fontSize: 14},
+            axisLine: {fontWeight:700},
+            axisLabel: {color: '#252525', fontSize: 14,fontWeight:700},
           },
           series: [
             {
@@ -806,6 +812,8 @@ export default {
       this.getIntersectionData();
 
       this.initMap();
+
+      //this.HeatmapG();
 
       let data1 = [5.0, 6.0, 9.0, 3.0, 3.0, 6.0, 4.0, 5.0, 10.0, 6.0, 3.0, 2.0, 3.0, 1.0, 4.0, 1.0, 3.0, 6.0, 3.0, 1.0, 4.0, 1.0, 2.0, 0.0, 1.0, 2.0, 0.0, 3.0, 1.0, 0.0, 2.0, 1.0, 4.0, 0.0, 1.0, 1.0, 3.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.0, 0.0, 0.0, 0.0, 1.0, 0.0, 2.0, 0.0, 3.0, 2.0, 0.0, 0.0, 1.0, 1.0, 2.0, 0.0, 1.0, 0.0, 3.0, 1.0, 4.0, 5.0, 4.0, 6.0, 8.0, 8.0, 9.0, 16.0, 13.0, 13.0, 12.0, 18.0, 19.0, 25.0, 17.0, 24.0, 29.0, 32.0, 35.0, 51.0, 47.0, 40.0, 44.0, 35.0, 51.0, 57.0, 43.0, 54.0, 64.0, 56.0, 58.0, 59.0, 63.0, 67.0, 65.0, 65.0, 84.0, 77.0, 59.0, 60.0, 59.0, 58.0, 56.0, 45.0, 65.0, 59.0, 50.0, 49.0, 38.0, 52.0, 52.0, 57.0, 60.0, 48.0, 50.0, 47.0, 42.0, 50.0, 44.0, 40.0, 48.0, 56.0, 57.0, 58.0, 52.0, 49.0, 55.0, 59.0, 50.0, 47.0, 54.0, 54.0, 41.0, 46.0, 59.0, 54.0, 53.0, 61.0, 50.0, 69.0, 51.0, 57.0, 63.0, 59.0, 64.0, 55.0, 66.0, 53.0, 54.0, 68.0, 54.0, 47.0, 51.0, 63.0, 41.0, 46.0, 51.0, 61.0, 38.0, 57.0, 62.0, 54.0, 48.0, 52.0, 58.0, 40.0, 51.0, 60.0, 58.0, 49.0, 53.0, 66.0, 56.0, 63.0, 72.0, 62.0, 59.0, 75.0, 74.0, 68.0, 50.0, 60.0, 67.0, 63.0, 60.0, 81.0, 68.0, 63.0, 60.0, 71.0, 66.0, 66.0, 62.0, 46.0, 40.0, 40.0, 61.0, 47.0, 47.0, 63.0, 51.0, 55.0, 50.0, 50.0, 74.0, 72.0, 66.0, 73.0, 69.0, 62.0, 64.0, 61.0, 58.0, 66.0, 56.0, 78.0, 54.0, 56.0, 59.0, 51.0, 62.0, 78.0, 57.0, 68.0, 75.0, 54.0, 55.0, 41.0, 50.0, 59.0, 50.0, 46.0, 53.0, 49.0, 33.0, 49.0, 36.0, 44.0, 39.0, 46.0, 43.0, 45.0, 34.0, 36.0, 34.0, 32.0, 35.0, 39.0, 27.0, 30.0, 23.0, 25.0, 32.0, 28.0, 31.0, 33.0, 21.0, 22.0, 24.0, 25.0, 23.0, 20.0, 20.0, 19.0, 29.0, 30.0, 16.0, 23.0, 23.0, 17.0, 16.0, 9.0, 15.0, 14.0, 18.0, 17.0, 11.0, 13.0, 10.0, 7.0, 6.0, 14.0, 10.0, 5.0, 2.0];
       let data2 = [5.0, 6.0, 9.0, 3.0, 3.0, 6.0, 4.0, 5.0, 10.0, 6.0, 4.0, 4.0, 3.0, 3.0, 3.0, 3.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 2.0, 2.0, 2.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 6.0, 8.0, 8.0, 9.0, 12.0, 12.0, 14.0, 14.0, 16.0, 19.0, 22.0, 22.0, 27.0, 34.0, 37.0, 40.0, 42.0, 44.0, 40.0, 44.0, 45.0, 54.0, 54.0, 52.0, 58.0, 62.0, 63.0, 63.0, 63.0, 62.0, 65.0, 65.0, 64.0, 69.0, 70.0, 65.0, 64.0, 63.0, 63.0, 62.0, 56.0, 56.0, 56.0, 56.0, 54.0, 51.0, 50.0, 50.0, 49.0, 52.0, 52.0, 54.0, 52.0, 49.0, 48.0, 49.0, 48.0, 47.0, 48.0, 48.0, 50.0, 51.0, 52.0, 55.0, 53.0, 52.0, 50.0, 53.0, 54.0, 51.0, 51.0, 52.0, 53.0, 53.0, 55.0, 57.0, 62.0, 58.0, 57.0, 58.0, 61.0, 59.0, 60.0, 57.0, 59.0, 60.0, 58.0, 58.0, 57.0, 55.0, 54.0, 53.0, 53.0, 53.0, 53.0, 50.0, 52.0, 53.0, 55.0, 54.0, 54.0, 53.0, 55.0, 53.0, 53.0, 54.0, 52.0, 55.0, 56.0, 59.0, 59.0, 61.0, 64.0, 63.0, 64.0, 65.0, 66.0, 64.0, 61.0, 63.0, 64.0, 61.0, 63.0, 64.0, 64.0, 60.0, 58.0, 59.0, 59.0, 58.0, 55.0, 52.0, 52.0, 54.0, 52.0, 51.0, 55.0, 52.0, 57.0, 54.0, 54.0, 61.0, 65.0, 65.0, 67.0, 68.0, 66.0, 66.0, 62.0, 63.0, 64.0, 61.0, 67.0, 62.0, 60.0, 60.0, 57.0, 59.0, 63.0, 60.0, 61.0, 63.0, 59.0, 56.0, 52.0, 52.0, 55.0, 52.0, 52.0, 50.0, 49.0, 48.0, 44.0, 44.0, 42.0, 39.0, 41.0, 42.0, 41.0, 39.0, 39.0, 37.0, 37.0, 34.0, 35.0, 33.0, 32.0, 30.0, 30.0, 30.0, 31.0, 30.0, 32.0, 28.0, 24.0, 26.0, 25.0, 24.0, 23.0, 22.0, 23.0, 24.0, 23.0, 21.0, 19.0, 19.0, 17.0, 17.0, 15.0, 14.0, 15.0, 14.0, 14.0, 12.0, 11.0, 11.0, 10.0, 9.0, 9.0, 8.0, 7.0];
@@ -923,6 +931,11 @@ html,body{
   font-size: 12px;
 }
 
+/deep/ .el-checkbox__label{
+  font-size: 22px;
+}
+
+
 #map{
   margin: 0;
   padding: 0;
@@ -938,7 +951,7 @@ html,body{
   position: fixed;
   z-index: 1000;
   width: 500px;
-  bottom: 50px;
+  bottom: 60px;
   left: 600px;
 }
 .Evaluation{

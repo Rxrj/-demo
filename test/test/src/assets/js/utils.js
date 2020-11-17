@@ -48,6 +48,7 @@ function plotEchartsGrid(data1,data2){
       top:5
     },
     tooltip: {
+      transitionDuration: 0,
       trigger: 'axis',
       axisPointer: {
         animation: false
@@ -160,6 +161,7 @@ function plotEchartsIntersection(data1,data2){
       top:5
     },
     tooltip: {
+      transitionDuration: 0,
       trigger: 'axis',
       axisPointer: {
         animation: false

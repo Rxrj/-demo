@@ -49,11 +49,11 @@
                 <div style="right:500px;top:50px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-6-1 8:00</div>
                 <div style="bottom:200px;right:720px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#FF0000;bottom:10px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="taxis"></div>
-                  <div style="bottom:0px;right:-10px;position: absolute;width: 200px">Idle Taxis:    </div><div style="bottom:0px;right:-20px;position: absolute;" id="taxisNumber">40</div>
+                  <div style="bottom:0px;right:-10px;position: absolute;width: 200px">Idle Taxis:    </div><div style="bottom:0px;right:-20px;position: absolute;" id="taxisNumber">4000</div>
                 </div>
                 <div style="bottom:150px;right:635px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#007cbf;bottom:10px;right:235px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="requests"></div>
-                  <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;right:-15px;position: absolute;" id="requestsNumber">40</div>
+                  <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;right:-15px;position: absolute;" id="requestsNumber">0</div>
                 </div>
                 <div class="Evaluation" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font" id="searchTimeNumber">416.317s</div></div>
@@ -116,6 +116,8 @@ export default {
               ".geojson");
             map.getSource('agents').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_" + String(index) + ".geojson");
             var sec=date.getSeconds();
+            document.getElementById("taxisNumber").innerHTML= idle_taxis[index];
+            document.getElementById("requestsNumber").innerHTML= waiting_requests[index];
             date.setSeconds(sec+30);
             var h=date.getHours();//获取时
             var m=date.getMinutes();//获取分
@@ -145,8 +147,6 @@ export default {
               document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
               document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
               document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
-              document.getElementById("taxisNumber").innerHTML= idle_taxis[index2];
-              document.getElementById("requestsNumber").innerHTML= waiting_requests[index2];
               index2++;
             }
           }else {
@@ -226,13 +226,13 @@ export default {
       //alert("Loading Data Succeed");
 
       //获取空车和请求数
-      var url7 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/waiting_requests.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
+      var url7 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/waiting_request.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
       var request7 = new XMLHttpRequest();
       request7.open("get", url7);/*设置请求方法与路径*/
       request7.send(null);/*不发送数据到服务器*/
       request7.onload = function () {/*XHR对象获取到返回信息后执行*/
         if (request7.status == 200) {/*返回状态为200，即为数据获取成功*/
-          waiting_requests = JSON.parse(request7.responseText).waitingRequests.slice(0,288);
+          waiting_requests = JSON.parse(request7.responseText).waitingRequests.slice(0,1680);
         }
       };
       //alert(waiting_requests);
@@ -243,7 +243,7 @@ export default {
       request8.send(null);/*不发送数据到服务器*/
       request8.onload = function () {/*XHR对象获取到返回信息后执行*/
         if (request8.status == 200) {/*返回状态为200，即为数据获取成功*/
-          idle_taxis = JSON.parse(request8.responseText).idleTaxis.slice(0,288);
+          idle_taxis = JSON.parse(request8.responseText).idleTaxis.slice(0,1680);
         }
       };
       //alert(idle_taxis);
@@ -269,6 +269,7 @@ export default {
           }
         },
         tooltip: {
+          transitionDuration: 0,
           trigger: 'axis',
           axisPointer: {
             type:'shadow'
@@ -393,6 +394,13 @@ export default {
           })
         }
       })
+      //实现动态高亮数据点(还没实现)
+      charts1.dispatchAction({
+        type:'highlight',
+        dataIndex:25
+      });
+
+
 
       //WaitingTime
       var charts2 = echarts.init(document.getElementById('charts2'));
@@ -444,6 +452,7 @@ export default {
           }
         ],
         tooltip: {
+          transitionDuration: 0,
           trigger: 'axis',
           axisPointer: {
             type:'shadow'
@@ -588,6 +597,7 @@ export default {
           }
         ],
         tooltip: {
+          transitionDuration: 0,
           trigger: 'axis',
           axisPointer: {
             type:'shadow'

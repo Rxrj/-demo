@@ -67,8 +67,8 @@
                   width="90%"
                   :before-close="handleClose">
                   <el-row>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsHolidaysPick"></div></el-col>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsHolidaysDrop"></div></el-col>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysPick"></div></el-col>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysDrop"></div></el-col>
                   </el-row>
                 </el-dialog>
                 <el-menu-item style="font-size: 18px;padding-left: 5px" @click="chooseTime">Holidays and Working Days</el-menu-item>
@@ -89,8 +89,7 @@
                   width="90%"
                   :before-close="handleClose">
                   <el-row>
-                    <el-col :span="12"><div style="height: 500px;" id="chartsPickup"></div></el-col>
-                    <el-col :span="12"><div style="height: 500px" id="chartsDropoff"></div></el-col>
+                    <el-col :span="24"><div style="height: 600px;" id="chartsComparison"></div></el-col>
                   </el-row>
                 </el-dialog>
               </el-submenu>
@@ -372,8 +371,12 @@ export default {
 
     },
     showComparison(){
-      this.dialogVisible = true;
-      this.drawChartComparison();
+      if(this.valueTime2 == "")
+        alert("Please choose a date!");
+      else {
+        this.dialogVisible = true;
+        this.drawChartComparison();
+      }
     },
     initData:function (){
       //2016-06-01的数据
@@ -440,6 +443,7 @@ export default {
       // 绘制图表
       charts1.setOption({
         tooltip: {
+          transitionDuration: 0,
           trigger: 'axis',
           axisPointer: {            // 坐标轴指示器，坐标轴触发有效
             type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
@@ -585,6 +589,7 @@ export default {
             top:100
           },
           tooltip: {
+            transitionDuration: 0,
             trigger: 'axis',
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
               type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
@@ -626,11 +631,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
                 }
               }
             }
@@ -642,11 +649,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
 
                 }
               }
@@ -799,6 +808,7 @@ export default {
             top:100
           },
           tooltip: {
+            transitionDuration: 0,
             trigger: 'axis',
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
               type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
@@ -840,11 +850,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
                 }
               }
             }
@@ -856,11 +868,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
 
                 }
               }
@@ -1612,6 +1626,7 @@ export default {
             textStyle: {fontSize: 16,},
           },
           tooltip: {
+            transitionDuration: 0,
             trigger: 'axis',
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
               type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
@@ -1653,11 +1668,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
                 }
               }
             }
@@ -1669,11 +1686,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
 
                 }
               }
@@ -1734,11 +1753,12 @@ export default {
         // 绘制图表
         chartsHolidaysDrop.setOption({
           title: {
-            text: 'Pick Up',
+            text: 'Drop Off',
             left: 'center',
             textStyle: {fontSize: 16,},
           },
           tooltip: {
+            transitionDuration: 0,
             trigger: 'axis',
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
               type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
@@ -1780,11 +1800,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
                 }
               }
             }
@@ -1796,11 +1818,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
 
                 }
               }
@@ -2080,17 +2104,17 @@ export default {
       this.$nextTick(() => {
         var day = this.valueTime2.getDate();
         var week = this.valueTime2.getDay();
-        var weekArray = new Array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
+        var weekArray = new Array("Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat", );//0表示周天
         //var url = "https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff/day_"+ String(day-1) + ".geojson";/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
-        choosenDate = ['2016-6-1(Wed)', '2016-6-'+day+'('+weekArray[week-1]+')'];
+        choosenDate = ['2016-6-1(Wed)', '2016-6-'+day+'('+weekArray[week]+')'];
         //echarts图表
-        window.chartsPickup = echarts.init(document.getElementById('chartsPickup'));
+        window.chartsComparison = echarts.init(document.getElementById('chartsComparison'));
         // 绘制图表
-        chartsPickup.setOption({
+        chartsComparison.setOption({
           title: {
-            text: 'Pick Up',
+            text: 'Requests',
             left: 'center',
-            textStyle: {fontSize: 16,},
+            textStyle: {fontSize: 22,},
           },
           tooltip: {
             trigger: 'axis',
@@ -2102,9 +2126,11 @@ export default {
 
           legend: {
             data: choosenDate,
-            padding:[20,0,0,0],
+            padding:[25,0,0,0],
             textStyle:{
-              color:['#252525']
+              color:['#252525'],
+              fontSize:18,
+              fontWeight:1000
             },
             top:10
           },
@@ -2134,11 +2160,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
                 }
               }
             }
@@ -2150,11 +2178,13 @@ export default {
                 lineStyle: {
                   type: 'solid',
                   color: '#252525',//左边线的颜色
+                  fontWeight:1000
                 }
               },
               axisLabel: {
                 textStyle: {
                   color: '#252525',//坐标值得具体的颜色
+                  fontWeight:1000
 
                 }
               }
@@ -2171,97 +2201,6 @@ export default {
               name: choosenDate[1],
               type: 'line',
               data: pickupComparison,
-              color:['#007cbf']
-            },
-          ],
-        });
-        window.chartsDropoff = echarts.init(document.getElementById('chartsDropoff'));
-        // 绘制图表
-        chartsDropoff.setOption({
-          title: {
-            text: 'Drop Off',
-            left: 'center',
-            textStyle: {fontSize: 16,},
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-              type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
-
-            }
-          },
-
-          legend: {
-            data: choosenDate,
-            padding:[20,0,0,0],
-            textStyle:{
-              color:['#252525']
-            },
-            top:10
-          },
-          dataZoom: [
-            {
-              type: 'slider',
-              xAxisIndex: [0],
-              show: true,
-              realtime: true,
-              start: 33,
-              end: 92,
-            },
-            {
-              type: 'slider',
-              yAxisIndex: [0],
-              show: true,
-              realtime: true,
-              start: 33,
-              end: 100,
-            },
-          ],
-          xAxis: [
-            {
-              type: 'category',
-              data: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00', '02:05', '02:10', '02:15', '02:20', '02:25', '02:30', '02:35', '02:40', '02:45', '02:50', '02:55', '03:00', '03:05', '03:10', '03:15', '03:20', '03:25', '03:30', '03:35', '03:40', '03:45', '03:50', '03:55', '04:00', '04:05', '04:10', '04:15', '04:20', '04:25', '04:30', '04:35', '04:40', '04:45', '04:50', '04:55', '05:00', '05:05', '05:10', '05:15', '05:20', '05:25', '05:30', '05:35', '05:40', '05:45', '05:50', '05:55', '06:00', '06:05', '06:10', '06:15', '06:20', '06:25', '06:30', '06:35', '06:40', '06:45', '06:50', '06:55', '07:00', '07:05', '07:10', '07:15', '07:20', '07:25', '07:30', '07:35', '07:40', '07:45', '07:50', '07:55', '08:00', '08:05', '08:10', '08:15', '08:20', '08:25', '08:30', '08:35', '08:40', '08:45', '08:50', '08:55', '09:00', '09:05', '09:10', '09:15', '09:20', '09:25', '09:30', '09:35', '09:40', '09:45', '09:50', '09:55', '10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:00', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:00', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:00', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:00', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:00', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50', '18:55', '19:00', '19:05', '19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40', '19:45', '19:50', '19:55', '20:00', '20:05', '20:10', '20:15', '20:20', '20:25', '20:30', '20:35', '20:40', '20:45', '20:50', '20:55', '21:00', '21:05', '21:10', '21:15', '21:20', '21:25', '21:30', '21:35', '21:40', '21:45', '21:50', '21:55', '22:00', '22:05', '22:10', '22:15', '22:20', '22:25', '22:30', '22:35', '22:40', '22:45', '22:50', '22:55', '23:00', '23:05', '23:10', '23:15', '23:20', '23:25', '23:30', '23:35', '23:40', '23:45', '23:50', '23:55'],
-              axisLine: {
-                lineStyle: {
-                  type: 'solid',
-                  color: '#252525',//左边线的颜色
-                }
-              },
-              axisLabel: {
-                textStyle: {
-                  color: '#252525',//坐标值得具体的颜色
-                }
-              }
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value',
-              axisLine: {
-                lineStyle: {
-                  type: 'solid',
-                  color: '#252525',//左边线的颜色
-                }
-              },
-              axisLabel: {
-                textStyle: {
-                  color: '#252525',//坐标值得具体的颜色
-
-                }
-              }
-            }
-          ],
-          series: [
-            {
-              name: choosenDate[0],
-              type: 'line',
-              data: dropoffData,
-              color:['#FF0000']
-            },
-            {
-              name: choosenDate[1],
-              type: 'line',
-              data: dropoffComparison,
               color:['#007cbf']
             },
           ],
@@ -2548,6 +2487,14 @@ html,body{
 /deep/ .el-slider__marks-text{
   color: #3a8ee6;
   font-size: 12px;
+}
+
+/deep/ .el-dialog__body{
+  padding: 0;
+}
+
+/deep/ .el-dialog__title{
+  font-size: 24px;
 }
 
 

@@ -19,6 +19,9 @@ export default {
 html,body.el-container{
   width: 100%;
   height:100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  scroll:no;
 }
 #app {
   font-family: sans-serif;
