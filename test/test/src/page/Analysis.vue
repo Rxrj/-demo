@@ -165,6 +165,10 @@
             <div class="chartsBoard">Request Curve</div>
             <div class="charts" id="charts1" style="width: 400px;height: 400px;padding-left: 10px"></div>
           </div>
+          <div style="right:40px;bottom:300px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
+            <div class="chartsBoard">Request Curve</div>
+            <div class="charts"  style="width: 400px;height: 400px;padding-left: 10px"></div>
+          </div>
 
 
         </div>
@@ -252,9 +256,9 @@ export default {
             // {
             //   document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
             // }
-            document.getElementById("currentTime").innerHTML = "Date Time: " + date.format("yyyy-MM-dd hh:mm");
             document.getElementById("requestNumber").innerHTML =  pickupData[indexT]+dropoffData[indexT];
             indexT++;
+            document.getElementById("currentTime").innerHTML = "Date Time: " + date.format("yyyy-MM-dd hh:mm");
           }else {
             //移除添加的source和layer
             map.removeLayer('pickup');
@@ -2226,8 +2230,8 @@ export default {
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
       center: [-73.96,40.785], // 初始坐标系
-      zoom: 11,     // starting zoom 地图初始的拉伸比例
-      antialias: true, //抗锯齿，通过false关闭提升性能
+      zoom: 11.5,     // starting zoom 地图初始的拉伸比例
+
     });
 
 

@@ -56,7 +56,7 @@
                   <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;right:-15px;position: absolute;" id="requestsNumber">0</div>
                 </div>
                 <div class="Evaluation" style="text-align: right">
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Search Time<br/><div class="font" id="searchTimeNumber">416.317s</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Time<br/><div class="font" id="searchTimeNumber">416.317s</div></div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font" id="waitingTimeNumber">61.833s</div></div>
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font" id="expirationNumber">14.411%</div></div>
                 </div>
@@ -103,6 +103,10 @@ export default {
     runSimulation(){
       runClick = true;
       const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
+      //为了获得时间 记得删除
+      // var fso=new ActiveXObject("Scripting.FileSystemObject");
+      // var f=fso.CreateTextFile("c:\\Users\\Administrator\\Desktop\\timeIndex.txt",true);
+      // f.write("ni");
       if(runClick == true)
       {
         alert("Start Run");
@@ -184,7 +188,7 @@ export default {
           }else {
             window.clearInterval(timer);
           }
-        }, 500);
+        }, 100);
       }
     },
     handleChange(){

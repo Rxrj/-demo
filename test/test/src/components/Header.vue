@@ -4,7 +4,7 @@
       <el-menu-item class="header-item" style="font-size: 50px;left:30px">S  O  U  P</el-menu-item>
       <el-menu-item class="header-item"
                     style="padding-top:20px;float:right;font-size: 20px;color:#409EFF;line-height: 15px;"><div
-        style="text-align: right">Spatial-Temporal Demand</div><br/> Prediction and Competitive Supply</el-menu-item>
+        style="text-align: right">PASSENGER Demand</div><br/> Prediction and Competitive Supply</el-menu-item>
       <el-menu-item index="/" class="header-item" style="left:100px">Request Analysis</el-menu-item>
       <el-menu-item index="/Prediction" class="header-item" style="left:170px">Request Prediction</el-menu-item>
       <el-menu-item index="/Simulation" class="header-item" style="left:250px">Simulation</el-menu-item>
