@@ -34,9 +34,9 @@
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Option</span>
                 </template>
-                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-1" @click="HeatmapG">Hexagon Grid</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2" @click="HeatmapI">Intersection</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-3" @click="showComparison" id="showComparison" >Prediction Comparison</el-menu-item>
+                <el-menu-item style="font-size: 20px;padding-left: 40px" index="1-1" @click="HeatmapG">Choropleth Map</el-menu-item>
+                <el-menu-item style="font-size: 20px;padding-left: 35px" index="1-2" @click="HeatmapI">Heat Map</el-menu-item>
+                <el-menu-item style="font-size: 20px;padding-left: 15px" index="1-3" @click="showComparison" id="showComparison" >Prediction Comparison</el-menu-item>
                 <el-dialog
                   title="Prediction Comparison"
                   :visible.sync="dialogVisible"

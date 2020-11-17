@@ -4,7 +4,7 @@
       <Header/>
     </el-header>
     <el-container style="height: 100%;background-color: #252525">
-      <el-aside style="padding-top:90px">
+      <el-aside style="padding-top:90px;overflow-x: hidden">
         <div class="block" >
           <el-date-picker
             align="right"
@@ -34,12 +34,12 @@
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
-                <el-menu-item style="font-size: 18px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
+                <el-menu-item style="font-size: 20px" index="1-1" @click="scatterP">Scatter Plot</el-menu-item>
 
-                <el-menu-item style="font-size: 18px;padding-left: 40px" index="1-2" @click="Choropleth">Choropleth Map</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-3" @click="Heatmap">Heat
+                <el-menu-item style="font-size: 20px;padding-left: 40px" index="1-2" @click="Choropleth">Choropleth Map</el-menu-item>
+                <el-menu-item style="font-size: 20px;padding-left: 35px" index="1-3" @click="Heatmap">Heat
                   Map</el-menu-item>
-                <el-menu-item style="font-size: 18px;padding-left: 35px" index="1-4" @click="threeD">3D Map</el-menu-item>
+                <el-menu-item style="font-size: 20px;padding-left: 35px" index="1-4" @click="threeD">3D Map</el-menu-item>
 
 <!--                <el-menu-item style="font-size: 18px;padding-left: 20px" index="1-2">Thermodynamic Diagram</el-menu-item>-->
 <!--                <el-menu-item style="font-size: 18px;padding-left: 5px" index="1-3" @click="threeD">3D Diagram</el-menu-item>-->
@@ -49,7 +49,7 @@
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Analysis</span>
                 </template>
-                <el-menu-item style="font-size: 18px;" @click="drawChartWorking">Working Days</el-menu-item>
+                <el-menu-item style="font-size: 20px;" @click="drawChartWorking">Working Days</el-menu-item>
                 <el-dialog
                   title="Workingdays of June"
                   :visible.sync="dialogVisibleWorking"
@@ -60,7 +60,7 @@
                     <el-col :span="12"><div style="height: 600px;" id="chartsWorkingDrop"></div></el-col>
                   </el-row>
                 </el-dialog>
-                <el-menu-item style="font-size: 18px;" @click="drawChartHolidays">Holidays</el-menu-item>
+                <el-menu-item style="font-size: 20px;" @click="drawChartHolidays">Holidays</el-menu-item>
                 <el-dialog
                   title="Weekends of June"
                   :visible.sync="dialogVisibleHolidays"
@@ -71,7 +71,7 @@
                     <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysDrop"></div></el-col>
                   </el-row>
                 </el-dialog>
-                <el-menu-item style="font-size: 18px;padding-left: 5px" @click="chooseTime">Holidays and Working Days</el-menu-item>
+                <el-menu-item style="font-size: 20px;padding-left: 5px" @click="chooseTime">Holidays and Working Days</el-menu-item>
                 <el-date-picker
                   id="valueTime2"
                   align="right"
@@ -86,7 +86,7 @@
                 <el-dialog
                   title="Holidays and Weekdays Comparison"
                   :visible.sync="dialogVisible"
-                  width="90%"
+                  width="50%"
                   :before-close="handleClose">
                   <el-row>
                     <el-col :span="24"><div style="height: 600px;" id="chartsComparison"></div></el-col>

@@ -396,7 +396,7 @@ export default {
       })
       //实现动态高亮数据点(还没实现)
       charts1.dispatchAction({
-        type:'highlight',
+        type:'showTip',
         dataIndex:25
       });
 
