@@ -78,7 +78,7 @@ function plotEchartsGrid(data1,data2){
         xAxisIndex: [0],
         show: true,
         realtime: true,
-        start: 5,
+        start: 0,
         end: 95,
       },
       {
@@ -93,7 +93,7 @@ function plotEchartsGrid(data1,data2){
         type: 'inside',
         realtime: true,
         xAxisIndex: [0],
-        start: 5,
+        start: 0,
         end: 95,
       },
       {
