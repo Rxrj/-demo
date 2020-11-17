@@ -181,21 +181,6 @@ export default {
       //alert(this.valueSlider);
     },
 
-    //定义时间函数
-    runTimer:function(index,endIndex,date){
-      var index =96;
-      var endIndex = 240;
-      if(index<endIndex){
-        index++;
-        map1.getSource('pickup_grid').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_groundTruth/grid_" + String(index) + ".geojson");
-        map2.getSource('pickup_grid_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_pred/grid_" + String(index) + ".geojson");
-        var minute = date.getMinutes();
-        date.setMinutes(minute + 5);
-        console.log(date.format("yyyy-MM-dd hh:mm"));
-        document.getElementById("currentTime").innerHTML = "Date Time: " + date.format("yyyy-MM-dd hh:mm");
-      }
-    },
-
     runPrediction() {
       alert("Start Run");
       if (typeof this.valueTime != "object") {
@@ -214,8 +199,8 @@ export default {
               map1.getSource('pickup_grid').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_groundTruth/grid_" + String(index) + ".geojson");
               map2.getSource('pickup_grid_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/grid_polygon_pred/grid_" + String(index) + ".geojson");
 
-              map1.getSource('pickup_intersection').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(Math.floor(index)) + ".geojson");
-              map2.getSource('pickup_intersection_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_pred/intersection_" + String(Math.floor(index)) + ".geojson");
+              map1.getSource('pickup_intersection').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_groundTruth/intersection_" + String(Math.floor(index/6)) + ".geojson");
+              map2.getSource('pickup_intersection_pred').setData("https://raw.githubusercontent.com/fengzi258/SOUP_data/main/intersection_pred/intersection_" + String(Math.floor(index/6)) + ".geojson");
 
               var min = date.getMinutes();
               date.setMinutes(min + 5);
