@@ -234,6 +234,16 @@ export default {
               changeValueSlider = false;
             }
             var m=date.getMinutes();//获取分
+            chartsAnalysis.dispatchAction({
+              type:'showTip',
+              seriesIndex: 0,//这行不能省
+              dataIndex:index+96
+            });
+            chartsAnalysis.dispatchAction({
+              type:'showTip',
+              seriesIndex: 1,//这行不能省
+              dataIndex:index+96
+            });
             if(m < 10)
             {
               document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
@@ -439,9 +449,9 @@ export default {
     //画地图上的图表
     drawChart(){
       //echarts进行初始化
-      window.charts1 = echarts.init(document.getElementById('charts1'));
+      window.chartsAnalysis = echarts.init(document.getElementById('charts1'));
       // 绘制图表
-      charts1.setOption({
+      chartsAnalysis.setOption({
         tooltip: {
           transitionDuration: 0,
           trigger: 'axis',
@@ -546,14 +556,14 @@ export default {
           },
         ],
       });
-      charts1.showLoading();
+      chartsAnalysis.showLoading();
       $.ajax({
         type:'get',
         url:"https://raw.githubusercontent.com/fengzi258/SOUP_data/main/pickup_dropoff_data.geojson",
         dataType:'JSON',
         success:function(data){
-          charts1.hideLoading();             //隐藏加载效果
-          charts1.setOption({
+          chartsAnalysis.hideLoading();             //隐藏加载效果
+          chartsAnalysis.setOption({
             series: [
               {
                 name: 'Pick Up',

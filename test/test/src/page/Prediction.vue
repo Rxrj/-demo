@@ -223,6 +223,26 @@ export default {
               } else {
                 document.getElementById("currentTime").innerHTML = "Date Time: 2016-6-1 " + h + ":" + m;
               }
+              charts1.dispatchAction({
+                type:'showTip',
+                seriesIndex: 0,//这行不能省
+                dataIndex:index
+              });
+              charts1.dispatchAction({
+                type:'showTip',
+                seriesIndex: 1,//这行不能省
+                dataIndex:index
+              });
+              charts2.dispatchAction({
+                type:'showTip',
+                seriesIndex: 0,//这行不能省
+                dataIndex:Math.floor(index/ 6)
+              });
+              charts2.dispatchAction({
+                type:'showTip',
+                seriesIndex: 1,//这行不能省
+                dataIndex:Math.floor(index/ 6)
+              });
             } else {
               //移除添加的source和layer
               map1.removeLayer('pickup_grid');

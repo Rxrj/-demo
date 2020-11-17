@@ -142,11 +142,42 @@ export default {
             {
               document.getElementById("currentTimeSim").innerHTML =  "Date Time: 2016-6-1 "+h+":"+m;
             }
-            if((index+1)%10 == 0)
+            if((index+1)%10 == 0 || index == 1)
             {
+              //alert(index);
               document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
               document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
               document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
+              chartsSearchTime.dispatchAction({
+                type:'showTip',
+                seriesIndex: 0,//这行不能省
+                dataIndex:index2
+              });
+              chartsSearchTime.dispatchAction({
+                type:'showTip',
+                seriesIndex: 1,//这行不能省
+                dataIndex:index2
+              });
+              chartsWaitingTime.dispatchAction({
+                type:'showTip',
+                seriesIndex: 0,//这行不能省
+                dataIndex:index2
+              });
+              chartsWaitingTime.dispatchAction({
+                type:'showTip',
+                seriesIndex: 1,//这行不能省
+                dataIndex:index2
+              });
+              chartsExpirationPercentage.dispatchAction({
+                type:'showTip',
+                seriesIndex: 0,//这行不能省
+                dataIndex:index2
+              });
+              chartsExpirationPercentage.dispatchAction({
+                type:'showTip',
+                seriesIndex: 1,//这行不能省
+                dataIndex:index2
+              });
               index2++;
             }
           }else {
@@ -252,8 +283,8 @@ export default {
     },
     drawCharts(){
       //SearchTime
-      window.charts1 = echarts.init(document.getElementById('charts1'));
-      charts1.setOption({
+      window.chartsSearchTime = echarts.init(document.getElementById('charts1'));
+      chartsSearchTime.setOption({
         title:{
           text:'Search Time',
           left:'center',
@@ -281,7 +312,7 @@ export default {
             xAxisIndex: [0],
             show: true,
             realtime: true,
-            start: 5,
+            start: 0,
             end: 95,
           },
           {
@@ -289,14 +320,14 @@ export default {
             yAxisIndex: [0],
             show: true,
             realtime: true,
-            start: 20,
-            end: 60,
+            start: 0,
+            end: 100,
           },
           {
             type: 'inside',
             realtime: true,
             xAxisIndex: [0],
-            start: 5,
+            start: 0,
             end: 95,
           },
           {
@@ -304,7 +335,7 @@ export default {
             realtime: true,
             yAxisIndex: [0],
             start: 0,
-            end: 50,
+            end: 100,
           }
         ],
         xAxis: [
@@ -365,7 +396,7 @@ export default {
         url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_search.json",
         dataType:'JSON',
         success:function(data){
-          charts1.setOption({
+          chartsSearchTime.setOption({
             series: [
               {
                 name: 'DROP',
@@ -382,7 +413,7 @@ export default {
         url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_search.json",
         dataType:'JSON',
         success:function(data){
-          charts1.setOption({
+          chartsSearchTime.setOption({
             series: [
               {
                 name: 'RD',
@@ -394,16 +425,12 @@ export default {
           })
         }
       })
-      //实现动态高亮数据点(还没实现)
-      charts1.dispatchAction({
-        type:'showTip',
-        dataIndex:25
-      });
+
 
 
 
       //WaitingTime
-      var charts2 = echarts.init(document.getElementById('charts2'));
+      window.chartsWaitingTime = echarts.init(document.getElementById('charts2'));
       var option = {
         title:{
           text:'Waiting Time',
@@ -425,7 +452,7 @@ export default {
             xAxisIndex: [0],
             show: true,
             realtime: true,
-            start: 5,
+            start: 0,
             end: 95,
           },
           {
@@ -433,14 +460,14 @@ export default {
             yAxisIndex: [0],
             show: true,
             realtime: true,
-            start: 60,
+            start: 0,
             end: 100,
           },
           {
             type: 'inside',
             realtime: true,
             xAxisIndex: [0],
-            start: 5,
+            start: 0,
             end: 95,
           },
           {
@@ -511,13 +538,13 @@ export default {
             color:['#007cbf']
           }]
       };
-      charts2.setOption(option);
+      chartsWaitingTime.setOption(option);
       $.ajax({
         type:'get',
         url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_wait.json",
         dataType:'JSON',
         success:function(data){
-          charts2.setOption({
+          chartsWaitingTime.setOption({
             series: [
               {
                 name: 'DROP',
@@ -534,7 +561,7 @@ export default {
         url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_wait.json",
         dataType:'JSON',
         success:function(data){
-          charts2.setOption({
+          chartsWaitingTime.setOption({
             series: [
               {
                 name: 'RD',
@@ -548,7 +575,7 @@ export default {
       })
 
       //ExpirationPercentage
-      var charts3 = echarts.init(document.getElementById('charts3'));
+      window.chartsExpirationPercentage = echarts.init(document.getElementById('charts3'));
       var option = {
         title:{
           text:'Expiration Percentage',
@@ -570,7 +597,7 @@ export default {
             xAxisIndex: [0],
             show: true,
             realtime: true,
-            start: 5,
+            start: 0,
             end: 95,
           },
           {
@@ -585,7 +612,7 @@ export default {
             type: 'inside',
             realtime: true,
             xAxisIndex: [0],
-            start: 5,
+            start: 0,
             end: 95,
           },
           {
@@ -656,13 +683,13 @@ export default {
             color:['#007cbf']
           }]
       };
-      charts3.setOption(option);
+      chartsExpirationPercentage.setOption(option);
       $.ajax({
         type:'get',
         url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_expiration.json",
         dataType:'JSON',
         success:function(data){
-          charts3.setOption({
+          chartsExpirationPercentage.setOption({
             series: [
               {
                 name: 'DROP',
@@ -679,7 +706,7 @@ export default {
         url:"https://raw.githubusercontent.com/Rxrj/SOUP-data/main/RD_expiration.json",
         dataType:'JSON',
         success:function(data){
-          charts3.setOption({
+          chartsExpirationPercentage.setOption({
             series: [
               {
                 name: 'RD',
