@@ -108,8 +108,10 @@
             @change="getValueSlider"
             show-stops>
           </el-slider>
-          <div style="height:90px;left:50px;top:100px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="numberBoard">Number of Requests</div><br><div id="requestNumber"style="color: #fd4949;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
-          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime">Date Time: 2016-06-01 08:00</div>
+          <div style="height:90px;left:50px;top:100px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px" id="NumberRequest"><div class="chartsBoard">Number of Requests</div><br><div id="requestNumber" style="color: #eeeeee;top:55px;left:100px;position: absolute;font-size: 23px">2010</div></div>
+          <div style="height:130px;width:300px;left:50px;top:230px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68,68,68);border-radius: 10px" id="SelectGrid"><div class="chartsBoard" >The Select Grid</div><br><div id="gridInfo" style="color: #eeeeee;top:55px;left:20px;position: absolute;font-size: 23px">lng: -73.972 lat: 40.760 <br>grid id: 92</div></div>
+          <div style="height:130px;width:400px;right:50px;top:100px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68,68,68);border-radius: 10px" id="Time"><div class="chartsBoard" >Date Time</div><br><div id="currentTime" style="color: #eeeeee;top:55px;left:100px;position: absolute;font-size: 23px">2016-06-01 08:00</div></div>
+<!--          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime"><div class="numberBoard">Date Time</div><div>2016-06-01 08:00</div></div>-->
           <div id="choosePD" style="visibility: visible">
             <div style="bottom:200px;right:100px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
               <div style="background-color:#FF0000;bottom:5px;right:115px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px"></div>
@@ -123,19 +125,19 @@
             </div>
           </div>
           <div id="heatmapIcon" style="visibility: hidden">
-            <div style="background-color:#00000000;bottom:350px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
+            <div style="background-color:#00000000;bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
               <div style="right:-40px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><5</div>
             </div>
-            <div style="background-color:rgb(255,208,166);bottom:300px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+            <div style="background-color:rgb(255,208,166);bottom:220px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
               <div style="right:-60px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">5-10</div>
             </div>
-            <div style="background-color:rgb(255,170,127);bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+            <div style="background-color:rgb(255,170,127);bottom:190px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
               <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">10-30</div>
             </div>
-            <div style="background-color:rgb(255,112,78);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+            <div style="background-color:rgb(255,112,78);bottom:160px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
               <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">30-50</div>
             </div>
-            <div style="background-color:rgb(240,64,64);bottom:150px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+            <div style="background-color:rgb(240,64,64);bottom:130px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
               <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">50-70</div>
             </div>
             <div style="background-color:rgb(181,10,9);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
@@ -162,14 +164,13 @@
               <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>60</div>
             </div>
           </div>
-          <div style="right:40px;bottom:375px;;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
+          <div style="right:40px;bottom:330px;;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
             <div class="chartsBoard">Request Curve</div>
             <div class="charts" id="charts1" style="width: 400px;height: 400px;padding-left: 10px"></div>
           </div>
-          <div style="left:15px;top:35%;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
-          <div style="left:40px;bottom:80px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
+          <div style="left:40px;bottom:100px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
             <div class="chartsBoard" style="font-size: 20px">Grid Neighbor Request Comparison</div>
-            <div class="charts" id="chartsNeighbor" style="height: 500px;"></div>
+            <div class="charts" id="chartsNeighbor" style="height: 500px;width: 600px;"></div>
           </div>
 
 
@@ -201,6 +202,7 @@ var grid_center_coordinates = new Array();
 var current_region_id = 0;
 var dayOfMonth = 1;
 var grid_polygon_data;
+var ids;
 import Header from "../components/Header";
 import echarts from 'echarts';
 import '@/assets/css/all.css';
@@ -220,7 +222,9 @@ export default {
       runClick = true;
       const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
      if(runClick == true){
-        var date = new Date(2016,5,1,8,0);//注意月份是0-11，1月为0，12月为11
+       var date = this.valueTime;
+       date.setHours(8);
+       date.setMinutes(0);
         var indexT = 96;
         var index=0;
         var timer = window.setInterval(function() {
@@ -248,7 +252,7 @@ export default {
               //alert(date.getHours());
               changeValueSlider = false;
             }
-            // var m=date.getMinutes();//获取分
+            //var m=date.getMinutes();//获取分
             chartsAnalysis.dispatchAction({
               type:'showTip',
               seriesIndex: 0,//这行不能省
@@ -259,6 +263,12 @@ export default {
               seriesIndex: 1,//这行不能省
               dataIndex:index+96
             });
+            chartsNeighbor.dispatchAction({
+              type:'showTip',
+              seriesIndex: 0,//这行不能省
+              dataIndex:index+96
+            });
+
             // if(m < 10)
             // {
             //   document.getElementById("currentTime").innerHTML =  "Date Time: 2016-6-1 "+h+":0"+m;
@@ -269,7 +279,7 @@ export default {
             // }
             document.getElementById("requestNumber").innerHTML =  pickupData[indexT]+dropoffData[indexT];
             indexT++;
-            document.getElementById("currentTime").innerHTML = "Date Time: " + date.format("yyyy-MM-dd hh:mm");
+            document.getElementById("currentTime").innerHTML = date.format("yyyy-MM-dd hh:mm");
           }else {
             //移除添加的source和layer
             map.removeLayer('pickup');
@@ -358,7 +368,6 @@ export default {
       document.getElementById("choosePD").style.visibility="visible";
       document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="hidden";
-      map.setLayoutProperty('grid_neighbors','visibility','visible');
     },
     Choropleth(){
       map.setPitch(0);
@@ -372,7 +381,6 @@ export default {
       document.getElementById("choosePD").style.visibility="hidden";
       document.getElementById("heatmapIcon").style.visibility="visible";
       document.getElementById("heatmapIcon2").style.visibility="hidden";
-      map.setLayoutProperty('grid_neighbors','visibility','none');
     },
     Heatmap(){
       map.setPitch(0);
@@ -386,7 +394,6 @@ export default {
       document.getElementById("choosePD").style.visibility="hidden";
       document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="visible";
-      map.setLayoutProperty('grid_neighbors','visibility','none');
     },
     chooseTime(){
       if(document.getElementById("valueTime2").style.visibility=="visible" && document.getElementById("showButton").style.visibility=="visible"){
@@ -2250,7 +2257,7 @@ export default {
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-      center: [-73.96,40.785], // 初始坐标系
+      center: [-73.99,40.785], // 初始坐标系
       zoom: 11.3,     // starting zoom 地图初始的拉伸比例
 
     });
@@ -2426,8 +2433,8 @@ export default {
         "paint": {
           // "line-color": 'rgba(138,43,226,1)',
           // "line-width": 1.5
-          "fill-color": 'rgba(138,43,226,1)',
-          "fill-opacity" : 0.25
+          "fill-color": 'rgb(100,191,255)',
+          "fill-opacity" : 0.5
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
@@ -2441,15 +2448,12 @@ export default {
       }
       dayOfMonth = this.valueTime.getDate();
       current_region_id = getCurrentGridIndex(e.lngLat.toArray(), grid_center_coordinates);
-      document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " grid id: " + current_region_id;
+      document.getElementById('gridInfo').innerHTML = getMouseLngLat(e) + " <br> grid id: " + current_region_id;
 
       let neighbor_ids = grid_data[current_region_id].neighbors.ids;
       let neighbor_data = new Array();
-      let ids = new Array();
+      ids = new Array();
       for(let i=0;i<neighbor_ids.length;i++){
-
-        console.log(grid_polygon_data[neighbor_ids[i]].center_coordinates);
-
         ids[i] = "g" + String(neighbor_ids[i]);
         neighbor_data[i] = grid_data[neighbor_ids[i]].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
       }
@@ -2468,12 +2472,11 @@ export default {
         "type": "FeatureCollection",
         "features": data_neighbor_coordinates,
       });
-      // var marker = new mapboxgl.Marker().setLngLat(center_coordinates).addTo(map);
     });
     let ids_init = [0, 65, 71, 51, 84, 44, 82];
     let center_coordinates = [-73.96496216710322, 40.76634771095223];
-    var marker = new mapboxgl.Marker().setLngLat([-73.96,40.785]).addTo(map);
-
+    var marker = new mapboxgl.Marker().setLngLat([-73.958,40.779]).addTo(map);
+    //var marker = new mapboxgl.Marker().setLngLat(grid_polygon_data[ids_init[0]].center_coordinates);
     // for(let i=0;i<ids_init.length;i++) {
     //   var marker = new mapboxgl.Marker()
     //     .setLngLat(grid_polygon_data[ids_init[i]].center_coordinates)
@@ -2617,8 +2620,20 @@ html,body{
 }
 
 /deep/ .el-slider__marks-text{
-  color: #3a8ee6;
+  color: #eeeeee;
   font-size: 12px;
+}
+
+/deep/ .el-slider__bar {
+  height: 8px;
+  background-color: rgb(100,191,255);
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  position: absolute;
+}
+
+/deep/ .el-slider__button {
+  border: 2px solid rgb(100,191,255);
 }
 
 /deep/ .el-dialog__body{
@@ -2671,9 +2686,10 @@ html,body{
   padding: 20px;
   margin: 0;
   position: absolute;
-  width: 400px;
-  top: 120px;
-  right:5px;
+  width: 370px;
+  top: 160px;
+  right:50px;
+  z-index:9999
 }
 .numberBoard{
   background: rgba(251,103,103,.5);

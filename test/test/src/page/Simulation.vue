@@ -111,13 +111,14 @@ export default {
         alert("Start Run");
         var index=0;
         // var index2 = 0;
-        var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
+        var date = this.valueTime;
+        date.setHours(8,0);
         var timer = window.setInterval(function() {
           if(index < 1680){
             index++;
-            map.getSource('resources').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_" + String(index) +
+            mapS.getSource('resources').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_" + String(index) +
               ".geojson");
-            map.getSource('agents').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_" + String(index) + ".geojson");
+            mapS.getSource('agents').setData("https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_" + String(index) + ".geojson");
             var sec=date.getSeconds();
             document.getElementById("taxisNumber").innerHTML= idle_taxis[index];
             document.getElementById("requestsNumber").innerHTML= waiting_requests[index];
@@ -5765,7 +5766,7 @@ export default {
   mounted() {
     this.initTreeData();
     mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
-    window.map = new mapboxgl.Map({
+    window.mapS = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
       center: [-73.96,40.785], // 初始坐标系
@@ -5773,13 +5774,13 @@ export default {
       antialias: true, //抗锯齿，通过false关闭提升性能
     });
 
-    map.on('load', function () {
-      map.addSource("regions", {
+    mapS.on('load', function () {
+      mapS.addSource("regions", {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/regions.geojson"
       });
 
-      map.addLayer({
+      mapS.addLayer({
         "id": "regions",
         "type": "line",           /* fill类型一般用来表示一个面，一般较大 */
         "source": "regions",
@@ -5789,17 +5790,17 @@ export default {
         },
         "filter": ["==", "$type", "Polygon"]  /* filter过滤器将type等于Polygon的数据显示在layer上 */
       });
-      map.addSource('resources', {
+      mapS.addSource('resources', {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/resource/resources_0.geojson"
       });
 
-      map.addSource('agents', {
+      mapS.addSource('agents', {
         "type": "geojson",
         "data": "https://raw.githubusercontent.com/REUS1/SOUP-Data/main/agent/agents_0.geojson"
       });
 
-      map.addLayer({
+      mapS.addLayer({
         "id": "resources",
         "source": "resources",
         "type": "circle",
@@ -5809,7 +5810,7 @@ export default {
         }
       });
 
-      map.addLayer({
+      mapS.addLayer({
         "id": "agents",
         "source": "agents",
         "type": "circle",
@@ -5833,7 +5834,7 @@ export default {
       activeIndex: '1',
       activeIndex2: '1',
       maps: null,
-      valueTime:"2016-6-1",
+      valueTime:"2016-6-01",
       valueSlider:8,
       marksSlider:{
         0:'0',

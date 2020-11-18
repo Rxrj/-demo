@@ -741,14 +741,14 @@ export default {
               type: 'line',
               symbolSize: 4,
               data: data1,
-              color: ['#05f8d6']
+              color: ['#FF0000']
             },
             {
               name: 'Our ST-GCSL',
               type: 'line',
               symbolSize: 4,
               data: data2,
-              color: ['#0082fc']
+              color: ['#007cbf']
 
             },
             {
@@ -763,7 +763,7 @@ export default {
               type: 'line',
               symbolSize: 4,
               data: data4,
-              color: ['#f47a75']
+              color: ['#ff9063']
             }
           ]
         };
