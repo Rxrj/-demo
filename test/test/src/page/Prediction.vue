@@ -92,7 +92,7 @@
           </el-col>
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime" v-if="showTimeGrid">Date Time: 2016-06-01 00:00</div>
-<!--        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime2" v-if="showTimeIntersection">Date Time: 2016-06-01 00:00</div>-->
+        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime2" v-if="showTimeIntersection">Date Time: 2016-06-01 00:00</div>
         <div style="left:1410px;top:100px;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
 
         <div id="heatmapIcon" style="visibility: hidden">
@@ -192,6 +192,8 @@ export default {
       if (runClick == true) {
         if (this.showTimeGrid) {
           var date = this.valueTime;
+          date.setHours(0);
+          date.setMinutes(0);
           var index = (dayOfMonth - 1) * 288;
           var timer = window.setInterval(function () {
             if (index < dayOfMonth * 288) {
@@ -347,6 +349,7 @@ export default {
     },
 
     initMap: function () {
+      document.getElementById("heatmapIcon").style.visibility = "visible";
       mapboxgl.accessToken = 'pk.eyJ1IjoicnhyaiIsImEiOiJja2dseDQ1bnUwMTV4MzFxcmY2cWxwcnpjIn0.qjzBBML5vuTGTZeMeyHsrg'; //这里请换成自己的token
       window.map1 = new mapboxgl.Map({
         container: 'map1', // container id 绑定的组件的id

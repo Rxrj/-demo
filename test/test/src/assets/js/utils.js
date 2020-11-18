@@ -612,14 +612,8 @@ function plotEchartsNeighbor(ids,data_array){
     }
     series[i] = item;
   }
-  
+
   var option = {
-    title: {
-      text: 'Grid Neighbor Request Comparison',
-      left: 'center',
-      textStyle: {color:'#eeeeee',fontSize: 16,},
-      top:5
-    },
     tooltip: {
       transitionDuration: 0,
       trigger: 'axis',
@@ -630,17 +624,12 @@ function plotEchartsNeighbor(ids,data_array){
     legend: {
       data: ids,
       // left: 20,
-      top: 30,
+      top: 0,
       textStyle: {color:'#eeeeee',fontSize: 14,fontWeight:600},
     },
-    toolbox: {
-      feature: {
-        dataZoom: {
-          yAxisIndex: 'none'
-        },
-        restore: {},
-        saveAsImage: {}
-      }
+    grid:{
+      top:'15%',
+      left:'12%'
     },
     axisPointer: {
       link: {xAxisIndex: 'all'}
@@ -651,8 +640,8 @@ function plotEchartsNeighbor(ids,data_array){
         xAxisIndex: [0],
         show: true,
         realtime: true,
-        start: 5,
-        end: 95,
+        start: 0,
+        end: 100,
       },
       {
         type: 'slider',
@@ -660,7 +649,7 @@ function plotEchartsNeighbor(ids,data_array){
         show: true,
         realtime: true,
         start: 0,
-        end: 50,
+        end: 40,
       },
       {
         type: 'inside',
@@ -689,7 +678,7 @@ function plotEchartsNeighbor(ids,data_array){
       name:'Request',
       nameTextStyle:{
         color: '#eeeeee',
-        fontSize:14
+        fontSize:14,
       },
       type: 'value',
       max: 180,
