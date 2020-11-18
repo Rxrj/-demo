@@ -248,7 +248,7 @@ export default {
               //alert(date.getHours());
               changeValueSlider = false;
             }
-            var m=date.getMinutes();//获取分
+            // var m=date.getMinutes();//获取分
             chartsAnalysis.dispatchAction({
               type:'showTip',
               seriesIndex: 0,//这行不能省
@@ -358,6 +358,7 @@ export default {
       document.getElementById("choosePD").style.visibility="visible";
       document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="hidden";
+      map.setLayoutProperty('grid_neighbors','visibility','visible');
     },
     Choropleth(){
       map.setPitch(0);
@@ -371,6 +372,7 @@ export default {
       document.getElementById("choosePD").style.visibility="hidden";
       document.getElementById("heatmapIcon").style.visibility="visible";
       document.getElementById("heatmapIcon2").style.visibility="hidden";
+      map.setLayoutProperty('grid_neighbors','visibility','none');
     },
     Heatmap(){
       map.setPitch(0);
@@ -384,6 +386,7 @@ export default {
       document.getElementById("choosePD").style.visibility="hidden";
       document.getElementById("heatmapIcon").style.visibility="hidden";
       document.getElementById("heatmapIcon2").style.visibility="visible";
+      map.setLayoutProperty('grid_neighbors','visibility','none');
     },
     chooseTime(){
       if(document.getElementById("valueTime2").style.visibility=="visible" && document.getElementById("showButton").style.visibility=="visible"){
@@ -2444,6 +2447,9 @@ export default {
       let neighbor_data = new Array();
       let ids = new Array();
       for(let i=0;i<neighbor_ids.length;i++){
+
+        console.log(grid_polygon_data[neighbor_ids[i]].center_coordinates);
+
         ids[i] = "g" + String(neighbor_ids[i]);
         neighbor_data[i] = grid_data[neighbor_ids[i]].properties.groundTruth.slice(288 * (dayOfMonth - 1), dayOfMonth * 288);
       }
@@ -2462,9 +2468,12 @@ export default {
         "type": "FeatureCollection",
         "features": data_neighbor_coordinates,
       });
+      // var marker = new mapboxgl.Marker().setLngLat(center_coordinates).addTo(map);
     });
     let ids_init = [0, 65, 71, 51, 84, 44, 82];
-    //var marker = new mapboxgl.Marker().setLngLat(grid_polygon_data[ids_init[0]].center_coordinates);
+    let center_coordinates = [-73.96496216710322, 40.76634771095223];
+    var marker = new mapboxgl.Marker().setLngLat([-73.96,40.785]).addTo(map);
+
     // for(let i=0;i<ids_init.length;i++) {
     //   var marker = new mapboxgl.Marker()
     //     .setLngLat(grid_polygon_data[ids_init[i]].center_coordinates)
