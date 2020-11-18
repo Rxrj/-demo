@@ -612,7 +612,7 @@ function plotEchartsNeighbor(ids,data_array){
     }
     series[i] = item;
   }
-
+  
   var option = {
     title: {
       text: 'Grid Neighbor Request Comparison',

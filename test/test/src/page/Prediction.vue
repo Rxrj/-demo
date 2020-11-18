@@ -92,7 +92,7 @@
           </el-col>
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime" v-if="showTimeGrid">Date Time: 2016-06-01 00:00</div>
-        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime2" v-if="showTimeIntersection">Date Time: 2016-06-01 00:00</div>
+<!--        <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime2" v-if="showTimeIntersection">Date Time: 2016-06-01 00:00</div>-->
         <div style="left:1410px;top:100px;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
 
         <div id="heatmapIcon" style="visibility: hidden">
@@ -245,6 +245,10 @@ export default {
               map1.removeSource('pickup_grid');
               map2.removeLayer('pickup_grid_pred');
               map2.removeSource('pickup_grid_pred');
+              map1.removeLayer('pickup_intersection');
+              map1.removeSource('pickup_intersection');
+              map2.removeLayer('pickup_intersection_pred');
+              map2.removeSource('pickup_intersection_pred');
               window.clearInterval(timer);
             }
           }, 500);
