@@ -56,9 +56,12 @@
                   <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;right:-15px;position: absolute;" id="requestsNumber">0</div>
                 </div>
                 <div class="Evaluation" style="text-align: right">
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Time<br/><div class="font" id="searchTimeNumber">416.317s</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font" id="waitingTimeNumber">61.833s</div></div>
-                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div class="font" id="expirationNumber">14.411%</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Time<br/><div class="font"
+                                                                                                      id="searchTimeNumber">0.000s</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Waiting Time<br/><div class="font"
+                                                                                                         id="waitingTimeNumber">0.000s</div></div>
+                  <div style="color: #eeeeee; font-weight: bold;text-align:center">Expiration Percentage<br/><div
+                    class="font" id="expirationNumber">0.000%</div></div>
                 </div>
               </div>
             </el-col>
@@ -107,7 +110,7 @@ export default {
       {
         alert("Start Run");
         var index=0;
-        var index2 = 0;
+        // var index2 = 0;
         var date = new Date(2016,6,1,8,0);//注意月份是0-11，1月为0，12月为11
         var timer = window.setInterval(function() {
           if(index < 1680){
@@ -136,12 +139,12 @@ export default {
             //   else
             //     console.log("'"+date.getHours()+":"+date.getMinutes()+":30',");
             // }
-            if(changeValueSlider == false)
+            if(changeValueSlider === false)
               that.valueSlider = h;//时间条会随着时间移动
-            if(changeValueSlider == true)
+            if(changeValueSlider === true)
             {
               index = (that.valueSlider - 8) * 120;
-              index2 = (that.valueSlider - 8)*12;
+              // index2 = (that.valueSlider - 8) * 12;
               //alert(index);
               date.setHours(that.valueSlider,0);
               //alert(date.getHours());
@@ -186,18 +189,18 @@ export default {
               seriesIndex: 1,//这行不能省
               dataIndex:index
             });
-            if((index+1)%10 == 0 || index == 1)
-            {
+            // if((index+1)%10 === 0 || index === 1)
+            // {
               //alert(index);
-              document.getElementById("searchTimeNumber").innerHTML= DROP_search[index2].toFixed(3) + "s";
-              document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index2].toFixed(3) + "s";
-              document.getElementById("expirationNumber").innerHTML= DROP_expiration[index2].toFixed(3) + "%";
-              index2++;
-            }
+            document.getElementById("searchTimeNumber").innerHTML= DROP_search[index].toFixed(3) + "s";
+            document.getElementById("waitingTimeNumber").innerHTML= DROP_wait[index].toFixed(3) + "s";
+            document.getElementById("expirationNumber").innerHTML= DROP_expiration[index].toFixed(3) + "%";
+            //   index2++;
+            // }
           }else {
             window.clearInterval(timer);
           }
-        }, 200);
+        }, 400);
       }
     },
     handleChange(){
@@ -216,7 +219,7 @@ export default {
       request1.send(null);/*不发送数据到服务器*/
       request1.onload = function () {/*XHR对象获取到返回信息后执行*/
         if (request1.status == 200) {/*返回状态为200，即为数据获取成功*/
-          DROP_expiration = JSON.parse(request1.responseText).expirationPercentage.slice(0,288);
+          DROP_expiration = JSON.parse(request1.responseText).expirationPercentage.slice(0,1680);
         }
       };
       var url2 = "https://raw.githubusercontent.com/Rxrj/SOUP-data/main/DROP_search.json"/*json文件url，本地的就写本地的位置，如果是服务器的就写服务器的路径*/
@@ -225,7 +228,7 @@ export default {
       request2.send(null);/*不发送数据到服务器*/
       request2.onload = function () {/*XHR对象获取到返回信息后执行*/
         if (request2.status == 200) {/*返回状态为200，即为数据获取成功*/
-          DROP_search = JSON.parse(request2.responseText).searchTime.slice(0,288);
+          DROP_search = JSON.parse(request2.responseText).searchTime.slice(0,1680);
         }
       };
 
@@ -235,7 +238,7 @@ export default {
       request3.send(null);/*不发送数据到服务器*/
       request3.onload = function () {/*XHR对象获取到返回信息后执行*/
         if (request3.status == 200) {/*返回状态为200，即为数据获取成功*/
-          DROP_wait = JSON.parse(request3.responseText).waitTime.slice(0,288);
+          DROP_wait = JSON.parse(request3.responseText).waitTime.slice(0,1680);
         }
       };
 
