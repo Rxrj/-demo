@@ -41,7 +41,6 @@
                 <el-menu-item style="font-size: 20px;padding-left: 35px" index="1-2" @click="HeatmapI">Heat Map</el-menu-item>
                 <el-menu-item style="font-size: 20px;padding-left: 15px" index="1-3" @click="showComparison" id="showComparison" >Prediction Comparison</el-menu-item>
                 <el-dialog
-                  title="Prediction Comparison"
                   :visible.sync="dialogVisible"
                   width="60%"
                   :before-close="handleClose">
@@ -664,7 +663,7 @@ export default {
             }
           },
           legend: {
-            data: ['Ground Truth', 'Our ST-GCSL', 'DCRNN', 'STGCN'],
+            data: ['Ground Truth', 'ST-GCSL', 'DCRNN', 'STGCN'],
             // left: 20,
             top: 30,
             textStyle: {color: '#252525', fontSize: 14,},
@@ -742,7 +741,7 @@ export default {
               color: ['#FF0000']
             },
             {
-              name: 'Our ST-GCSL',
+              name: 'ST-GCSL',
               type: 'line',
               symbolSize: 4,
               data: data2,
@@ -830,7 +829,7 @@ export default {
         21:'21',
         22:'22',
         23:'23',
-        // 24:'24',
+        24:'24',
       },
       pickerOptions: {
         disabledDate(time) {

@@ -49,11 +49,11 @@
                 <div style="right:850px;top:-30px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTimeSim">Date Time: 2016-06-01 08:00</div>
                 <div style="bottom:200px;right:720px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#FF0000;bottom:10px;right:150px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="taxis"></div>
-                  <div style="bottom:0px;right:-10px;position: absolute;width: 200px">Idle Taxis:    </div><div style="bottom:0px;right:-20px;position: absolute;" id="taxisNumber">4000</div>
+                  <div style="bottom:0px;right:-10px;position: absolute;width: 200px">Idle Taxis:    </div><div style="bottom:0px;left:-30px;position: absolute;" id="taxisNumber">4000</div>
                 </div>
                 <div style="bottom:150px;right:635px;font-size:22px;font-weight:700;position: absolute;color: #eeeeee">
                   <div style="background-color:#007cbf;bottom:10px;right:235px;font-size:22px;font-weight:700;position: absolute;width: 10px;height: 10px" id="requests"></div>
-                  <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;right:-15px;position: absolute;" id="requestsNumber">0</div>
+                  <div style="bottom:0px;right:-18px;position: absolute;width: 300px">Waiting Requests:   </div><div style="bottom:0px;left:-30px;position: absolute;" id="requestsNumber">0</div>
                 </div>
                 <div class="Evaluation" style="text-align: right">
                   <div style="color: #eeeeee; font-weight: bold;text-align:center">Idle Time<br/><div class="font"
@@ -206,7 +206,7 @@ export default {
           }else {
             window.clearInterval(timer);
           }
-        }, 400);
+        }, 300);
       }
     },
     handleChange(){
