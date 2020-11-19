@@ -167,7 +167,7 @@
           </div>
           <div style="left:40px;bottom:100px;;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
             <div class="chartsBoard">Request Curve</div>
-            <div class="charts" id="charts1" style="width: 400px;height: 400px;padding-left: 10px"></div>
+            <div class="charts" id="charts1" style="width: 400px;height: 400px;padding-left: 10px;z-index:0"></div>
           </div>
 <!--          <div style="left:40px;bottom:100px;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">-->
 <!--            <div class="chartsBoard" style="font-size: 20px">Grid Neighbor Request Comparison</div>-->
