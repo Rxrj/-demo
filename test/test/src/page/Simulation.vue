@@ -109,6 +109,9 @@ export default {
       if(runClick == true)
       {
         alert("Start Run");
+        if (typeof this.valueTime != "object") {
+          this.valueTime = new Date(this.valueTime);
+        }
         var index=0;
         // var index2 = 0;
         var date = this.valueTime;

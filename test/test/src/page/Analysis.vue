@@ -219,6 +219,9 @@ export default {
     },
     runAnalysis(){
       alert("Start Run");
+      if (typeof this.valueTime != "object") {
+        this.valueTime = new Date(this.valueTime);
+      }
       runClick = true;
       const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
      if(runClick == true){
@@ -262,12 +265,7 @@ export default {
               type:'showTip',
               seriesIndex: 1,//这行不能省
               dataIndex:index+96
-            });
-            chartsNeighbor.dispatchAction({
-              type:'showTip',
-              seriesIndex: 0,//这行不能省
-              dataIndex:index+96
-            });
+            })
             document.getElementById("requestNumber").innerHTML =  pickupData[indexT]+dropoffData[indexT];
             indexT++;
             document.getElementById("currentTime").innerHTML = date.format("yyyy-MM-dd hh:mm");
