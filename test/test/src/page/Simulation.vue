@@ -108,6 +108,8 @@ export default {
       const that = this;//注意先获取this，计时器内部的this不是能控制valueSlider的this
       if(runClick == true)
       {
+        mapS.setLayoutProperty('resources','visibility','visible');
+        mapS.setLayoutProperty('agents','visibility','visible');
         alert("Start Run");
         if (typeof this.valueTime != "object") {
           this.valueTime = new Date(this.valueTime);
@@ -210,10 +212,10 @@ export default {
     handleChange(){
       var check = this.checked;
       if(!check){
-        map.setLayoutProperty('regions', 'visibility', 'none');
+        mapS.setLayoutProperty('regions', 'visibility', 'none');
       }
       else{
-        map.setLayoutProperty('regions', 'visibility', 'visible');
+        mapS.setLayoutProperty('regions', 'visibility', 'visible');
       }
     },
     initTreeData:function (){
@@ -5773,7 +5775,7 @@ export default {
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
       center: [-73.96,40.785], // 初始坐标系
-      zoom: 11,     // starting zoom 地图初始的拉伸比例
+      zoom: 11.3,     // starting zoom 地图初始的拉伸比例
       antialias: true, //抗锯齿，通过false关闭提升性能
     });
 
@@ -5823,11 +5825,13 @@ export default {
         }
       });
 
+      mapS.setLayoutProperty('resources','visibility','none');
+      mapS.setLayoutProperty('agents','visibility','none');
+
 
 
 
     });
-
     this.drawCharts();
 
   },

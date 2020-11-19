@@ -17,7 +17,7 @@
           </el-date-picker>
           <br>
           <div>
-            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+            <el-checkbox v-model="checkedP" style="padding-top: 20px;margin-left: 0px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
             <br>
           </div>
           <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee" @click="runPrediction">Run</el-button>
@@ -93,7 +93,7 @@
         </el-row>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime" v-if="showTimeGrid">Date Time: 2016-06-01 00:00</div>
         <div style="left:600px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee" id="currentTime2" v-if="showTimeIntersection">Date Time: 2016-06-01 00:00</div>
-        <div style="left:1410px;top:100px;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">[Click the Grid]</div>
+        <div style="left:1410px;top:100px;width:500px;font-size:18px;font-weight:700;position: absolute;color: #eeeeee" id="gridInfo">lng: -73.959 lat: 40.779 grid id: 0 intersection id: 3677</div>
 
         <div id="heatmapIcon" style="visibility: hidden">
           <div style="background-color:#00000000;bottom:350px;right:650px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
@@ -260,9 +260,7 @@ export default {
 
 
     handleChange() {
-      // var check = this.checked;
-      var check = !this.checked;
-      this.checked = check;
+      var check = this.checkedP;
       if (!check) {
         map1.setLayoutProperty('regions', 'visibility', 'none');
         map2.setLayoutProperty('regions', 'visibility', 'none');
@@ -355,7 +353,7 @@ export default {
         container: 'map1', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
         center: [-73.96, 40.785], // 初始坐标系
-        zoom: 11,     // starting zoom 地图初始的拉伸比例
+        zoom: 11.3,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
 
@@ -499,7 +497,7 @@ export default {
         container: 'map2', // container id 绑定的组件的id
         style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
         center: [-73.96, 40.785], // 初始坐标系
-        zoom: 11,     // starting zoom 地图初始的拉伸比例
+        zoom: 11.3,     // starting zoom 地图初始的拉伸比例
         antialias: true, //抗锯齿，通过false关闭提升性能
       });
 
@@ -801,7 +799,7 @@ export default {
       dialogVisible: false,
       showTimeGrid: true,
       showTimeIntersection: false,
-      checked: true,
+      checkedP: true,
       activeIndex: '1',
       activeIndex2: '1',
       maps: null,

@@ -17,7 +17,7 @@
           </el-date-picker>
           <br>
           <div>
-            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 5px;font-size: 20px;font-weight: 700" @change="handleChange"><div>Partition Visible</div></el-checkbox>
+            <el-checkbox v-model="checked" style="padding-top: 20px;margin-left: 5px;font-size: 20px;font-weight: 700" @change="handleChange"><div style="font-size: 22px">Partition Visible</div></el-checkbox>
             <br>
           </div>
           <el-button style="font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee" @click="runAnalysis">Run</el-button>
@@ -26,12 +26,11 @@
         <el-row class="tac">
           <el-col :span="12">
             <el-menu
-              default-active="1-1"
               class="el-menu-vertical-demo"
               @open="handleOpen"
               @close="handleClose"
               style="left: 25px;font-weight: 700">
-              <el-submenu default-active="1-1" index="1" style="width: 250px;background-color: #252525">
+              <el-submenu index="1" style="width: 250px;background-color: #252525">
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Visualization</span>
                 </template>
@@ -50,29 +49,7 @@
                 <template slot="title">
                   <span style="color: #eeeeee;font-size: 20px" class="item-title">Data Analysis</span>
                 </template>
-                <el-menu-item style="font-size: 20px;" @click="drawChartWorking">Weekdays</el-menu-item>
-                <el-dialog
-                  title="Workingdays of June"
-                  :visible.sync="dialogVisibleWorking"
-                  width="90%"
-                  :before-close="handleClose">
-                  <el-row>
-                    <el-col :span="12"><div style="height: 600px;" id="chartsWorkingPick"></div></el-col>
-                    <el-col :span="12"><div style="height: 600px;" id="chartsWorkingDrop"></div></el-col>
-                  </el-row>
-                </el-dialog>
-                <el-menu-item style="font-size: 20px;" @click="drawChartHolidays">Weekends</el-menu-item>
-                <el-dialog
-                  title="Weekends of June"
-                  :visible.sync="dialogVisibleHolidays"
-                  width="90%"
-                  :before-close="handleClose">
-                  <el-row>
-                    <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysPick"></div></el-col>
-                    <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysDrop"></div></el-col>
-                  </el-row>
-                </el-dialog>
-                <el-menu-item style="font-size: 17px;padding-left: 5px" @click="chooseTime">Weekday and Weekend</el-menu-item>
+                <el-menu-item style="font-size: 19px;padding-left: 0px" @click="chooseTime">Weekdays and Weekends</el-menu-item>
                 <el-date-picker
                   id="valueTime2"
                   align="right"
@@ -85,7 +62,7 @@
                 </el-date-picker>
                 <el-button @click="showComparison" id="showButton" style="visibility: hidden;font-size:22px;margin-top: 20px;width: 100px;background-color:#2d2d2d;border:solid 2px #444444;color: #eeeeee">Show</el-button>
                 <el-dialog
-                  title="Holidays and Weekdays Comparison"
+                  title="Weekdays and Weekends Comparison"
                   :visible.sync="dialogVisible"
                   width="50%"
                   :before-close="handleClose">
@@ -93,6 +70,29 @@
                     <el-col :span="24"><div style="height: 600px;" id="chartsComparison"></div></el-col>
                   </el-row>
                 </el-dialog>
+                <el-menu-item style="font-size: 20px;visibility: hidden" @click="drawChartWorking">Weekdays</el-menu-item>
+                <el-dialog
+                  title="Workingdays of June"
+                  :visible.sync="dialogVisibleWorking"
+                  width="90%"
+                  :before-close="handleClose">
+                  <el-row>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsWorkingPick"></div></el-col>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsWorkingDrop"></div></el-col>
+                  </el-row>
+                </el-dialog>
+                <el-menu-item style="font-size: 20px;visibility: hidden" @click="drawChartHolidays">Weekends</el-menu-item>
+                <el-dialog
+                  title="Weekends of June"
+                  :visible.sync="dialogVisibleHolidays"
+                  width="90%"
+                  :before-close="handleClose">
+                  <el-row>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysPick"></div></el-col>
+                    <el-col :span="12"><div style="height: 600px;" id="chartsHolidaysDrop"></div></el-col>
+                  </el-row>
+                </el-dialog>
+
               </el-submenu>
             </el-menu>
           </el-col>
@@ -112,56 +112,56 @@
 <!--          <div style="height:130px;width:300px;left:50px;top:230px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68,68,68);border-radius: 10px" id="SelectGrid"><div class="chartsBoard" >The Select Grid</div><br><div id="gridInfo" style="color: #eeeeee;top:55px;left:20px;position: absolute;font-size: 23px">lng: -73.972 lat: 40.760 <br>grid id: 92</div></div>-->
           <div style="height:130px;width:400px;right:50px;top:100px;font-size:24px;font-weight:700;position: absolute;color: #eeeeee;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68,68,68);border-radius: 10px" id="Time"><div class="chartsBoard" >Date Time</div><br><div id="currentTime" style="color: #eeeeee;top:55px;left:40px;position: absolute;font-size: 23px">2016-06-01 08:00</div></div>
 <!--          <div style="right:0px;top:100px;font-size:22px;font-weight:700;position: absolute;width: 500px;color: #eeeeee;" id="currentTime"><div class="numberBoard">Date Time</div><div>2016-06-01 08:00</div></div>-->
-          <div id="choosePD" style="visibility: visible">
-            <div style="bottom:200px;right:420px;font-size:25px;font-weight:750;position: absolute;color: #eeeeee">
-              <div style="background-color:#FF0000;bottom:5px;right:115px;font-size:25px;font-weight:750;position: absolute;width: 10px;height: 10px"></div>
+          <div id="choosePD" style="visibility: hidden">
+            <div style="bottom:300px;right:300px;font-size:25px;font-weight:750;position: absolute;color: #eeeeee">
+              <div style="background-color:#FF0000;bottom:5px;right:130px;font-size:25px;font-weight:750;position: absolute;width: 10px;height: 10px"></div>
               <el-checkbox v-model="pickupSelect"
                          @change="handleChangePickup"><div style="font-weight:750;">Pick Up</div></el-checkbox>
             </div>
-            <div style="bottom:150px;right:406px;font-size:25px;font-weight:750;position: absolute;color: #eeeeee">
-              <div style="background-color:#007cbf;bottom:5px;right:128px;font-size:25px;font-weight:750;position: absolute;width: 10px;height: 10px"></div>
+            <div style="bottom:230px;right:282px;font-size:25px;font-weight:750;position: absolute;color: #eeeeee">
+              <div style="background-color:#007cbf;bottom:5px;right:148px;font-size:25px;font-weight:750;position: absolute;width: 10px;height: 10px"></div>
               <el-checkbox v-model="dropoffSelect" style="padding-top: 20px;margin-left: 10px;font-size: 20px;font-weight: 700" @change="handleChangeDropoff"
             ><div>Drop Off</div></el-checkbox>
             </div>
           </div>
           <div id="heatmapIcon" style="visibility: hidden">
-            <div style="background-color:#00000000;bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
-              <div style="right:-40px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><5</div>
+            <div style="background-color:#00000000;bottom:350px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(255,208,166)">
+              <div style="right:-47px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;"><5</div>
             </div>
-            <div style="background-color:rgb(255,208,166);bottom:220px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-60px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">5-10</div>
+            <div style="background-color:rgb(255,208,166);bottom:300px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-72px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">5-10</div>
             </div>
-            <div style="background-color:rgb(255,170,127);bottom:190px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">10-30</div>
+            <div style="background-color:rgb(255,170,127);bottom:250px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-82px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">10-30</div>
             </div>
-            <div style="background-color:rgb(255,112,78);bottom:160px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">30-50</div>
+            <div style="background-color:rgb(255,112,78);bottom:200px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-82px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">30-50</div>
             </div>
-            <div style="background-color:rgb(240,64,64);bottom:130px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">50-70</div>
+            <div style="background-color:rgb(240,64,64);bottom:150px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-82px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">50-70</div>
             </div>
-            <div style="background-color:rgb(181,10,9);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>70</div>
+            <div style="background-color:rgb(181,10,9);bottom:100px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-59px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">>70</div>
             </div>
           </div>
           <div id="heatmapIcon2" style="visibility: hidden">
-            <div style="background-color:#00000000;bottom:350px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(209,229,240)">
-              <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;"><12</div>
+            <div style="background-color:#00000000;bottom:350px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px;border: solid 1px rgb(209,229,240)">
+              <div style="right:-56px;bottom:-5px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;"><12</div>
             </div>
-            <div style="background-color:rgb(209,229,240);bottom:300px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">12-24</div>
+            <div style="background-color:rgb(209,229,240);bottom:300px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-78px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">12-24</div>
             </div>
-            <div style="background-color:rgb(103,169,207);bottom:250px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">24-36</div>
+            <div style="background-color:rgb(103,169,207);bottom:250px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-82px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">24-36</div>
             </div>
-            <div style="background-color:rgb(253,219,199);bottom:200px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">36-48</div>
+            <div style="background-color:rgb(253,219,199);bottom:200px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-82px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">36-48</div>
             </div>
-            <div style="background-color:rgb(239,138,98);bottom:150px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-70px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">48-60</div>
+            <div style="background-color:rgb(239,138,98);bottom:150px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-82px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">48-60</div>
             </div>
-            <div style="background-color:rgb(178,24,43);bottom:100px;right:200px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
-              <div style="right:-55px;font-size:20px;font-weight:700;position: absolute;color: #eeeeee;">>60</div>
+            <div style="background-color:rgb(178,24,43);bottom:100px;right:380px;font-size:22px;font-weight:700;position: absolute;width: 50px;height: 22px;border-radius: 5px">
+              <div style="right:-59px;bottom:-2px;font-size:26px;font-weight:700;position: absolute;color: #eeeeee;">>60</div>
             </div>
           </div>
           <div style="left:40px;bottom:100px;;position: absolute;background-color: rgba(33,36,37,.62);border: 1px solid rgb(68, 68, 68);border-radius: 10px">
@@ -472,7 +472,6 @@ export default {
           trigger: 'axis',
           axisPointer: {            // 坐标轴指示器，坐标轴触发有效
             type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
-
           }
         },
         legend: {
@@ -2246,7 +2245,7 @@ export default {
     window.map = new mapboxgl.Map({
       container: 'map', // container id 绑定的组件的id
       style: 'mapbox://styles/mapbox/dark-v9', //地图样式，可以使用官网预定义的样式,也可以自定义
-      center: [-73.99,40.785], // 初始坐标系
+      center: [-73.96,40.785], // 初始坐标系
       zoom: 11.3,     // starting zoom 地图初始的拉伸比例
 
     });
@@ -2389,6 +2388,8 @@ export default {
         },
       });
       map.setLayoutProperty('pickup_pred-heatmap','visibility','none');
+      map.setLayoutProperty('pickup', 'visibility', 'none');
+      map.setLayoutProperty('dropoff', 'visibility', 'none');
 
       // let ids_init = [0, 65, 71, 51, 84, 44, 82];
       // let data_neighbor_coordinates = new Array();
@@ -2603,7 +2604,7 @@ html,body{
 /deep/ .el-submenu__title:hover{background-color:#383838 !important;}
 /deep/ .el-checkbox__input.is-checked + .el-checkbox__label {
   color: #eeeeee;
-  font-size: 22px;
+  font-size: 26px;
 }
 /deep/ .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
   background-color: #252525;
@@ -2628,7 +2629,7 @@ html,body{
 }
 
 /deep/ .el-checkbox__label{
-  font-size: 22px;
+  font-size: 26px;
 }
 
 /deep/ .el-slider__marks-text{
@@ -2727,4 +2728,5 @@ html,body{
   border-left: 12px solid #64bfff;
   text-shadow: 1px 1px 1px #000,1px 1px 1px #fff;
 }
+
 </style>
